@@ -974,10 +974,10 @@ class PlayState extends MusicBeatState
 			script.interp.execute(script.expr);
 		}
 
-		script.callFunction("create");
-
-		if (!scripts.contains(script))
+		if (!scripts.contains(script)){
+			script.callFunction("create");
 			scripts.push(script);
+		}
 		#end
 
 		add(gf);
@@ -1069,8 +1069,6 @@ class PlayState extends MusicBeatState
 			scoreTxt.x = healthBarBG.x + healthBarBG.width / 2;
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
-		if (offsetTesting)
-			scoreTxt.x += 300;
 		add(scoreTxt);
 
 		replayTxt = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (FlxG.save.data.downscroll ? 100 : -100), 0, "REPLAY", 20);
@@ -1101,11 +1099,6 @@ class PlayState extends MusicBeatState
 		if (loadRep)
 			replayTxt.cameras = [camHUD];
 
-		// if (SONG.song == 'South')
-		// FlxG.camera.alpha = 0.7;
-		// UI_camera.zoom = 1;
-
-		// cameras = [FlxG.cameras.list[1]];
 		startingSong = true;
 
 		if (isStoryMode)
@@ -2284,10 +2277,10 @@ class PlayState extends MusicBeatState
 
 		if (FlxG.keys.justPressed.NINE)
 		{
-			if (iconP1.animation.curAnim.name == 'bf-old')
-				iconP1.animation.play(SONG.player1);
+			if (iconP1.char == 'bf-old')
+				iconP1.changeChar(boyfriend.iconImage, true);
 			else
-				iconP1.animation.play('bf-old');
+				iconP1.changeChar("bf-old", true);
 		}
 
 		switch (curStage)

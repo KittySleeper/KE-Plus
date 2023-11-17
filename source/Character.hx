@@ -143,23 +143,6 @@ class Character extends FlxSprite
 				updateHitbox();
 				antialiasing = false;
 
-			case 'dad':
-				// DAD ANIMATION LOADING CODE
-				tex = Paths.getSparrowAtlas('DADDY_DEAREST','shared');
-				frames = tex;
-				animation.addByPrefix('idle', 'Dad idle dance', 24);
-				animation.addByPrefix('singUP', 'Dad Sing Note UP', 24);
-				animation.addByPrefix('singRIGHT', 'Dad Sing Note RIGHT', 24);
-				animation.addByPrefix('singDOWN', 'Dad Sing Note DOWN', 24);
-				animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24);
-
-				addOffset('idle');
-				addOffset("singUP", -6, 50);
-				addOffset("singRIGHT", 0, 27);
-				addOffset("singLEFT", -10, 10);
-				addOffset("singDOWN", 0, -30);
-
-				playAnim('idle');
 			case 'spooky':
 				tex = Paths.getSparrowAtlas('spooky_kids_assets');
 				frames = tex;
@@ -330,6 +313,8 @@ class Character extends FlxSprite
 
 				flipX = true;
 
+				iconColor = 0xFF31B0D1;
+
 			case 'bf-christmas':
 				var tex = Paths.getSparrowAtlas('christmas/bfChristmas');
 				frames = tex;
@@ -360,6 +345,8 @@ class Character extends FlxSprite
 				flipX = true;
 
 				iconImage = "bf";
+				
+				iconColor = 0xFF31B0D1;
 			case 'bf-car':
 				var tex = Paths.getSparrowAtlas('bfCar');
 				frames = tex;
@@ -387,6 +374,8 @@ class Character extends FlxSprite
 				flipX = true;
 
 				iconImage = "bf";
+
+				iconColor = 0xFF31B0D1;
 			case 'bf-pixel':
 				frames = Paths.getSparrowAtlas('weeb/bfPixel');
 				animation.addByPrefix('idle', 'BF IDLE', 24, false);
@@ -420,6 +409,8 @@ class Character extends FlxSprite
 				antialiasing = false;
 
 				flipX = true;
+
+				iconColor = 0xFF31B0D1;
 			case 'bf-pixel-dead':
 				frames = Paths.getSparrowAtlas('weeb/bfPixelsDEAD');
 				animation.addByPrefix('singUP', "BF Dies pixel", 24, false);
@@ -529,12 +520,12 @@ class Character extends FlxSprite
 
 				iconImage = "parents";
 			default:
-				var char:CharacterLoader = Json.parse(Assets.getText(Paths.json(curCharacter, "characters")));
+				var char:CharacterLoader = Json.parse(Assets.getText(Paths.json("characters/" + curCharacter)));
 
 				frames = Paths.getSparrowAtlas(char.image);
 				iconImage = char.iconImage;
 				iconColor = FlxColor.fromString(char.iconColor);
-				
+
 				for (anim in char.anims){
 					if (anim.fps < 1)
 						anim.fps = 24;
@@ -543,7 +534,7 @@ class Character extends FlxSprite
 					if (anim.offset == null)
 						anim.offset = [0, 0];
 
-					animation.addByPrefix(anim.prefix, anim.postfix, 24);
+					animation.addByPrefix(anim.prefix, anim.postfix, anim.fps, anim.looped);
 					addOffset(anim.prefix, anim.offset[0], anim.offset[1]);
 				}
 		}
