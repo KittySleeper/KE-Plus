@@ -28,7 +28,7 @@ typedef ReplayJSON =
     public var replayGameVer:String;
     public var timestamp:Date;
     public var songName:String;
-    public var songDiff:Int;
+    public var songDiff:String;
     public var keyPresses:Array<KeyPress>;
     public var keyReleases:Array<KeyRelease>;
 }
@@ -44,7 +44,7 @@ class Replay
         this.path = path;
         replay = {
             songName: "Tutorial", 
-            songDiff: 1, 
+            songDiff: "normal", 
             keyPresses: [],
             keyReleases: [],
             replayGameVer: version,

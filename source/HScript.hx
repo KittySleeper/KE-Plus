@@ -69,7 +69,14 @@ class HScript {
 				"FlxTrail" => flixel.addons.effects.FlxTrail,
 				"FlxBackdrop" => flixel.addons.display.FlxBackdrop,
 
-				"Assets" => Assets
+				"Assets" => Assets,
+
+				"PlayState" => PlayState,
+				"Paths" => Paths,
+				"Conductor" => Conductor,
+				"CoolUtil" => CoolUtil,
+				"Character" => Character,
+				
 			];
 			for (va in defaultVars.keys())
 				setValue(va, defaultVars[va]);

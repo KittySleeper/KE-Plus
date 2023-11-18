@@ -72,6 +72,8 @@ class StoryMenuState extends MusicBeatState
 	var leftArrow:FlxSprite;
 	var rightArrow:FlxSprite;
 
+	var diffs:Array<String> = ["easy", "normal", 'hard'];
+
 	override function create()
 	{
 		#if windows
@@ -285,19 +287,9 @@ class StoryMenuState extends MusicBeatState
 			PlayState.isStoryMode = true;
 			selectedWeek = true;
 
-			var diffic = "";
+			PlayState.storyDifficulty = diffs[curDifficulty];
 
-			switch (curDifficulty)
-			{
-				case 0:
-					diffic = '-easy';
-				case 2:
-					diffic = '-hard';
-			}
-
-			PlayState.storyDifficulty = curDifficulty;
-
-			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
+			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + "-" + diffs[curDifficulty], PlayState.storyPlaylist[0].toLowerCase());
 			PlayState.storyWeek = curWeek;
 			PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)
@@ -335,10 +327,10 @@ class StoryMenuState extends MusicBeatState
 
 		// USING THESE WEIRD VALUES SO THAT IT DOESNT FLOAT UP
 		sprDifficulty.y = leftArrow.y - 15;
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(curWeek, diffs[curDifficulty].toLowerCase());
 
 		#if !switch
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(curWeek, diffs[curDifficulty].toLowerCase());
 		#end
 
 		FlxTween.tween(sprDifficulty, {y: leftArrow.y + 15, alpha: 1}, 0.07);
@@ -393,7 +385,7 @@ class StoryMenuState extends MusicBeatState
 		txtTracklist.x -= FlxG.width * 0.35;
 
 		#if !switch
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(curWeek, diffs[curDifficulty].toLowerCase());
 		#end
 	}
 }

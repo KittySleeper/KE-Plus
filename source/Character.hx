@@ -8,7 +8,8 @@ import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
 
-typedef AnimationLoader = {
+typedef AnimationLoader =
+{
 	var prefix:String;
 	var postfix:String;
 	var offset:Array<Float>;
@@ -17,7 +18,8 @@ typedef AnimationLoader = {
 	var looped:Bool;
 };
 
-typedef CharacterLoader = {
+typedef CharacterLoader =
+{
 	var image:String;
 	var iconImage:String;
 	var anims:Array<AnimationLoader>;
@@ -35,8 +37,12 @@ class Character extends FlxSprite
 	public var curCharacter:String = 'bf';
 
 	public var holdTimer:Float = 0;
+	public var danced:Bool = false;
+
 	public var iconImage:String;
 	public var iconColor:FlxColor;
+
+	public var script:HScript;
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
 	{
@@ -45,6 +51,15 @@ class Character extends FlxSprite
 		animOffsets = new Map<String, Array<Dynamic>>();
 		curCharacter = character;
 		this.isPlayer = isPlayer;
+
+		script = new HScript('assets/data/characters/$curCharacter');
+
+		if (!script.isBlank && script.expr != null)
+		{
+			script.interp.scriptObject = this;
+			script.setValue("character", this);
+			script.interp.execute(script.expr);
+		}
 
 		var tex:FlxAtlasFrames;
 		antialiasing = true;
@@ -275,7 +290,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 			case 'bf':
-				var tex = Paths.getSparrowAtlas('BOYFRIEND','shared');
+				var tex = Paths.getSparrowAtlas('BOYFRIEND', 'shared');
 				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
@@ -345,7 +360,7 @@ class Character extends FlxSprite
 				flipX = true;
 
 				iconImage = "bf";
-				
+
 				iconColor = 0xFF31B0D1;
 			case 'bf-car':
 				var tex = Paths.getSparrowAtlas('bfCar');
@@ -520,13 +535,17 @@ class Character extends FlxSprite
 
 				iconImage = "parents";
 			default:
-				var char:CharacterLoader = Json.parse(Assets.getText(Paths.json("characters/" + curCharacter)));
+				var char:CharacterLoader = Json.parse(Assets.getText(Paths.json("characters/dad")));
+
+				if (Assets.exists(Paths.json("characters/" + curCharacter)))
+					char = Json.parse(Assets.getText(Paths.json("characters/" + curCharacter)));
 
 				frames = Paths.getSparrowAtlas(char.image);
 				iconImage = char.iconImage;
 				iconColor = FlxColor.fromString(char.iconColor);
 
-				for (anim in char.anims){
+				for (anim in char.anims)
+				{
 					if (anim.fps < 1)
 						anim.fps = 24;
 					if (anim.looped != true && anim.looped != false)
@@ -565,6 +584,10 @@ class Character extends FlxSprite
 
 		if (iconImage == null)
 			iconImage = curCharacter;
+
+		#if sys
+		script.callFunction("create");
+		#end
 	}
 
 	override function update(elapsed:Float)
@@ -587,23 +610,27 @@ class Character extends FlxSprite
 			}
 		}
 
-		switch (curCharacter)
-		{
-			case 'gf':
-				if (animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
-					playAnim('danceRight');
-		}
+		if (curCharacter.contains("gf") && animation.curAnim != null && animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
+			playAnim('danceRight');
 
 		super.update(elapsed);
-	}
 
-	private var danced:Bool = false;
+		#if sys
+		script.callFunction("update", [elapsed]);
+		#end
+	}
 
 	/**
 	 * FOR GF DANCING SHIT
 	 */
 	public function dance()
 	{
+		danced = !danced;
+
+		#if sys
+		script.callFunction('dance');
+		#end
+
 		if (!debugMode)
 		{
 			switch (curCharacter)
@@ -611,8 +638,6 @@ class Character extends FlxSprite
 				case 'gf':
 					if (!animation.curAnim.name.startsWith('hair'))
 					{
-						danced = !danced;
-
 						if (danced)
 							playAnim('danceRight');
 						else
@@ -622,8 +647,6 @@ class Character extends FlxSprite
 				case 'gf-christmas':
 					if (!animation.curAnim.name.startsWith('hair'))
 					{
-						danced = !danced;
-
 						if (danced)
 							playAnim('danceRight');
 						else
@@ -643,8 +666,6 @@ class Character extends FlxSprite
 				case 'gf-pixel':
 					if (!animation.curAnim.name.startsWith('hair'))
 					{
-						danced = !danced;
-
 						if (danced)
 							playAnim('danceRight');
 						else
@@ -652,8 +673,6 @@ class Character extends FlxSprite
 					}
 
 				case 'spooky':
-					danced = !danced;
-
 					if (danced)
 						playAnim('danceRight');
 					else
@@ -675,23 +694,6 @@ class Character extends FlxSprite
 		}
 		else
 			offset.set(0, 0);
-
-		if (curCharacter == 'gf')
-		{
-			if (AnimName == 'singLEFT')
-			{
-				danced = true;
-			}
-			else if (AnimName == 'singRIGHT')
-			{
-				danced = false;
-			}
-
-			if (AnimName == 'singUP' || AnimName == 'singDOWN')
-			{
-				danced = !danced;
-			}
-		}
 	}
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)

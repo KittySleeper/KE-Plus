@@ -53,7 +53,7 @@ class TitleState extends MusicBeatState
 		#if sys
 		polymod.Polymod.init({
 			modRoot: "mods",
-			dirs: sys.FileSystem.readDirectory('./mods'),
+			dirs: [Assets.getText(Paths.txt("modSelected"))],
 			errorCallback: (e) -> {
 				trace(e.message);
 			},

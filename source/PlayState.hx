@@ -13,7 +13,6 @@ import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.addons.effects.FlxTrail;
 import flixel.addons.effects.chainable.FlxWaveEffect;
@@ -29,6 +28,8 @@ import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
+import openfl.Assets;
+import openfl.Assets;
 #if windows
 import Discord.DiscordClient;
 #end
@@ -46,7 +47,7 @@ class PlayState extends MusicBeatState
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
-	public static var storyDifficulty:Int = 1;
+	public static var storyDifficulty:String = "normal";
 	public static var weekSong:Int = 0;
 	public static var shits:Int = 0;
 	public static var bads:Int = 0;
@@ -68,7 +69,6 @@ class PlayState extends MusicBeatState
 
 	#if windows
 	// Discord RPC variables
-	var storyDifficultyText:String = "";
 	var iconRPC:String = "";
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
@@ -183,6 +183,8 @@ class PlayState extends MusicBeatState
 
 	// LUA SHIT
 	public static var lua:State = null;
+
+	public var instance:PlayState;
 
 	function callLua(func_name:String, args:Array<Dynamic>, ?type:String):Dynamic
 	{
@@ -404,6 +406,8 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
+		instance = this;
+		
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
@@ -426,16 +430,6 @@ class PlayState extends MusicBeatState
 
 		#if windows
 		// Making difficulty text for Discord Rich Presence.
-		switch (storyDifficulty)
-		{
-			case 0:
-				storyDifficultyText = "Easy";
-			case 1:
-				storyDifficultyText = "Normal";
-			case 2:
-				storyDifficultyText = "Hard";
-		}
-
 		iconRPC = SONG.player2;
 
 		// To avoid having duplicate images in Discord assets
@@ -467,7 +461,7 @@ class PlayState extends MusicBeatState
 			+ " "
 			+ SONG.song
 			+ " ("
-			+ storyDifficultyText
+			+ storyDifficulty
 			+ ") "
 			+ generateRanking(),
 			"\nAcc: "
@@ -496,6 +490,60 @@ class PlayState extends MusicBeatState
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
+
+		#if sys
+		scripts = new Array<HScript>();
+
+		for (allowed in HScript.allowedExtensions)
+		{
+			if (FileSystem.exists('./mods/${Assets.getText(Paths.txt('modSelected'))}/data/${SONG.song.toLowerCase()}'))
+			{
+				for (scriptFile in FileSystem.readDirectory('./mods/${Assets.getText(Paths.txt('modSelected'))}/data/${SONG.song.toLowerCase()}'))
+				{
+					if (scriptFile.contains(allowed))
+					{
+						var script = new HScript('assets/data/${SONG.song.toLowerCase()}/${scriptFile.replace("." + allowed, "")}');
+
+						if (!script.isBlank && script.expr != null)
+						{
+							script.interp.scriptObject = this;
+							script.setValue('add', add);
+							script.setValue('remove', remove);
+							script.setValue('SONG', SONG);
+							script.setValue('bf', boyfriend);
+							script.interp.execute(script.expr);
+						}
+
+						if (!scripts.contains(script))
+							scripts.push(script);
+					}
+				}
+			}
+
+		if (FileSystem.exists('./mods/${Assets.getText(Paths.txt('modSelected'))}/scripts'))
+			{
+				for (scriptFile in FileSystem.readDirectory('./mods/${Assets.getText(Paths.txt('modSelected'))}/scripts'))
+				{
+					if (scriptFile.contains(allowed))
+					{
+						var script = new HScript('assets/scripts/${scriptFile.replace("." + allowed, "")}');
+
+						if (!script.isBlank && script.expr != null)
+						{
+							script.interp.scriptObject = this;
+							script.setValue('add', add);
+							script.setValue('remove', remove);
+							script.setValue('bf', boyfriend);
+							script.interp.execute(script.expr);
+						}
+
+						if (!scripts.contains(script))
+							scripts.push(script);
+					}
+				}
+			}
+		}
+		#end
 
 		switch (SONG.song.toLowerCase())
 		{
@@ -960,23 +1008,10 @@ class PlayState extends MusicBeatState
 				gf.y += 300;
 		}
 
-		scripts = new Array<HScript>();
-
 		#if sys
-		var script = new HScript('assets/data/${SONG.song.toLowerCase()}/script');
-
-		if (!script.isBlank && script.expr != null)
+		for (script in scripts)
 		{
-			script.interp.scriptObject = this;
-			script.setValue('add', add);
-			script.setValue('remove', remove);
-			script.setValue('bf', boyfriend);
-			script.interp.execute(script.expr);
-		}
-
-		if (!scripts.contains(script)){
 			script.callFunction("create");
-			scripts.push(script);
 		}
 		#end
 
@@ -1054,7 +1089,7 @@ class PlayState extends MusicBeatState
 			+ 50, 0,
 			SONG.song
 			+ " "
-			+ (storyDifficulty == 2 ? "Hard" : storyDifficulty == 1 ? "Normal" : "Easy")
+			+ storyDifficulty
 			+ (Main.watermarks ? " - KE " + MainMenuState.kadeEngineVer : ""),
 			16);
 		kadeEngineWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -1707,7 +1742,7 @@ class PlayState extends MusicBeatState
 
 		if (!paused)
 		{
-			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
+			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song, storyDifficulty), 1, false);
 		}
 
 		FlxG.sound.music.onComplete = endSong;
@@ -1745,7 +1780,8 @@ class PlayState extends MusicBeatState
 			songName.alpha = 0;
 			add(songName);
 
-			for (shittyShit in [songPosBG, songPosBar, songName]){
+			for (shittyShit in [songPosBG, songPosBar, songName])
+			{
 				FlxTween.tween(shittyShit, {alpha: 1}, 0.5);
 				shittyShit.cameras = [camHUD];
 			}
@@ -1766,7 +1802,7 @@ class PlayState extends MusicBeatState
 			+ " "
 			+ SONG.song
 			+ " ("
-			+ storyDifficultyText
+			+ storyDifficulty
 			+ ") "
 			+ generateRanking(),
 			"\nAcc: "
@@ -1795,7 +1831,7 @@ class PlayState extends MusicBeatState
 		curSong = songData.song;
 
 		if (SONG.needsVoices)
-			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
+			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, storyDifficulty));
 		else
 			vocals = new FlxSound();
 
@@ -2017,7 +2053,7 @@ class PlayState extends MusicBeatState
 			DiscordClient.changePresence("PAUSED on "
 				+ SONG.song
 				+ " ("
-				+ storyDifficultyText
+				+ storyDifficulty
 				+ ") "
 				+ generateRanking(),
 				"Acc: "
@@ -2054,7 +2090,7 @@ class PlayState extends MusicBeatState
 					+ " "
 					+ SONG.song
 					+ " ("
-					+ storyDifficultyText
+					+ storyDifficulty
 					+ ") "
 					+ generateRanking(),
 					"\nAcc: "
@@ -2068,7 +2104,7 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ") " + generateRanking(), iconRPC);
+				DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficulty + ") " + generateRanking(), iconRPC);
 			}
 			#end
 		}
@@ -2090,7 +2126,7 @@ class PlayState extends MusicBeatState
 			+ " "
 			+ SONG.song
 			+ " ("
-			+ storyDifficultyText
+			+ storyDifficulty
 			+ ") "
 			+ generateRanking(),
 			"\nAcc: "
@@ -2383,7 +2419,6 @@ class PlayState extends MusicBeatState
 		/* if (FlxG.keys.justPressed.NINE)
 			FlxG.switchState(new Charting()); */
 
-		#if debug
 		if (FlxG.keys.justPressed.EIGHT)
 		{
 			FlxG.switchState(new AnimationDebug(SONG.player2));
@@ -2393,7 +2428,6 @@ class PlayState extends MusicBeatState
 				lua = null;
 			}
 		}
-		#end
 
 		if (startingSong)
 		{
@@ -2664,7 +2698,7 @@ class PlayState extends MusicBeatState
 			DiscordClient.changePresence("GAME OVER -- "
 				+ SONG.song
 				+ " ("
-				+ storyDifficultyText
+				+ storyDifficulty
 				+ ") "
 				+ generateRanking(),
 				"\nAcc: "
@@ -2879,7 +2913,7 @@ class PlayState extends MusicBeatState
 					if (SONG.validScore)
 					{
 						NGio.unlockMedal(60961);
-						Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
+						Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty.toLowerCase());
 					}
 
 					FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
@@ -2887,16 +2921,7 @@ class PlayState extends MusicBeatState
 				}
 				else
 				{
-					var difficulty:String = "";
-
-					if (storyDifficulty == 0)
-						difficulty = '-easy';
-
-					if (storyDifficulty == 2)
-						difficulty = '-hard';
-
 					trace('LOADING NEXT SONG');
-					trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty);
 
 					if (SONG.song.toLowerCase() == 'eggnog')
 					{
@@ -2913,7 +2938,7 @@ class PlayState extends MusicBeatState
 					FlxTransitionableState.skipNextTransOut = true;
 					prevCamFollow = camFollow;
 
-					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + difficulty, PlayState.storyPlaylist[0]);
+					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + "-" + storyDifficulty, PlayState.storyPlaylist[0]);
 					FlxG.sound.music.stop();
 
 					LoadingState.loadAndSwitchState(new PlayState());
@@ -2921,7 +2946,7 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				trace('WENT BACK TO FREEPLAY??');
+				Highscore.saveScore(curSong, songScore, storyDifficulty.toLowerCase());
 				FlxG.switchState(new FreeplayState());
 			}
 		}
@@ -3902,7 +3927,7 @@ class PlayState extends MusicBeatState
 			+ " "
 			+ SONG.song
 			+ " ("
-			+ storyDifficultyText
+			+ storyDifficulty
 			+ ") "
 			+ generateRanking(),
 			"Acc: "

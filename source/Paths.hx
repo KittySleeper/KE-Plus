@@ -1,5 +1,6 @@
 package;
 
+import lime.utils.Assets;
 import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
@@ -95,14 +96,34 @@ class Paths
 		return getPath('music/$key.$SOUND_EXT', MUSIC, library);
 	}
 
-	inline static public function voices(song:String)
+	inline static public function voices(song:String, diff:String = "")
 	{
-		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+		var voices = "";
+
+		if (diff == "normal" || diff == null)
+			diff = "";
+
+		if (Assets.exists('assets/songs/${song.toLowerCase()}/Voices-${diff.toLowerCase()}.$SOUND_EXT'))
+			voices = 'assets/songs/${song.toLowerCase()}/Voices-${diff.toLowerCase()}.$SOUND_EXT';
+		else
+			voices = 'assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+
+		return 'songs:$voices';
 	}
 
-	inline static public function inst(song:String)
+	inline static public function inst(song:String, diff:String = "")
 	{
-		return 'songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
+		var inst = "";
+
+		if (diff == "normal" || diff == null)
+			diff = "";
+
+		if (Assets.exists('assets/songs/${song.toLowerCase()}/Inst-${diff.toLowerCase()}.$SOUND_EXT'))
+			inst = 'assets/songs/${song.toLowerCase()}/Inst-${diff.toLowerCase()}.$SOUND_EXT';
+		else
+			inst = 'assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
+
+		return 'songs:$inst';
 	}
 
 	inline static public function image(key:String, ?library:String)
