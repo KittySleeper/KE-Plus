@@ -20,6 +20,7 @@ typedef AnimationLoader =
 
 typedef CharacterLoader =
 {
+	var flipX:Bool;
 	var image:String;
 	var iconImage:String;
 	var anims:Array<AnimationLoader>;
@@ -565,6 +566,11 @@ class Character extends FlxSprite
 
 				if (Assets.exists(Paths.json("characters/" + curCharacter)))
 					char = Json.parse(Assets.getText(Paths.json("characters/" + curCharacter)));
+
+				if (char.flipX != true && char.flipX != false)
+					char.flipX = false;
+				
+				flipX = char.flipX;
 
 				frames = Paths.getSparrowAtlas(char.image);
 				iconImage = char.iconImage;

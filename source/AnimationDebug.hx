@@ -14,8 +14,6 @@ import flixel.util.FlxColor;
  */
 class AnimationDebug extends FlxState
 {
-	var bf:Boyfriend;
-	var dad:Character;
 	var char:Character;
 	var textAnim:FlxText;
 	var dumbTexts:FlxTypedGroup<FlxText>;
@@ -42,26 +40,16 @@ class AnimationDebug extends FlxState
 		if (daAnim == 'bf')
 			isDad = false;
 
-		if (isDad)
-		{
-			dad = new Character(0, 0, daAnim);
-			dad.screenCenter();
-			dad.debugMode = true;
-			add(dad);
+		var charGhost = new Character(0, 0, daAnim);
+		charGhost.screenCenter();
+		charGhost.debugMode = true;
+		charGhost.alpha = 0.30;
+		add(charGhost);
 
-			char = dad;
-			dad.flipX = false;
-		}
-		else
-		{
-			bf = new Boyfriend(0, 0);
-			bf.screenCenter();
-			bf.debugMode = true;
-			add(bf);
-
-			char = bf;
-			bf.flipX = false;
-		}
+		char = new Character(0, 0, daAnim);
+		char.screenCenter();
+		char.debugMode = true;
+		add(char);
 
 		dumbTexts = new FlxTypedGroup<FlxText>();
 		add(dumbTexts);
