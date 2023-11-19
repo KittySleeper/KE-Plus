@@ -11,9 +11,12 @@ Blammed:pico:3:Easy,Normal,Hard
 Satin-Panties:mom:4:Easy,Normal,Hard
 High:mom:4:Easy,Normal,Hard
 Milf:mom:4:Easy,Normal,Hard
-Cocoa:parents-christmas:5:Easy,Normal,Hard
-Eggnog:parents-christmas:5:Easy,Normal,Hard
-Winter-Horrorland:monster-christmas:5:Easy,Normal,Hard
+Cocoa:parents:5:Easy,Normal,Hard
+Eggnog:parents:5:Easy,Normal,Hard
+Winter-Horrorland:monster:5:Easy,Normal,Hard
 Senpai:senpai:6:Easy,Normal,Hard
 Roses:senpai:6:Easy,Normal,Hard
 Thorns:spirit:6:Easy,Normal,Hard
+Ugh:tankman:7:Easy,Normal,Hard
+Guns:tankman:7:Easy,Normal,Hard
+Stress:tankman:7:Easy,Normal,Hard
