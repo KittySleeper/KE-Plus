@@ -98,6 +98,8 @@ class Character extends FlxSprite
 
 				playAnim('danceRight');
 
+				iconColor = 0xFFa5004d;
+
 			case 'gf-christmas':
 				tex = Paths.getSparrowAtlas('christmas/gfChristmas');
 				frames = tex;
@@ -129,6 +131,8 @@ class Character extends FlxSprite
 
 				playAnim('danceRight');
 
+				iconColor = 0xFFa5004d;
+
 			case 'gf-car':
 				tex = Paths.getSparrowAtlas('gfCar');
 				frames = tex;
@@ -141,6 +145,8 @@ class Character extends FlxSprite
 				addOffset('danceRight', 0);
 
 				playAnim('danceRight');
+
+				iconColor = 0xFFa5004d;
 
 			case 'gf-pixel':
 				tex = Paths.getSparrowAtlas('weeb/gfPixel');
@@ -157,6 +163,8 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
 				updateHitbox();
 				antialiasing = false;
+
+				iconColor = 0xFFa5004d;
 
 			case 'spooky':
 				tex = Paths.getSparrowAtlas('spooky_kids_assets');
@@ -177,6 +185,9 @@ class Character extends FlxSprite
 				addOffset("singDOWN", -50, -130);
 
 				playAnim('danceRight');
+
+				iconColor = 0xFFd57e00;
+
 			case 'mom':
 				tex = Paths.getSparrowAtlas('Mom_Assets');
 				frames = tex;
@@ -196,6 +207,8 @@ class Character extends FlxSprite
 				addOffset("singDOWN", 20, -160);
 
 				playAnim('idle');
+
+				iconColor = 0xFFd8558e;
 
 			case 'mom-car':
 				tex = Paths.getSparrowAtlas('momCar');
@@ -217,6 +230,8 @@ class Character extends FlxSprite
 
 				playAnim('idle');
 
+				iconColor = 0xFFd8558e;
+
 				iconImage = "mom";
 			case 'monster':
 				tex = Paths.getSparrowAtlas('Monster_Assets');
@@ -233,6 +248,7 @@ class Character extends FlxSprite
 				addOffset("singLEFT", -30);
 				addOffset("singDOWN", -30, -40);
 				playAnim('idle');
+				iconColor = 0xFFd8558e;
 			case 'monster-christmas':
 				tex = Paths.getSparrowAtlas('christmas/monsterChristmas');
 				frames = tex;
@@ -248,7 +264,7 @@ class Character extends FlxSprite
 				addOffset("singLEFT", -30);
 				addOffset("singDOWN", -40, -94);
 				playAnim('idle');
-
+				iconColor = 0xFFd8558e;
 				iconImage = "monster";
 			case 'pico':
 				tex = Paths.getSparrowAtlas('Pico_FNF_assetss');
@@ -286,6 +302,8 @@ class Character extends FlxSprite
 				addOffset("singDOWNmiss", 210, -28);
 
 				playAnim('idle');
+
+				iconColor = 0xFFb7d855;
 
 				flipX = true;
 
@@ -425,7 +443,7 @@ class Character extends FlxSprite
 
 				flipX = true;
 
-				iconColor = 0xFF31B0D1;
+				iconColor = 0xFF7bd6f6;
 			case 'bf-pixel-dead':
 				frames = Paths.getSparrowAtlas('weeb/bfPixelsDEAD');
 				animation.addByPrefix('singUP', "BF Dies pixel", 24, false);
@@ -463,6 +481,8 @@ class Character extends FlxSprite
 				setGraphicSize(Std.int(width * 6));
 				updateHitbox();
 
+				iconColor = 0xFFffaa6f;
+
 				antialiasing = false;
 			case 'senpai-angry':
 				frames = Paths.getSparrowAtlas('weeb/senpai');
@@ -483,6 +503,8 @@ class Character extends FlxSprite
 				updateHitbox();
 
 				antialiasing = false;
+
+				iconColor = 0xFFffaa6f;
 
 				iconImage = "senpai";
 
@@ -506,6 +528,8 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 				antialiasing = false;
+
+				iconColor = 0xFFff3c6e;
 
 			case 'parents-christmas':
 				frames = Paths.getSparrowAtlas('christmas/mom_dad_christmas_assets');
@@ -532,6 +556,8 @@ class Character extends FlxSprite
 				addOffset("singDOWN-alt", -30, -27);
 
 				playAnim('idle');
+
+				iconColor = 0xFFc45eae;
 
 				iconImage = "parents";
 			default:
