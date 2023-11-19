@@ -1,5 +1,6 @@
 package;
 
+import openfl.net.FileReference;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -179,5 +180,50 @@ class AnimationDebug extends FlxState
 		}
 
 		super.update(elapsed);
+
+		if (FlxG.keys.justPressed.SEVEN)
+			saveChar();
+	}
+
+	function saveChar()
+	{
+		var char = {
+			"image": char.char.image,
+			"position": char.char.position,
+			"camPosition": char.char.camPosition,
+			"anims": char.char.anims,
+			"iconImage": char.char.iconImage,
+			"flipX": char.char.flipX,
+			"iconColor": char.char.iconColor,
+		};
+
+		for (animOffset in animList)
+		{
+			for (anim in char.anims)
+			{
+				if (anim.prefix == animOffset)
+				{
+					anim.offset = [this.char.animOffsets.get(animOffset)[0], this.char.animOffsets.get(animOffset)[1]];
+				}
+			}
+		}
+
+		if (char.flipX != true && char.flipX != false)
+			char.flipX = false;
+		if (char.iconImage == null)
+			char.iconImage = daAnim;
+		if (char.position == null)
+			char.position = [0, 0];
+		if (char.camPosition == null)
+			char.camPosition = [0, 0];
+
+		var data:String = haxe.Json.stringify(char);
+
+		if ((data != null) && (data.length > 0))
+		{
+			var file = new FileReference();
+
+			file.save(data, daAnim + '.json');
+		}
 	}
 }
