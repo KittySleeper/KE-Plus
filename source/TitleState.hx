@@ -71,7 +71,8 @@ class TitleState extends MusicBeatState
 					"week3" => "assets/week3",
 					"week4" => "assets/week4",
 					"week5" => 'assets/week5',
-					"week6" => 'assets/week6'
+					"week6" => 'assets/week6',
+					"week7" => 'assets/week7'
 				]
 			}
 		});
@@ -327,13 +328,6 @@ class TitleState extends MusicBeatState
 
 				http.onData = function (data:String) {
 				  
-				  	if (!MainMenuState.kadeEngineVer.contains(data.trim()) && !OutdatedSubState.leftState && MainMenuState.nightly == "")
-					{
-						trace('outdated lmao! ' + data.trim() + ' != ' + MainMenuState.kadeEngineVer);
-						OutdatedSubState.needVer = data;
-						FlxG.switchState(new OutdatedSubState());
-					}
-					else
 					{
 						FlxG.switchState(new MainMenuState());
 					}

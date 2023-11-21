@@ -1,0 +1,64 @@
+{
+  "iconColor": "#262626",
+  "image": "tankmanCaptain",
+  "position": [0, 0],
+  "iconImage": "tankman",
+  "flipX": true,
+  "anims": [
+    {
+      "prefix": "idle",
+      "offset": [0, 0],
+      "looped": false,
+      "postfix": "Tankman Idle"
+    },
+    {
+      "prefix": "singLEFT",
+      "offset": [80, -15],
+      "looped": false,
+      "postfix": "Tankman Right Note 1"
+    },
+    {
+      "prefix": "singUP",
+      "offset": [47, 50],
+      "looped": false,
+      "postfix": "Tankman UP note 1"
+    },
+    {
+      "prefix": "singDOWN",
+      "offset": [70, -110],
+      "looped": false,
+      "postfix": "Tankman DOWN note 1"
+    },
+    {
+      "prefix": "singRIGHT",
+      "offset": [-20, -33],
+      "looped": false,
+      "postfix": "Tankman Note Left 1"
+    },
+    {
+      "prefix": "singLEFTMiss",
+      "offset": [80, -20],
+      "looped": false,
+      "postfix": "Tankman Right Note MISS"
+    },
+    {
+      "prefix": "singUPMiss",
+      "offset": [44, 40],
+      "looped": false,
+      "postfix": "Tankman UP note MISS"
+    },
+    {
+      "prefix": "singDOWNMiss",
+      "offset": [80, -120],
+      "looped": false,
+      "postfix": "Tankman DOWN note MISS"
+    },
+    {
+      "prefix": "singRIGHTMiss",
+      "offset": [-11, -43],
+      "looped": false,
+      "postfix": "Tankman Note Left MISS"
+    }
+  ],
+  "camPosition": [0, 0]
+}

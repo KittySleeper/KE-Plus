@@ -1,5 +1,6 @@
 package;
 
+import openfl.net.FileReference;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -14,8 +15,6 @@ import flixel.util.FlxColor;
  */
 class AnimationDebug extends FlxState
 {
-	var bf:Boyfriend;
-	var dad:Character;
 	var char:Character;
 	var textAnim:FlxText;
 	var dumbTexts:FlxTypedGroup<FlxText>;
@@ -42,26 +41,16 @@ class AnimationDebug extends FlxState
 		if (daAnim == 'bf')
 			isDad = false;
 
-		if (isDad)
-		{
-			dad = new Character(0, 0, daAnim);
-			dad.screenCenter();
-			dad.debugMode = true;
-			add(dad);
+		var charGhost = new Character(0, 0, daAnim);
+		charGhost.screenCenter();
+		charGhost.debugMode = true;
+		charGhost.alpha = 0.30;
+		add(charGhost);
 
-			char = dad;
-			dad.flipX = false;
-		}
-		else
-		{
-			bf = new Boyfriend(0, 0);
-			bf.screenCenter();
-			bf.debugMode = true;
-			add(bf);
-
-			char = bf;
-			bf.flipX = false;
-		}
+		char = new Character(0, 0, daAnim);
+		char.screenCenter();
+		char.debugMode = true;
+		add(char);
 
 		dumbTexts = new FlxTypedGroup<FlxText>();
 		add(dumbTexts);
@@ -191,5 +180,50 @@ class AnimationDebug extends FlxState
 		}
 
 		super.update(elapsed);
+
+		if (FlxG.keys.justPressed.SEVEN)
+			saveChar();
+	}
+
+	function saveChar()
+	{
+		var char = {
+			"image": char.char.image,
+			"position": char.char.position,
+			"camPosition": char.char.camPosition,
+			"anims": char.char.anims,
+			"iconImage": char.char.iconImage,
+			"flipX": char.char.flipX,
+			"iconColor": char.char.iconColor,
+		};
+
+		for (animOffset in animList)
+		{
+			for (anim in char.anims)
+			{
+				if (anim.prefix == animOffset)
+				{
+					anim.offset = [this.char.animOffsets.get(animOffset)[0], this.char.animOffsets.get(animOffset)[1]];
+				}
+			}
+		}
+
+		if (char.flipX != true && char.flipX != false)
+			char.flipX = false;
+		if (char.iconImage == null)
+			char.iconImage = daAnim;
+		if (char.position == null)
+			char.position = [0, 0];
+		if (char.camPosition == null)
+			char.camPosition = [0, 0];
+
+		var data:String = haxe.Json.stringify(char);
+
+		if ((data != null) && (data.length > 0))
+		{
+			var file = new FileReference();
+
+			file.save(data, daAnim + '.json');
+		}
 	}
 }
