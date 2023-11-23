@@ -1,69 +1,75 @@
 {
   "iconColor": "#262626",
-  "image": "tankmanCaptain",
+  "image": "week7/tankmanCaptain",
   "position": [0, 180],
   "iconImage": "tankman",
   "flipX": true,
   "anims": [
     {
       "prefix": "idle",
-      "postfix": "Tankman Idle",
+      "offset": [0, 0],
       "looped": false,
-      "offset": [0, 0]
+      "postfix": "Tankman Idle"
     },
     {
       "prefix": "singLEFT",
-      "postfix": "Tankman Right Note 1",
+      "offset": [80, -15],
       "looped": false,
-      "offset": [80, -15]
+      "postfix": "Tankman Right Note 1"
     },
     {
       "prefix": "singUP",
-      "postfix": "Tankman UP note 1",
+      "offset": [47, 50],
       "looped": false,
-      "offset": [47, 50]
+      "postfix": "Tankman UP note 1"
     },
     {
       "prefix": "singUP-alt",
-      "postfix": "TANKMAN UGH",
+      "offset": [-17, -9],
       "looped": false,
-      "offset": [-17, -9]
+      "postfix": "TANKMAN UGH"
+    },
+    {
+      "prefix": "singDOWN-alt",
+      "offset": [0, 16],
+      "looped": false,
+      "postfix": "PRETTY GOOD tankman"
     },
     {
       "prefix": "singDOWN",
-      "postfix": "Tankman DOWN note 1",
+      "offset": [70, -110],
       "looped": false,
-      "offset": [70, -110]
+      "postfix": "Tankman DOWN note 1"
     },
     {
       "prefix": "singRIGHT",
-      "postfix": "Tankman Note Left 1",
+      "offset": [-20, -33],
       "looped": false,
-      "offset": [-20, -33]
+      "postfix": "Tankman Note Left 1"
     },
     {
       "prefix": "singLEFTmiss",
-      "postfix": "Tankman Right Note MISS",
+      "offset": [80, -20],
       "looped": false,
-      "offset": [80, -20]
+      "postfix": "Tankman Right Note MISS"
     },
     {
       "prefix": "singUPmiss",
-      "postfix": "Tankman UP note MISS",
+      "offset": [44, 40],
       "looped": false,
-      "offset": [44, 40]
+      "postfix": "Tankman UP note MISS"
     },
     {
       "prefix": "singDOWNmiss",
-      "postfix": "Tankman DOWN note MISS",
+      "offset": [80, -116],
       "looped": false,
-      "offset": [80, -116]
+      "postfix": "Tankman DOWN note MISS"
     },
     {
       "prefix": "singRIGHTmiss",
-      "postfix": "Tankman Note Left MISS",
+      "offset": [-11, -43],
       "looped": false,
-      "offset": [-11, -43]
+      "postfix": "Tankman Note Left MISS"
     }
   ],
   "camPosition": [0, 0]

@@ -68,6 +68,8 @@ class HScript {
 				// Flixel Addons because hscript says "FUCK YOU! I AINT IMPORTING ADDONS!"
 				"FlxTrail" => flixel.addons.effects.FlxTrail,
 				"FlxBackdrop" => flixel.addons.display.FlxBackdrop,
+				"FlxVideo" => hxcodec.flixel.FlxVideo,
+				"FlxVideoSprite" => hxcodec.flixel.FlxVideoSprite,
 
 				"Assets" => Assets,
 
@@ -76,8 +78,7 @@ class HScript {
 				"BGSprite" => BGSprite,
 				"Conductor" => Conductor,
 				"CoolUtil" => CoolUtil,
-				"Character" => Character,
-				
+				"Character" => Character
 			];
 			for (va in defaultVars.keys())
 				setValue(va, defaultVars[va]);

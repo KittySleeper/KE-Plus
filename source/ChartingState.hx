@@ -132,7 +132,7 @@ class ChartingState extends MusicBeatState
 				needsVoices: true,
 				player1: 'bf',
 				player2: 'dad',
-				player3: 'gf',
+				gfVersion: 'gf',
 				stage: 'stage',
 				speed: 1,
 			};
@@ -269,9 +269,9 @@ class ChartingState extends MusicBeatState
 
 		var player3DropDown = new FlxUIDropDownMenu(10, 120, FlxUIDropDownMenu.makeStrIdLabelArray(charactersGf, true), function(character:String)
 		{
-			_song.player3 = charactersGf[Std.parseInt(character)];
+			_song.gfVersion = charactersGf[Std.parseInt(character)];
 		});
-		player3DropDown.selectedLabel = _song.player3;
+		player3DropDown.selectedLabel = _song.gfVersion;
 
 		var stageDropDown = new FlxUIDropDownMenu(140, 120, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(stage:String)
 		{

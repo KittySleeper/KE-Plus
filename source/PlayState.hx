@@ -1,5 +1,7 @@
 package;
 
+import hxcodec.flixel.FlxVideo;
+import hxcodec.flixel.FlxVideoSprite;
 import openfl.geom.Matrix;
 import openfl.display.BitmapData;
 import llua.Convert;
@@ -494,21 +496,6 @@ class PlayState extends MusicBeatState
 		#if sys
 		scripts = new Array<HScript>();
 
-		var script = new HScript('assets/data/stages/${SONG.stage}');
-
-		if (!script.isBlank && script.expr != null)
-		{
-			script.interp.scriptObject = this;
-			script.setValue('add', add);
-			script.setValue('remove', remove);
-			script.setValue('SONG', SONG);
-			script.setValue('bf', boyfriend);
-			script.interp.execute(script.expr);
-		}
-
-		if (!scripts.contains(script))
-			scripts.push(script);
-
 		for (allowed in HScript.allowedExtensions)
 		{
 			if (FileSystem.exists('./mods/${Assets.getText(Paths.txt('modSelected'))}/data/${SONG.song.toLowerCase()}'))
@@ -919,30 +906,57 @@ class PlayState extends MusicBeatState
 				}
 			default:
 				{
-					defaultCamZoom = 0.9;
-					curStage = 'stage';
-					var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
-					bg.antialiasing = true;
-					bg.scrollFactor.set(0.9, 0.9);
-					bg.active = false;
-					add(bg);
+					var stageExists = false;
 
-					var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stagefront'));
-					stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-					stageFront.updateHitbox();
-					stageFront.antialiasing = true;
-					stageFront.scrollFactor.set(0.9, 0.9);
-					stageFront.active = false;
-					add(stageFront);
+					for (allowed in HScript.allowedExtensions)
+					{
+						if (Assets.exists('assets/data/stages/${SONG.stage.toLowerCase()}.$allowed'))
+						{
+							stageExists = true;
+							var script = new HScript('assets/data/stages/${SONG.stage}');
 
-					var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stagecurtains'));
-					stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-					stageCurtains.updateHitbox();
-					stageCurtains.antialiasing = true;
-					stageCurtains.scrollFactor.set(1.3, 1.3);
-					stageCurtains.active = false;
+							if (!script.isBlank && script.expr != null)
+							{
+								script.interp.scriptObject = this;
+								script.setValue('add', add);
+								script.setValue('remove', remove);
+								script.setValue('SONG', SONG);
+								script.setValue('bf', boyfriend);
+								script.interp.execute(script.expr);
+							}
 
-					add(stageCurtains);
+							if (!scripts.contains(script))
+								scripts.push(script);
+						}
+					}
+
+					if (!stageExists)
+					{
+						defaultCamZoom = 0.9;
+						curStage = 'stage';
+						var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
+						bg.antialiasing = true;
+						bg.scrollFactor.set(0.9, 0.9);
+						bg.active = false;
+						add(bg);
+
+						var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.image('stagefront'));
+						stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
+						stageFront.updateHitbox();
+						stageFront.antialiasing = true;
+						stageFront.scrollFactor.set(0.9, 0.9);
+						stageFront.active = false;
+						add(stageFront);
+
+						var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('stagecurtains'));
+						stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
+						stageCurtains.updateHitbox();
+						stageCurtains.antialiasing = true;
+						stageCurtains.scrollFactor.set(1.3, 1.3);
+						stageCurtains.active = false;
+
+						add(stageCurtains);
+					}
 				}
 		}
 
@@ -958,6 +972,8 @@ class PlayState extends MusicBeatState
 				gfVersion = 'gf-pixel';
 			case 'schoolEvil':
 				gfVersion = 'gf-pixel';
+			default:
+				gfVersion = SONG.gfVersion;
 		}
 
 		if (curStage == 'limo')
@@ -1254,7 +1270,9 @@ class PlayState extends MusicBeatState
 						startCountdown();
 					}
 			}
-		}else{
+		}
+		else
+		{
 			startCountdown();
 		}
 
@@ -2484,6 +2502,16 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.EIGHT)
 		{
 			FlxG.switchState(new AnimationDebug(SONG.player2));
+			if (lua != null)
+			{
+				Lua.close(lua);
+				lua = null;
+			}
+		}
+
+		if (FlxG.keys.justPressed.NINE)
+		{
+			FlxG.switchState(new AnimationDebug(SONG.gfVersion));
 			if (lua != null)
 			{
 				Lua.close(lua);

@@ -5,7 +5,7 @@ function create()
 {
 	camHUD.visible = false;
 
-	FlxG.camera.zoom += 0.10;
+	FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom + 0.15}, 0.6);
 	dad.visible = false;
 
 	var dadAlt = new FlxSprite(dad.x - 80, dad.y + 40);
@@ -16,12 +16,12 @@ function create()
 	add(dadAlt);
 
 	camFollow.setPosition(dadAlt.x + 400, dadAlt.y + 220);
-	FlxG.sound.play(Paths.sound("wellWellWell"));
+	FlxG.sound.play(Paths.sound("cutsenes/ugh/wellWellWell"));
 
 	dadAlt.animation.finishCallback = function(anim)
 	{
 		camFollow.setPosition(bf.x, bf.y + 70);
-		FlxG.sound.play(Paths.sound("bfBeep"));
+		FlxG.sound.play(Paths.sound("cutsenes/bfBeep"));
 		bf.playAnim("singUP");
 		new FlxTimer().start(1.5, function(timer)
 		{
@@ -29,7 +29,7 @@ function create()
 
 			camFollow.setPosition(dadAlt.x + 400, dadAlt.y + 220);
 			dadAlt.animation.play("pt2", true);
-			FlxG.sound.play(Paths.sound("killYou"));
+			FlxG.sound.play(Paths.sound("cutsenes/ugh/killYou"));
 
 			dadAlt.animation.finishCallback = function(anim)
 			{

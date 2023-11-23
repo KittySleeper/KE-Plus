@@ -12,6 +12,19 @@ import flixel.util.FlxTimer;
 
 using StringTools;
 
+typedef DialogueText = {
+	var character:String;
+	var characterState:String;
+	var boxState:String;
+	var dialogue:String;
+	var talkingRight:Bool;
+}
+
+typedef DialogueJson = {
+	var diolaugeStyle:String;
+	var dialogue:Array<DialogueText>;
+}
+
 class DialogueBox extends FlxSpriteGroup
 {
 	var box:FlxSprite;

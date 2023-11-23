@@ -40,6 +40,8 @@ class Character extends FlxSprite
 	public var holdTimer:Float = 0;
 	public var danced:Bool = false;
 
+	public var canDance:Bool = true;
+
 	public var iconImage:String;
 	public var iconColor:FlxColor;
 	public var positions:Array<Float> = [0, 0];
@@ -592,7 +594,10 @@ class Character extends FlxSprite
 					if (anim.offset == null)
 						anim.offset = [0, 0];
 
-					animation.addByPrefix(anim.prefix, anim.postfix, anim.fps, anim.looped);
+					if (anim.indices != null && anim.indices != [])
+						animation.addByIndices(anim.prefix, anim.postfix, anim.indices, "", anim.fps, anim.looped);
+					else
+						animation.addByPrefix(anim.prefix, anim.postfix, anim.fps, anim.looped);
 					addOffset(anim.prefix, anim.offset[0], anim.offset[1]);
 				}
 		}
@@ -633,7 +638,7 @@ class Character extends FlxSprite
 	{
 		if (!curCharacter.startsWith('bf'))
 		{
-			if (animation.curAnim.name.startsWith('sing'))
+			if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
 			{
 				holdTimer += elapsed;
 			}
@@ -649,7 +654,11 @@ class Character extends FlxSprite
 			}
 		}
 
-		if (curCharacter.contains("gf") && animation.curAnim != null && animation.curAnim.name == 'hairFall' && animation.curAnim.finished)
+		if (curCharacter.contains("gf")
+			&& animation.curAnim != null
+			&& animation.curAnim != null
+			&& animation.curAnim.name == 'hairFall'
+			&& animation.curAnim.finished)
 			playAnim('danceRight');
 
 		super.update(elapsed);
@@ -670,7 +679,7 @@ class Character extends FlxSprite
 		script.callFunction('dance');
 		#end
 
-		if (!debugMode)
+		if (!debugMode && canDance)
 		{
 			switch (curCharacter)
 			{
@@ -724,15 +733,26 @@ class Character extends FlxSprite
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
-		animation.play(AnimName, Force, Reversed, Frame);
+		#if sys
+		script.callFunction("playAnim", [AnimName, Force, Reversed, Frame]);
+		#end
 
-		var daOffset = animOffsets.get(AnimName);
-		if (animOffsets.exists(AnimName))
+		if (animation.exists(AnimName))
 		{
-			offset.set(daOffset[0], daOffset[1]);
+			animation.play(AnimName, Force, Reversed, Frame);
+
+			var daOffset = animOffsets.get(AnimName);
+			if (animOffsets.exists(AnimName))
+			{
+				offset.set(daOffset[0], daOffset[1]);
+			}
+			else
+				offset.set(0, 0);
 		}
 		else
-			offset.set(0, 0);
+		{
+			return;
+		}
 	}
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)

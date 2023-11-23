@@ -56,7 +56,7 @@ class Paths
 		return getPath(file, type, library);
 	}
 
-	inline static public function lua(key:String,?library:String)
+	inline static public function lua(key:String, ?library:String)
 	{
 		return getPath('data/$key.lua', TEXT, library);
 	}
@@ -134,6 +134,11 @@ class Paths
 	inline static public function font(key:String)
 	{
 		return 'assets/fonts/$key';
+	}
+
+	inline static public function video(key:String)
+	{
+		return 'assets/videos/$key.mp4';
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)
