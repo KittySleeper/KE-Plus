@@ -292,7 +292,12 @@ class StoryMenuState extends MusicBeatState
 
 			PlayState.storyDifficulty = diffs[curDifficulty];
 
-			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + "-" + diffs[curDifficulty], PlayState.storyPlaylist[0].toLowerCase());
+			var diff:String = "";
+
+			if (diffs[curDifficulty].toLowerCase() != "normal")
+				diff = "-" + diffs[curDifficulty];
+
+			PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diff, PlayState.storyPlaylist[0].toLowerCase());
 			PlayState.storyWeek = curWeek;
 			PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)

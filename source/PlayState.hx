@@ -1219,7 +1219,8 @@ class PlayState extends MusicBeatState
 				default:
 					var hasCutsene:Bool = false;
 
-					for (allowed in HScript.allowedExtensions){
+					for (allowed in HScript.allowedExtensions)
+					{
 						if (Assets.exists('assets/data/cutsenes/${curSong.toLowerCase()}.$allowed'))
 							hasCutsene = true;
 					}
@@ -1253,6 +1254,8 @@ class PlayState extends MusicBeatState
 						startCountdown();
 					}
 			}
+		}else{
+			startCountdown();
 		}
 
 		if (!loadRep)
@@ -2455,11 +2458,11 @@ class PlayState extends MusicBeatState
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
 
 		/*
-		for (icon in [iconP1, iconP2])
-		{
-			var lerp:Float = CoolUtil.lerpGood(1, icon.scale.x, 1.30);
+			for (icon in [iconP1, iconP2])
+			{
+				var lerp:Float = CoolUtil.lerpGood(1, icon.scale.x, 1.30);
 
-			icon.scale.set(lerp, lerp);
+				icon.scale.set(lerp, lerp);
 		}*/
 
 		if (health > 2)
