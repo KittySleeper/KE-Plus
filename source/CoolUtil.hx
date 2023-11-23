@@ -1,5 +1,7 @@
 package;
 
+import flixel.FlxG;
+import flixel.math.FlxMath;
 import lime.utils.Assets;
 
 using StringTools;
@@ -38,5 +40,9 @@ class CoolUtil
 			dumbArray.push(i);
 		}
 		return dumbArray;
+	}
+
+	public static function lerpGood(a:Float, b:Float, ratio:Float) {
+		return FlxMath.lerp(a, b, FlxMath.bound(ratio - (FlxG.elapsed * 60), 0, 1));
 	}
 }

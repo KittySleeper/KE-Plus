@@ -1,16 +1,45 @@
 package;
 
+import openfl.Assets;
+import haxe.Json;
 import flixel.addons.effects.FlxSkewedSprite;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
-#if polymod
-import polymod.format.ParseRules.TargetSignatureElement;
-#end
 
 using StringTools;
+
+typedef NoteTypeAnimHandler =
+{
+	var leftNoteAnim:String;
+	var upNoteAnim:String;
+	var downNoteAnim:String;
+	var rightNoteAnim:String;
+
+	var susLeftNoteAnim:String;
+	var susUpNoteAnim:String;
+	var susDownNoteAnim:String;
+	var susRightNoteAnim:String;
+
+	var susEndLeftNoteAnim:String;
+	var susEndUpNoteAnim:String;
+	var susEndDownNoteAnim:String;
+	var susEndRightNoteAnim:String;
+}
+
+typedef NoteTypeHandler =
+{
+	var image:String;
+	var flipX:Bool;
+	var cpuCanHit:Bool;
+	var hurtWhenMiss:Bool;
+	var hurtWhenHit:Bool;
+	var autoDelete:Bool;
+	var playCharacterAnim:Bool;
+	var anims:NoteTypeAnimHandler;
+}
 
 class Note extends FlxSprite
 {
@@ -25,6 +54,7 @@ class Note extends FlxSprite
 	public var modifiedByLua:Bool = false;
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
+	public var noteType:String = "";
 
 	public var noteScore:Float = 1;
 
@@ -36,13 +66,22 @@ class Note extends FlxSprite
 
 	public var rating:String = "shit";
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
+	public var cpuCanHit:Bool = true;
+	public var hurtWhenMiss:Bool = true;
+	public var hurtWhenHit:Bool = false;
+	public var autoDelete:Bool = true;
+	public var playCharacterAnim:Bool = true;
+
+	public var script:HScript;
+
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?noteType:String = "default")
 	{
 		super();
 
 		if (prevNote == null)
 			prevNote = this;
 
+		this.noteType = noteType;
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
 
@@ -51,12 +90,21 @@ class Note extends FlxSprite
 		y -= 2000;
 		this.strumTime = strumTime;
 
-		if (this.strumTime < 0 )
+		if (this.strumTime < 0)
 			this.strumTime = 0;
 
 		this.noteData = noteData;
 
 		var daStage:String = PlayState.curStage;
+
+		script = new HScript('assets/data/notes/$noteType');
+
+		if (!script.isBlank && script.expr != null)
+		{
+			script.interp.scriptObject = this;
+			script.setValue("note", this);
+			script.interp.execute(script.expr);
+		}
 
 		switch (daStage)
 		{
@@ -124,13 +172,7 @@ class Note extends FlxSprite
 				x += swagWidth * 3;
 				animation.play('redScroll');
 		}
-
-		// trace(prevNote);
-
-		// we make sure its downscroll and its a SUSTAIN NOTE (aka a trail, not a note)
-		// and flip it so it doesn't look weird.
-		// THIS DOESN'T FUCKING FLIP THE NOTE, CONTRIBUTERS DON'T JUST COMMENT THIS OUT JESUS
-		if (FlxG.save.data.downscroll && sustainNote) 
+		if (FlxG.save.data.downscroll && sustainNote)
 			flipY = true;
 
 		if (isSustainNote && prevNote != null)
@@ -173,12 +215,75 @@ class Note extends FlxSprite
 						prevNote.animation.play('redhold');
 				}
 
-				
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.8 * FlxG.save.data.scrollSpeed;
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
 			}
 		}
+
+		var note:NoteTypeHandler = null;
+		if (Assets.exists(Paths.json('notes/$noteType')))
+			note = Json.parse(Assets.getText(Paths.json('notes/$noteType')));
+
+		if (note != null)
+		{
+			frames = Paths.getSparrowAtlas(note.image);
+			if (note.flipX != true && note.flipX != false)
+				note.flipX = false;
+			if (note.cpuCanHit != true && note.cpuCanHit != false)
+				note.cpuCanHit = false;
+			if (note.autoDelete != true && note.autoDelete != false)
+				note.autoDelete = true;
+			if (note.hurtWhenHit != true && note.hurtWhenHit != false)
+				note.hurtWhenHit = false;
+			if (note.hurtWhenMiss != true && note.hurtWhenMiss != false)
+				hurtWhenMiss = true;
+
+			flipX = note.flipX;
+			cpuCanHit = note.cpuCanHit;
+			hurtWhenMiss = note.hurtWhenMiss;
+			hurtWhenHit = note.hurtWhenHit;
+			autoDelete = note.autoDelete;
+
+			var anims = ["left", "down", "up", "right"];
+			var noteAnims = [
+				note.anims.leftNoteAnim,
+				note.anims.downNoteAnim,
+				note.anims.upNoteAnim,
+				note.anims.rightNoteAnim
+			];
+			var susNoteAnims = [
+				note.anims.susLeftNoteAnim,
+				note.anims.susDownNoteAnim,
+				note.anims.susUpNoteAnim,
+				note.anims.susRightNoteAnim
+			];
+			var susEndNoteAnims = [
+				note.anims.susEndLeftNoteAnim,
+				note.anims.susEndDownNoteAnim,
+				note.anims.susEndUpNoteAnim,
+				note.anims.susEndRightNoteAnim
+			];
+
+			if (!isSustainNote)
+			{
+				animation.addByPrefix(anims[noteData], noteAnims[noteData]);
+				animation.play(anims[noteData]);
+			}
+			else
+			{
+				animation.addByPrefix(anims[noteData], susNoteAnims[noteData]);
+				animation.play(anims[noteData]);
+
+				if (prevNote != null)
+				{
+					animation.addByPrefix(anims[noteData] + "end", susEndNoteAnims[noteData]);
+					animation.play(anims[noteData] + "end");
+				}
+			}
+		}
+
+		script.callFunction("create");
 	}
 
 	override function update(elapsed:Float)
@@ -210,5 +315,39 @@ class Note extends FlxSprite
 			if (alpha > 0.3)
 				alpha = 0.3;
 		}
+
+		script.callFunction("update", [elapsed]);
+	}
+
+	public function bfNoteHit(character:Character)
+	{
+		if (playCharacterAnim && !hurtWhenHit)
+		{
+			switch (noteData)
+			{
+				case 0:
+					character.playAnim('singLEFT', true);
+				case 2:
+					character.playAnim('singUP', true);
+				case 1:
+					character.playAnim('singDOWN', true);
+				case 3:
+					character.playAnim('singRIGHT', true);	
+			}
+		}
+
+		#if sys
+		var daNote = this;
+
+		script.callFunction("bfNoteHit", [character, daNote]);
+		#end
+	}
+
+	public function dadNoteHit(character:Character) {
+		#if sys
+		var daNote = this;
+
+		script.callFunction("dadNoteHit", [character, daNote]);
+		#end
 	}
 }

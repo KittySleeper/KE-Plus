@@ -42,6 +42,7 @@ class Character extends FlxSprite
 
 	public var iconImage:String;
 	public var iconColor:FlxColor;
+	public var positions:Array<Float> = [0, 0];
 
 	public var char:CharacterLoader;
 
@@ -571,6 +572,10 @@ class Character extends FlxSprite
 
 				if (char.flipX != true && char.flipX != false)
 					char.flipX = false;
+				if (char.position == null)
+					char.position = [0, 0];
+
+				positions = char.position;
 
 				flipX = char.flipX;
 

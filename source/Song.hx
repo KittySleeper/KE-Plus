@@ -17,7 +17,9 @@ typedef SwagSong =
 
 	var player1:String;
 	var player2:String;
-	var validScore:Bool;
+	var player3:String;
+
+	var stage:String;
 }
 
 class Song
@@ -30,6 +32,9 @@ class Song
 
 	public var player1:String = 'bf';
 	public var player2:String = 'dad';
+	var player3:String = 'gf';
+	
+	var stage:String = 'stage';
 
 	public function new(song, notes, bpm)
 	{
@@ -48,29 +53,12 @@ class Song
 			// LOL GOING THROUGH THE BULLSHIT TO CLEAN IDK WHATS STRANGE
 		}
 
-		// FIX THE CASTING ON WINDOWS/NATIVE
-		// Windows???
-		// trace(songData);
-
-		// trace('LOADED FROM JSON: ' + songData.notes);
-		/* 
-			for (i in 0...songData.notes.length)
-			{
-				trace('LOADED FROM JSON: ' + songData.notes[i].sectionNotes);
-				// songData.notes[i].sectionNotes = songData.notes[i].sectionNotes
-			}
-
-				daNotes = songData.notes;
-				daSong = songData.song;
-				daBpm = songData.bpm; */
-
 		return parseJSONshit(rawJson);
 	}
 
 	public static function parseJSONshit(rawJson:String):SwagSong
 	{
 		var swagShit:SwagSong = cast Json.parse(rawJson).song;
-		swagShit.validScore = true;
 		return swagShit;
 	}
 }

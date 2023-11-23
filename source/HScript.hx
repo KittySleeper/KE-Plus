@@ -49,7 +49,7 @@ class HScript {
 				interp.variables.set("trace", hscriptTrace);
 			} catch (e) {
 				lime.app.Application.current.window.alert('Looks like the game couldn\'t parse your hscript file.\n$scriptPath\n${e.toString()}\n\nThe game will replace this\nscript with a blank script.',
-					'Failed to Parse $scriptPath');
+					'KE+ ERROR HANDLER ($scriptPath)');
 				isBlank = true;
 			}
 		}
@@ -73,6 +73,7 @@ class HScript {
 
 				"PlayState" => PlayState,
 				"Paths" => Paths,
+				"BGSprite" => BGSprite,
 				"Conductor" => Conductor,
 				"CoolUtil" => CoolUtil,
 				"Character" => Character,
