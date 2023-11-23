@@ -3705,11 +3705,7 @@ class PlayState extends MusicBeatState
 				boyfriend.playAnim('singRIGHTmiss', true);
 		}
 
-			updateAccuracy();
-			updateAccuracy();
-		}
 		updateAccuracy();
-		}
 	}
 
 	function updateAccuracy()
