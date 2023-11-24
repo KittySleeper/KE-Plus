@@ -141,6 +141,21 @@ class Paths
 		return 'assets/videos/$key.mp4';
 	}
 
+	inline static public function state(key:String, ext:String = "hx")
+	{
+		return 'assets/states/$key.$ext';
+	}
+
+	inline static public function cutsene(key:String, ext:String = "hx")
+	{
+		return 'assets/cutsenes/$key.$ext';
+	}
+
+	inline static public function character(key:String, ext:String = "json")
+	{
+		return 'assets/characters/$key.$ext';
+	}
+
 	inline static public function getSparrowAtlas(key:String, ?library:String)
 	{
 		return FlxAtlasFrames.fromSparrow(image(key, library), file('images/$key.xml', library));

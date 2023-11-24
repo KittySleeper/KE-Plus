@@ -1,4 +1,4 @@
-package;
+package states.editors;
 
 import openfl.net.FileReference;
 import flixel.FlxG;
@@ -13,7 +13,7 @@ import flixel.util.FlxColor;
 /**
 	*DEBUG MODE
  */
-class AnimationDebug extends FlxState
+class CharEditor extends MusicBeatState
 {
 	var char:Character;
 	var textAnim:FlxText;
@@ -217,7 +217,7 @@ class AnimationDebug extends FlxState
 		if (char.camPosition == null)
 			char.camPosition = [0, 0];
 
-		var data:String = haxe.Json.stringify(char);
+		var data:String = haxe.Json.stringify(char, "\t");
 
 		if ((data != null) && (data.length > 0))
 		{

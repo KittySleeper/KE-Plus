@@ -1,4 +1,4 @@
-package;
+package states;
 
 import flash.text.TextField;
 import flixel.FlxG;
@@ -159,7 +159,7 @@ class FreeplayState extends MusicBeatState
 
 		if (controls.BACK)
 		{
-			FlxG.switchState(new MainMenuState());
+			FlxG.switchState(new states.mainmenu.MainMenuState());
 		}
 
 		if (accepted)

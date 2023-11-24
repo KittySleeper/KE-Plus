@@ -73,7 +73,8 @@ class HScript {
 
 				"Assets" => Assets,
 
-				"PlayState" => PlayState,
+				"ModState" => states.ModState,
+				"PlayState" => states.game.PlayState,
 				"Paths" => Paths,
 				"BGSprite" => BGSprite,
 				"Conductor" => Conductor,

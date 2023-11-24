@@ -16,6 +16,8 @@ function create()
 	add(dadAlt);
 
 	camFollow.setPosition(dadAlt.x + 400, dadAlt.y + 220);
+	FlxG.sound.playMusic(Paths.music("DISTORTO"), 0);
+	FlxG.sound.music.fadeIn(5, 0, 0.5);
 	FlxG.sound.play(Paths.sound("cutsenes/ugh/wellWellWell"));
 
 	dadAlt.animation.finishCallback = function(anim)

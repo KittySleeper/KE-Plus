@@ -1,4 +1,4 @@
-package;
+package states.substates;
 
 import llua.Lua;
 import flixel.FlxG;
@@ -121,7 +121,7 @@ class PauseSubState extends MusicBeatSubstate
 						FlxG.switchState(new OptionsMenu());
 					}
 					else
-						FlxG.switchState(new MainMenuState());
+						FlxG.switchState(new states.mainmenu.MainMenuState());
 			}
 		}
 

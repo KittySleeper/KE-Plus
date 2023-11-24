@@ -1,4 +1,4 @@
-package;
+package states.mainmenu;
 
 import Controls.KeyboardScheme;
 import flixel.FlxG;
@@ -12,7 +12,6 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import lime.app.Application;
-
 #if windows
 import Discord.DiscordClient;
 #end
@@ -35,13 +34,10 @@ class MainMenuState extends MusicBeatState
 	var newGaming2:FlxText;
 	var newInput:Bool = true;
 
-	public static var nightly:String = "";
-
-	public static var kadeEngineVer:String = "1.4.2" + nightly;
-	public static var gameVer:String = "0.2.7.1";
-
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
+
+	var script:HScript;
 
 	override function create()
 	{
@@ -55,9 +51,19 @@ class MainMenuState extends MusicBeatState
 			FlxG.sound.playMusic(Paths.music('freakyMenu'));
 		}
 
+		script = new HScript('assets/states/MainMenuState');
+
+		if (!script.isBlank && script.expr != null)
+		{
+			script.interp.scriptObject = this;
+			script.setValue('add', add);
+			script.setValue('remove', remove);
+			script.interp.execute(script.expr);
+		}
+
 		persistentUpdate = persistentDraw = true;
 
-		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
+		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('mainmenu/menuBG'));
 		bg.scrollFactor.x = 0;
 		bg.scrollFactor.y = 0.15;
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
@@ -79,17 +85,19 @@ class MainMenuState extends MusicBeatState
 		magenta.antialiasing = true;
 		magenta.color = 0xFFfd719b;
 		add(magenta);
+
+		#if sys
+		script.callFunction("create");
+		#end
 		// magenta.scrollFactor.set();
 
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
-
 		for (i in 0...optionShit.length)
 		{
 			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
-			menuItem.frames = tex;
+			menuItem.frames = Paths.getSparrowAtlas("mainmenu/" + optionShit[i]);
 			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
 			menuItem.animation.play('idle');
@@ -102,13 +110,12 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, 0.60 * (60 / FlxG.save.data.fpsCap));
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, gameVer +  (Main.watermarks ? " FNF - " + kadeEngineVer + " Kade Engine" : ""), 12);
+		var versionShit:FlxText = new FlxText(0, 0, FlxG.width, "Funkin: 0.7.1\nKade: 1.4.2\nKade Plus: 1.0.0 (PRE 1.0)", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
 		// NG.core.calls.event.logEvent('swag').send();
-
 
 		if (FlxG.save.data.dfjk)
 			controls.setKeyboardScheme(KeyboardScheme.Solo, true);
@@ -117,6 +124,10 @@ class MainMenuState extends MusicBeatState
 
 		changeItem();
 
+		#if sys
+		script.callFunction("createPost");
+		#end
+
 		super.create();
 	}
 
@@ -124,6 +135,10 @@ class MainMenuState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
+		#if sys
+		script.callFunction("update", [elapsed]);
+		#end
+
 		if (FlxG.sound.music.volume < 0.8)
 		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
@@ -196,9 +211,14 @@ class MainMenuState extends MusicBeatState
 									case 'options':
 										FlxG.switchState(new OptionsMenu());
 								}
+
+								#if sys
+								script.callFunction("select", [daChoice]);
+								#end						
 							});
 						}
 					});
+
 				}
 			}
 		}
@@ -209,6 +229,10 @@ class MainMenuState extends MusicBeatState
 		{
 			spr.screenCenter(X);
 		});
+
+		#if sys
+		script.callFunction("updatePost", [elapsed]);
+		#end
 	}
 
 	function changeItem(huh:Int = 0)
@@ -232,5 +256,9 @@ class MainMenuState extends MusicBeatState
 
 			spr.updateHitbox();
 		});
+
+		#if sys
+		script.callFunction("changeItem", [huh]);
+		#end
 	}
 }

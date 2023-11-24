@@ -58,7 +58,7 @@ class Character extends FlxSprite
 		curCharacter = character;
 		this.isPlayer = isPlayer;
 
-		script = new HScript('assets/data/characters/$curCharacter');
+		script = new HScript('assets/characters/$curCharacter');
 
 		if (!script.isBlank && script.expr != null)
 		{
@@ -567,10 +567,10 @@ class Character extends FlxSprite
 
 				iconImage = "parents";
 			default:
-				char = Json.parse(Assets.getText(Paths.json("characters/dad")));
+				char = Json.parse(Assets.getText(Paths.character("dad")));
 
-				if (Assets.exists(Paths.json("characters/" + curCharacter)))
-					char = Json.parse(Assets.getText(Paths.json("characters/" + curCharacter)));
+				if (Assets.exists(Paths.character(curCharacter)))
+					char = Json.parse(Assets.getText(Paths.character(curCharacter)));
 
 				if (char.flipX != true && char.flipX != false)
 					char.flipX = false;

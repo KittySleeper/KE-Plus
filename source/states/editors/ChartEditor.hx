@@ -1,4 +1,4 @@
-package;
+package states.editors;
 
 import flixel.addons.ui.FlxUIText;
 import haxe.zip.Writer;
@@ -39,7 +39,7 @@ import openfl.utils.ByteArray;
 // shut up glitchey
 using StringTools;
 
-class ChartingState extends MusicBeatState
+class ChartEditor extends MusicBeatState
 {
 	var _file:FileReference;
 

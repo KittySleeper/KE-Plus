@@ -27,6 +27,8 @@ function create()
 
 	camFollow.setPosition(dadAlt.x + 400, dadAlt.y + 220);
 	FlxG.sound.play(Paths.sound("cutsenes/guns/tankSong2"));
+	FlxG.sound.playMusic(Paths.music("DISTORTO"), 0);
+	FlxG.sound.music.fadeIn(5, 0, 0.5);
 
 	new FlxTimer().start(4, function(timer)
 	{
