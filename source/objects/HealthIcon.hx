@@ -1,4 +1,4 @@
-package;
+package objects;
 
 import openfl.Assets;
 import flixel.FlxSprite;
@@ -11,6 +11,7 @@ class HealthIcon extends FlxSprite
 	public var sprTracker:FlxSprite;
 	public var char:String;
 	public var isPlayer:Bool;
+	public var hasWinning:Bool = true;
 
 	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
@@ -32,17 +33,25 @@ class HealthIcon extends FlxSprite
 		this.char = char;
 		this.isPlayer = isPlayer;
 
-		if (Assets.exists(Paths.image('icons/$char')))
-			loadGraphic(Paths.image('icons/$char'), true, 150, 150);
-		else if (Assets.exists(Paths.image('icons/icon-$char')))
-			loadGraphic(Paths.image('icons/icon-$char'), true, 150, 150);
-		else
-			loadGraphic(Paths.image('icons/icon-face'), true, 150, 150);
-
 		if (animation.exists(char))
 			animation.remove(char);
 
-		animation.add(char, [0, 1], 0, false, isPlayer);
+		var finalIcon:String = "icons/icon-face";
+
+		if (Assets.exists(Paths.image('icons/icon-$char')))
+			finalIcon = 'icons/icon-$char';
+
+		loadGraphic(Paths.image(finalIcon));
+
+		hasWinning = width == 450;
+
+		loadGraphic(Paths.image(finalIcon), true, 150, 150);
+
+		if (hasWinning)
+			animation.add(char, [0, 1, 2], 0, false, isPlayer);
+		else
+			animation.add(char, [0, 1], 0, false, isPlayer);
+
 		animation.play(char);
 	}
 }

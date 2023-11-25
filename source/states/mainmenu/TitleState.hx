@@ -23,9 +23,7 @@ import flixel.util.FlxTimer;
 import lime.app.Application;
 import openfl.Assets;
 
-#if windows
-import Discord.DiscordClient;
-#end
+
 
 #if desktop
 import sys.thread.Thread;

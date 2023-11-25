@@ -1,7 +1,7 @@
 package;
 
-import Controls.KeyboardScheme;
-import Controls.Control;
+
+
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -20,8 +20,6 @@ class LoadReplayState extends MusicBeatState
 {
 	var selector:FlxText;
 	var curSelected:Int = 0;
-
-    var songs:Array<states.FreeplayState.SongMetadata> = [];
 
 	var controlsStrings:Array<String> = [];
     var actualNames:Array<String> = [];
@@ -86,18 +84,6 @@ class LoadReplayState extends MusicBeatState
 		super.create();
 	}
 
-    public function getWeekNumbFromSong(songName:String):Int
-    {
-        var week:Int = 0;
-        for (i in 0...songs.length)
-        {
-            var pog:states.FreeplayState.SongMetadata = songs[i];
-            if (pog.songName.toLowerCase() == songName)
-                week = pog.week;
-        }
-        return week;
-    }
-
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -122,7 +108,6 @@ class LoadReplayState extends MusicBeatState
 				PlayState.SONG = Song.loadFromJson(poop, PlayState.rep.replay.songName.toLowerCase());
                 PlayState.isStoryMode = false;
                 PlayState.storyDifficulty = PlayState.rep.replay.songDiff;
-                PlayState.storyWeek = getWeekNumbFromSong(PlayState.rep.replay.songName);
                 states.LoadingState.loadAndSwitchState(new PlayState());
 			}
 	}

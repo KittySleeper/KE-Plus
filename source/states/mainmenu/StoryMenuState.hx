@@ -1,4 +1,4 @@
-package states;
+package states.mainmenu;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -13,9 +13,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.net.curl.CURLCode;
 
-#if windows
-import Discord.DiscordClient;
-#end
+
 
 using StringTools;
 

@@ -181,6 +181,9 @@ class CharEditor extends MusicBeatState
 
 		super.update(elapsed);
 
+		if (FlxG.keys.justPressed.ESCAPE)
+			FlxG.switchState(new PlayState());
+
 		if (FlxG.keys.justPressed.SEVEN)
 			saveChar();
 	}

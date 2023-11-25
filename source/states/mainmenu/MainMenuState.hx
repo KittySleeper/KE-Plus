@@ -1,6 +1,6 @@
 package states.mainmenu;
 
-import Controls.KeyboardScheme;
+
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -12,9 +12,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import lime.app.Application;
-#if windows
-import Discord.DiscordClient;
-#end
+
 
 using StringTools;
 

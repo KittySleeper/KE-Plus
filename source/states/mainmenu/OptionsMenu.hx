@@ -1,8 +1,7 @@
-package;
+package states.mainmenu;
 
 import openfl.Lib;
-import Options;
-import Controls.Control;
+
 import flash.text.TextField;
 import flixel.FlxG;
 import flixel.FlxSprite;

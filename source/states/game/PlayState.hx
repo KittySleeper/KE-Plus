@@ -10,7 +10,6 @@ import llua.State;
 import llua.LuaL;
 import openfl.Lib;
 import Section.SwagSection;
-import Song.SwagSong;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -31,10 +30,6 @@ import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 import flixel.util.FlxTimer;
 import openfl.Assets;
-import openfl.Assets;
-#if windows
-import Discord.DiscordClient;
-#end
 #if desktop
 import Sys;
 import sys.FileSystem;
@@ -56,8 +51,7 @@ class PlayState extends MusicBeatState
 	public static var goods:Int = 0;
 	public static var sicks:Int = 0;
 
-	public static var songPosBG:FlxSprite;
-	public static var songPosBar:FlxBar;
+	public static var songPosBar:FunkinBar;
 
 	public static var rep:Replay;
 	public static var loadRep:Bool = false;
@@ -111,8 +105,7 @@ class PlayState extends MusicBeatState
 	private var totalPlayed:Int = 0;
 	private var ss:Bool = false;
 
-	private var healthBarBG:FlxSprite;
-	private var healthBar:FlxBar;
+	private var healthBar:FunkinBar;
 	private var songPositionBar:Float = 0;
 
 	private var generatedMusic:Bool = false;
@@ -1134,30 +1127,18 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
-		if (FlxG.save.data.downscroll)
-			healthBarBG.y = 50;
-		healthBarBG.screenCenter(X);
-		healthBarBG.scrollFactor.set();
-		add(healthBarBG);
-
-		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
-			'health', 0, 2);
+		healthBar = new FunkinBar(0, FlxG.height * 0.4 + 10, "healthBar", dad.iconColor, boyfriend.iconColor, RIGHT_TO_LEFT, this, 'health', 0, 2);
+		healthBar.screenCenter();
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(dad.iconColor, boyfriend.iconColor);
-		// healthBar
 		add(healthBar);
 
 		// Add Kade Engine watermark
-		kadeEngineWatermark = new FlxText(4, healthBarBG.y + 50, 0, SONG.song + " " + storyDifficulty + (Main.watermarks ? " - KE+ 1.0.0 (PRE 1.0)" : ""), 16);
+		kadeEngineWatermark = new FlxText(4, healthBar.bg.y + 50, 0, SONG.song + " " + storyDifficulty + (Main.watermarks ? " - KE+ 1.0.0 (PRE 1.0)" : ""), 16);
 		kadeEngineWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		kadeEngineWatermark.scrollFactor.set();
 		add(kadeEngineWatermark);
 
-		if (FlxG.save.data.downscroll)
-			kadeEngineWatermark.y = FlxG.height * 0.9 + 45;
-
-		replayTxt = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (FlxG.save.data.downscroll ? 100 : -100), 0, "REPLAY", 20);
+		replayTxt = new FlxText(healthBar.bg.x + healthBar.bg.width / 2 - 75, healthBar.bg.y + (FlxG.save.data.downscroll ? 100 : -100), 0, "REPLAY", 20);
 		replayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		replayTxt.scrollFactor.set();
 		if (loadRep)
@@ -1166,23 +1147,22 @@ class PlayState extends MusicBeatState
 		}
 
 		iconP1 = new HealthIcon(boyfriend.iconImage, true);
-		iconP1.y = healthBar.y - (iconP1.height / 2);
+		iconP1.y = healthBar.bar.y - (iconP1.height / 2);
 		add(iconP1);
 
 		iconP2 = new HealthIcon(dad.iconImage, false);
-		iconP2.y = healthBar.y - (iconP2.height / 2);
+		iconP2.y = healthBar.bar.y - (iconP2.height / 2);
 		add(iconP2);
 
-		scoreTxt = new FlxText(0, healthBarBG.y + 20, FlxG.width, "", 16);
+		scoreTxt = new FlxText(0, healthBar.bg.y + 25, FlxG.width, "", 16);
 		if (!FlxG.save.data.accuracyDisplay)
-			scoreTxt.x = healthBarBG.x + healthBarBG.width / 2;
+			scoreTxt.x = healthBar.bg.x + healthBar.bg.width / 2;
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
 		notes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
-		healthBarBG.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
@@ -1832,26 +1812,12 @@ class PlayState extends MusicBeatState
 
 		if (FlxG.save.data.songPosition)
 		{
-			songPosBG = new FlxSprite(0, 10).loadGraphic(Paths.image('healthBar'));
-			if (FlxG.save.data.downscroll)
-				songPosBG.y = FlxG.height * 0.9 + 45;
-			songPosBG.screenCenter(X);
-			songPosBG.scrollFactor.set();
-			songPosBG.alpha = 0;
-			#if sys
-			for (script in scripts)
-				script.setValue("songPosBG", songPosBG);
-			#end
-			add(songPosBG);
-
-			songPosBar = new FlxBar(songPosBG.x
-				+ 4, songPosBG.y
-				+ 4, LEFT_TO_RIGHT, Std.int(songPosBG.width - 8), Std.int(songPosBG.height - 8), this,
+			songPosBar = new FunkinBar(0, 14, "healthBar", FlxColor.GRAY, FlxColor.LIME, LEFT_TO_RIGHT, this,
 				'songPositionBar', 0, songLength
 				- 1000);
-			songPosBar.numDivisions = 1000;
+			songPosBar.bar.numDivisions = 1000;
+			songPosBar.screenCenter(X);
 			songPosBar.scrollFactor.set();
-			songPosBar.createFilledBar(FlxColor.GRAY, FlxColor.LIME);
 			songPosBar.alpha = 0;
 			#if sys
 			for (script in scripts)
@@ -1859,9 +1825,7 @@ class PlayState extends MusicBeatState
 			#end
 			add(songPosBar);
 
-			var songName = new FlxText(0, 10, FlxG.width, SONG.song, 16);
-			if (FlxG.save.data.downscroll)
-				songName.y -= 3;
+			var songName = new FlxText(0, songPosBar.bg.y + 5, FlxG.width, SONG.song, 16);
 			songName.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			songName.scrollFactor.set();
 			songName.alpha = 0;
@@ -1871,7 +1835,7 @@ class PlayState extends MusicBeatState
 			#end
 			add(songName);
 
-			for (shittyShit in [songPosBG, songPosBar, songName])
+			for (shittyShit in [songPosBar, songName])
 			{
 				FlxTween.tween(shittyShit, {alpha: 1}, 0.5);
 				shittyShit.cameras = [camHUD];
@@ -2330,7 +2294,6 @@ class PlayState extends MusicBeatState
 
 			if (getVar("showOnlyStrums", 'bool'))
 			{
-				healthBarBG.visible = false;
 				kadeEngineWatermark.visible = false;
 				healthBar.visible = false;
 				iconP1.visible = false;
@@ -2339,7 +2302,6 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				healthBarBG.visible = true;
 				kadeEngineWatermark.visible = true;
 				healthBar.visible = true;
 				iconP1.visible = true;
@@ -2461,8 +2423,8 @@ class PlayState extends MusicBeatState
 
 		var iconOffset:Int = 26;
 
-		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
-		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
+		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.bar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
+		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.bar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
 
 		/*
 			for (icon in [iconP1, iconP2])
@@ -2475,13 +2437,17 @@ class PlayState extends MusicBeatState
 		if (health > 2)
 			health = 2;
 
-		if (healthBar.percent < 20)
+		if (healthBar.bar.percent < 20)
 			iconP1.animation.curAnim.curFrame = 1;
+		else if (healthBar.bar.percent > 80 && iconP1.hasWinning)
+			iconP1.animation.curAnim.curFrame = 2;
 		else
 			iconP1.animation.curAnim.curFrame = 0;
 
-		if (healthBar.percent > 80)
+		if (healthBar.bar.percent > 80)
 			iconP2.animation.curAnim.curFrame = 1;
+		else if (healthBar.bar.percent < 20 && iconP2.hasWinning)
+			iconP2.animation.curAnim.curFrame = 2;
 		else
 			iconP2.animation.curAnim.curFrame = 0;
 
@@ -2501,6 +2467,16 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.NINE)
 		{
 			FlxG.switchState(new states.editors.CharEditor(SONG.gfVersion));
+			if (lua != null)
+			{
+				Lua.close(lua);
+				lua = null;
+			}
+		}
+
+		if (FlxG.keys.justPressed.ZERO)
+		{
+			FlxG.switchState(new states.editors.CharEditor(SONG.player1));
 			if (lua != null)
 			{
 				Lua.close(lua);
@@ -3872,12 +3848,12 @@ class PlayState extends MusicBeatState
 			daNote.destroy();
 		}
 
+		daNote.bfNoteHit(boyfriend);
+
 		#if sys
 		for (script in scripts)
 			script.callFunction("bfNoteHit", [daNote]);
 		#end
-
-		daNote.bfNoteHit(boyfriend);
 	}
 
 	var fastCarCanDrive:Bool = true;
@@ -4042,10 +4018,6 @@ class PlayState extends MusicBeatState
 			}
 			// else
 			// Conductor.changeBPM(SONG.bpm);
-
-			// Dad doesnt interupt his own notes
-			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection)
-				dad.dance();
 		}
 		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
 		wiggleShit.update(Conductor.crochet);
@@ -4074,10 +4046,13 @@ class PlayState extends MusicBeatState
 			gf.dance();
 		}
 
-		if (!boyfriend.animation.curAnim.name.startsWith("sing"))
+		if (!boyfriend.animation.curAnim.name.contains("sing"))
 		{
-			boyfriend.playAnim('idle');
+			boyfriend.dance();
 		}
+
+		if (!dad.animation.curAnim.name.contains("sing"))
+			dad.dance();
 
 		if (curBeat % 8 == 7 && curSong == 'Bopeebo')
 		{

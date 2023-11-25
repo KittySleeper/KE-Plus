@@ -1,4 +1,4 @@
-package;
+package backend.fps;
 
 import flixel.FlxG;
 import haxe.Timer;
@@ -76,7 +76,7 @@ class FPSKE extends TextField
 
 		if (currentCount != cacheCount /*&& visible*/)
 		{
-			text = "Fps: " + currentFPS #if debug + "\nState: source." + Type.getClassName(Type.getClass(FlxG.state)) + ".hx" #end;
+			text = "Fps: " + currentFPS #if debug + "\nState: source/" + Type.getClassName(Type.getClass(FlxG.state)).replace(".", "/") + ".hx" #end;
 
 			#if (gl_stats && !disable_cffi && (!html5 || !canvas))
 			text += "\ntotalDC: " + Context3DStats.totalDrawCalls();

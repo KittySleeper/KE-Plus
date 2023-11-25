@@ -32,32 +32,35 @@ class ModState extends MusicBeatState
 			FlxG.switchState(new states.mainmenu.MainMenuState()); // softlock prevention
 		}
 
-        #if sys
-        script.callFunction("create");
-        #end
+		#if sys
+		script.callFunction("create");
+		#end
 	}
 
-    override public function update(elapsed) {
-        super.update(elapsed);
+	override public function update(elapsed)
+	{
+		super.update(elapsed);
 
 		#if sys
-        script.callFunction("update", [elapsed]);
-        #end
-    }
+		script.callFunction("update", [elapsed]);
+		#end
+	}
 
-    override public function stepHit() {
-        super.stepHit();
+	override public function stepHit()
+	{
+		super.stepHit();
 
-        #if sys
-        script.callFunction("stepHit");
-        #end
-    }
+		#if sys
+		script.callFunction("stepHit");
+		#end
+	}
 
-    override public function beatHit() {
-        super.beatHit();
+	override public function beatHit()
+	{
+		super.beatHit();
 
-        #if sys
-        script.callFunction("beatHit");
-        #end
-    }
+		#if sys
+		script.callFunction("beatHit");
+		#end
+	}
 }

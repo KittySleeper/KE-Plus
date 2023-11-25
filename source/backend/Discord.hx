@@ -1,4 +1,4 @@
-package;
+package backend;
 
 #if windows
 import Sys.sleep;
