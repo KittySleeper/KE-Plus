@@ -175,8 +175,7 @@ class FreeplayState extends MusicBeatState
 			trace('CUR WEEK' + PlayState.storyWeek);
 			LoadingState.loadAndSwitchState(new PlayState());
 		}
-
-		bg.color = FlxColor.fromInt(Std.int(FlxMath.lerp(bg.color, songs[curSelected].songColor, 0.57)));
+		bg.color = FlxColor.lerp(bg.color, songs[curSelected].songColor, 0.5);
 	}
 
 	function changeDiff(change:Int = 0)
