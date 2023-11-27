@@ -1,2 +1,3 @@
-Functions
-To Be Added Later
+Variables
+-bpm
+Song BPM
