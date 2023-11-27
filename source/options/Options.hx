@@ -139,6 +139,26 @@ class AccuracyOption extends Option
 	}
 }
 
+class HoldNoteHealth extends Option //basically if you gain health for hold notes or not
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+	public override function press():Bool
+	{
+		FlxG.save.data.holdHealth = !FlxG.save.data.holdHealth;
+		display = updateDisplay();
+		return true;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Hold Note Helath: " + (!FlxG.save.data.holdHealth ? "off" : "on");
+	}
+}
+
 class SongPositionOption extends Option
 {
 	public function new(desc:String)
