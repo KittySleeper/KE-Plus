@@ -1,3 +1,3 @@
 Variables
--bpm
+-bpm\n
 Song BPM
