@@ -35,3 +35,41 @@ Angle for game camera
 -camHudAngle
 
 Angle for camHUD
+
+-followXOffset
+
+Offset for CamFollow X
+
+-followYOffset
+
+Offset for CamFollow Y
+
+-showOnlyStrums
+
+Hides All UI Elements Besides strumlines
+
+-strumLine1Visible
+
+Whether Player 1's Strums are visible
+
+-strumLine2Visible
+
+Whether Player 2's Strums are visible
+
+-screenWidth
+
+Game's Width
+
+-screenHeight
+
+Games height
+
+-hudWidth
+
+Hud's Width
+
+-hudHeight
+
+Hud's height
+
+# Sprite Callbacks
