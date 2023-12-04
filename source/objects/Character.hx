@@ -20,6 +20,7 @@ typedef AnimationLoader =
 
 typedef CharacterLoader =
 {
+	var psychChar:Bool;
 	var flipX:Bool;
 	var image:String;
 	var iconImage:String;
@@ -28,6 +29,32 @@ typedef CharacterLoader =
 	var position:Array<Float>;
 	var camPosition:Array<Float>;
 };
+
+typedef CharacterLoaderPsych =
+{
+	var animations:Array<AnimationLoaderPsych>;
+	var image:String;
+	var scale:Float;
+	var sing_duration:Float;
+	var healthicon:String;
+
+	var position:Array<Float>;
+	var camera_position:Array<Float>;
+
+	var flip_x:Bool;
+	var no_antialiasing:Bool;
+	var healthbar_colors:Array<Int>;
+}
+
+typedef AnimationLoaderPsych =
+{
+	var anim:String;
+	var name:String;
+	var fps:Int;
+	var loop:Bool;
+	var indices:Array<Int>;
+	var offsets:Array<Float>;
+}
 
 class Character extends FlxSprite
 {
@@ -45,6 +72,7 @@ class Character extends FlxSprite
 	public var iconImage:String;
 	public var iconColor:FlxColor;
 	public var positions:Array<Float> = [0, 0];
+	public var camPositions:Array<Float> = [0, 0];
 
 	public var char:CharacterLoader;
 
@@ -567,17 +595,38 @@ class Character extends FlxSprite
 
 				iconImage = "parents";
 			default:
-				char = Json.parse(Assets.getText(Paths.character("dad")));
+				var name:String = if (Assets.exists(Paths.character(curCharacter))) curCharacter else "dad";
 
-				if (Assets.exists(Paths.character(curCharacter)))
-					char = Json.parse(Assets.getText(Paths.character(curCharacter)));
+				char = Json.parse(Assets.getText(Paths.character(name)));
+				var psychChar:CharacterLoaderPsych = Json.parse(Assets.getText(Paths.character(name)));
+
+				if (char.psychChar)
+				{
+					char.image = psychChar.image;
+					char.position = psychChar.position;
+					char.camPosition = psychChar.camera_position;
+					char.flipX = psychChar.flip_x;
+					char.iconImage = psychChar.healthicon;
+					char.iconColor = FlxColor.fromRGB(psychChar.healthbar_colors[0], psychChar.healthbar_colors[1], psychChar.healthbar_colors[2]).toHexString();
+
+					if (isPlayer){
+						char.position[0] -= 770;
+						char.position[1] -= 450;
+					}else{
+						char.position[0] -= 100;
+						char.position[1] -= 100;
+					}
+				}
 
 				if (char.flipX != true && char.flipX != false)
 					char.flipX = false;
 				if (char.position == null)
 					char.position = [0, 0];
+				if (char.camPosition == null)
+					char.camPosition = [0, 0];
 
 				positions = char.position;
+				camPositions = char.camPosition;
 
 				flipX = char.flipX;
 
@@ -585,20 +634,31 @@ class Character extends FlxSprite
 				iconImage = char.iconImage;
 				iconColor = FlxColor.fromString(char.iconColor);
 
-				for (anim in char.anims)
+				if (char.psychChar)
 				{
-					if (anim.fps < 1)
-						anim.fps = 24;
-					if (anim.looped != true && anim.looped != false)
-						anim.looped = false;
-					if (anim.offset == null)
-						anim.offset = [0, 0];
+					for (anim in psychChar.animations)
+					{
+						animation.addByPrefix(anim.anim, anim.name, anim.fps, anim.loop);
+						addOffset(anim.anim, anim.offsets[0], anim.offsets[1]);
+					}
+				}
+				else
+				{
+					for (anim in char.anims)
+					{
+						if (anim.fps < 1)
+							anim.fps = 24;
+						if (anim.looped != true && anim.looped != false)
+							anim.looped = false;
+						if (anim.offset == null)
+							anim.offset = [0, 0];
 
-					if (anim.indices != null && anim.indices != [])
-						animation.addByIndices(anim.prefix, anim.postfix, anim.indices, "", anim.fps, anim.looped);
-					else
-						animation.addByPrefix(anim.prefix, anim.postfix, anim.fps, anim.looped);
-					addOffset(anim.prefix, anim.offset[0], anim.offset[1]);
+						if (anim.indices != null && anim.indices != [])
+							animation.addByIndices(anim.prefix, anim.postfix, anim.indices, "", anim.fps, anim.looped);
+						else
+							animation.addByPrefix(anim.prefix, anim.postfix, anim.fps, anim.looped);
+						addOffset(anim.prefix, anim.offset[0], anim.offset[1]);
+					}
 				}
 		}
 

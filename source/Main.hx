@@ -27,7 +27,7 @@ class Main extends Sprite
 
 	var game:FlxGame;
 
-	var fpsCounter:FPSKE;
+	public static var fpsCounter:FPSKE;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 

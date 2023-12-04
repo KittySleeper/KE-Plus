@@ -1,3 +1,5 @@
+package backend;
+
 class Ratings
 {
     public static function CalculateRating(noteDiff:Float, ?customSafeZone:Float):String

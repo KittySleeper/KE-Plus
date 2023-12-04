@@ -1,3 +1,5 @@
+package backend;
+
 class EtternaFunctions
 {
     // erf constants

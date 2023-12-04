@@ -2,7 +2,7 @@ package states.editors;
 
 import flixel.addons.ui.FlxUIText;
 import haxe.zip.Writer;
-import Section.SwagSection;
+import backend.Section.SwagSection;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;

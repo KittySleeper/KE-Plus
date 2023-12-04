@@ -1,6 +1,6 @@
 package backend;
 
-import Section.SwagSection;
+import backend.Section.SwagSection;
 import haxe.Json;
 import haxe.format.JsonParser;
 import lime.utils.Assets;

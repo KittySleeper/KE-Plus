@@ -30,6 +30,11 @@ import backend.Controls;
 import backend.ControlsSubState;
 import backend.Conductor;
 import backend.Highscore;
+import backend.Replay;
+import backend.Ratings;
+import backend.EtternaFunctions;
+import backend.ChartParser;
+import backend.WiggleEffect;
 
 import options.Options;
 import options.PlayerSettings;
