@@ -78,7 +78,7 @@ class Main extends Sprite
 		}
 
 		#if !debug
-		initialState = TitleState;
+		initialState =  states.mainmenu.TitleState;
 		#end
 
 		#if (flixel >= "5.0.0")
