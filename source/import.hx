@@ -17,7 +17,6 @@ import objects.Note;
 import objects.DialogueBox;
 import objects.Character;
 import objects.MenuCharacter;
-import objects.Boyfriend;
 
 #if windows
 import backend.Discord.DiscordClient;

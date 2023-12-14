@@ -11,14 +11,14 @@ class NoteSplash extends FlxSprite{
 
         frames = Paths.getSparrowAtlas("noteSplashes");
 
-        animation.addByPrefix("purple1", "note impact 1 purple", false);
-        animation.addByPrefix("purple2", "note impact 2 purple", false);
-        animation.addByPrefix("blue1", "note impact 1  blue", false);
-        animation.addByPrefix("blue2", "note impact 2 blue", false);
-        animation.addByPrefix("green1", "note impact 1 green", false);
-        animation.addByPrefix("green2", "note impact 2 green", false);
-        animation.addByPrefix("red1", "note impact 1 red", false);
-        animation.addByPrefix("red2", "note impact 2 red", false);
+        animation.addByPrefix("purple1", "note impact 1 purple", 24, false);
+        animation.addByPrefix("purple2", "note impact 2 purple", 24, false);
+        animation.addByPrefix("blue1", "note impact 1  blue", 24, false);
+        animation.addByPrefix("blue2", "note impact 2 blue", 24, false);
+        animation.addByPrefix("green1", "note impact 1 green", 24, false);
+        animation.addByPrefix("green2", "note impact 2 green", 24, false);
+        animation.addByPrefix("red1", "note impact 1 red", 24, false);
+        animation.addByPrefix("red2", "note impact 2 red", 24, false);
 
         animation.play(anims[noteData]);
 

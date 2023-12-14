@@ -21,7 +21,7 @@ class GameplayCustomizeState extends MusicBeatState
 
     var sick:FlxSprite = new FlxSprite().loadGraphic(Paths.image('sick','shared'));
 
-    var bf:Boyfriend = new Boyfriend(770, 450, 'bf');
+    var bf:Character = new Character(770, 450, 'bf', true);
     var dad:Character;
 
     var strumLine:FlxSprite;

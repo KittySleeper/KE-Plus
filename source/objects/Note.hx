@@ -290,6 +290,9 @@ class Note extends FlxSprite
 	{
 		super.update(elapsed);
 
+		if (ID < 0 || noteData < 0)
+			kill();
+
 		if (mustPress)
 		{
 			// The * 0.5 is so that it's easier to hit them too late, instead of too early

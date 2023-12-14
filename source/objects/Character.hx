@@ -74,6 +74,8 @@ class Character extends FlxSprite
 	public var positions:Array<Float> = [0, 0];
 	public var camPositions:Array<Float> = [0, 0];
 
+	public var autoPlayAnims:Bool = true;
+
 	public var char:CharacterLoader;
 
 	public var script:HScript;
@@ -607,12 +609,16 @@ class Character extends FlxSprite
 					char.camPosition = psychChar.camera_position;
 					char.flipX = psychChar.flip_x;
 					char.iconImage = psychChar.healthicon;
-					char.iconColor = FlxColor.fromRGB(psychChar.healthbar_colors[0], psychChar.healthbar_colors[1], psychChar.healthbar_colors[2]).toHexString();
+					char.iconColor = FlxColor.fromRGB(psychChar.healthbar_colors[0], psychChar.healthbar_colors[1], psychChar.healthbar_colors[2])
+						.toHexString();
 
-					if (isPlayer){
+					if (isPlayer)
+					{
 						char.position[0] -= 770;
 						char.position[1] -= 450;
-					}else{
+					}
+					else
+					{
 						char.position[0] -= 100;
 						char.position[1] -= 100;
 					}
@@ -668,20 +674,24 @@ class Character extends FlxSprite
 		{
 			flipX = !flipX;
 
-			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf'))
+			if (!curCharacter.contains("bf"))
 			{
-				// var animArray
-				var oldRight = animation.getByName('singRIGHT').frames;
-				animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
+				var oldRight = animation.getByName("singRIGHT").frames;
+				var oldRightOffset = animOffsets.get("singRIGHT");
+				animation.getByName("singRIGHT").frames = animation.getByName("singLEFT").frames;
+				animOffsets.set("singRIGHT", animOffsets.get("singLEFT"));
 				animation.getByName('singLEFT').frames = oldRight;
+				animOffsets.set("singLEFT", oldRightOffset);
 
 				// IF THEY HAVE MISS ANIMATIONS??
 				if (animation.getByName('singRIGHTmiss') != null)
 				{
-					var oldMiss = animation.getByName('singRIGHTmiss').frames;
-					animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
+					var oldMiss = animation.getByName("singRIGHTmiss").frames;
+					var oldMissOffset = animOffsets.get("singRIGHTmiss");
+					animation.getByName("singRIGHTmiss").frames = animation.getByName("singLEFTmiss").frames;
+					animOffsets.set("singRIGHTmiss", animOffsets.get("singLEFTmiss"));
 					animation.getByName('singLEFTmiss').frames = oldMiss;
+					animOffsets.set("singLEFTmiss", oldMissOffset);
 				}
 			}
 		}
@@ -696,7 +706,9 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		if (!curCharacter.startsWith('bf'))
+		super.update(elapsed);
+
+		if (!isPlayer)
 		{
 			if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
 			{
@@ -714,14 +726,35 @@ class Character extends FlxSprite
 			}
 		}
 
+		if (isPlayer)
+		{
+			if (!debugMode)
+			{
+				if (animation.curAnim != null && animation.curAnim.name.startsWith('sing'))
+				{
+					holdTimer += elapsed;
+				}
+				else
+					holdTimer = 0;
+
+				if (animation.curAnim != null && animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode)
+				{
+					playAnim('idle', true, false, 10);
+				}
+
+				if (animation.curAnim != null && animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
+				{
+					playAnim('deathLoop');
+				}
+			}
+		}
+
 		if (curCharacter.contains("gf")
 			&& animation.curAnim != null
 			&& animation.curAnim != null
 			&& animation.curAnim.name == 'hairFall'
 			&& animation.curAnim.finished)
 			playAnim('danceRight');
-
-		super.update(elapsed);
 
 		#if sys
 		script.callFunction("update", [elapsed]);
