@@ -32,9 +32,22 @@ class FreeplayState extends MusicBeatState
 
 	var bg:FlxSprite;
 
+	public var script:HScript;
+
 	override function create()
 	{
+		#if sys
+		script = new HScript('assets/states/FreeplayState');
+		script.interp.scriptObject = this;
+		script.setValue('add', add);
+		script.setValue('remove', remove);
+		script.interp.execute(script.expr);
+		#end
+		
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
+		#if sys
+		script.callFunction("preSongLoad");
+		#end
 
 		for (i in 0...initSonglist.length)
 		{
@@ -50,6 +63,10 @@ class FreeplayState extends MusicBeatState
 					FlxG.sound.playMusic(Paths.music('freakyMenu'));
 			}
 		 */
+
+		#if sys
+		script.callFunction("create");
+		#end
 
 		#if windows
 		// Updating Discord Rich Presence
@@ -115,12 +132,19 @@ class FreeplayState extends MusicBeatState
 
 		var swag:Alphabet = new Alphabet(1, 0, "swag");
 
+		#if sys
+		script.callFunction("createPost");
+		#end
+
 		super.create();
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		#if sys
+		script.callFunction("update", [elapsed]);
+		#end
 
 		if (FlxG.sound.music.volume < 0.7)
 		{
@@ -171,16 +195,25 @@ class FreeplayState extends MusicBeatState
 			LoadingState.loadAndSwitchState(new PlayState());
 		}
 		bg.color = FlxColor.interpolate(bg.color, songs[curSelected].songColor, 0.57);
+		#if sys
+		script.callFunction("updatePost", [elapsed]);
+		#end
 	}
 
 	function changeDiff(change:Int = 0)
 	{
+		#if sys
+		script.callFunction("preDifficultyChange", [change]);
+		#end
 		curDifficulty += change;
 
 		if (curDifficulty < 0)
 			curDifficulty = songs[curSelected].difficultys.length - 1;
 		if (curDifficulty > songs[curSelected].difficultys.length - 1)
 			curDifficulty = 0;
+		#if sys
+		script.callFunction("difficultyChange", [change]);
+		#end
 
 		#if !switch
 		intendedScore = Highscore.getScore(songs[curSelected].songName, songs[curSelected].difficultys[curDifficulty].toLowerCase());
@@ -191,6 +224,9 @@ class FreeplayState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
+		#if sys
+		script.callFunction("preSelectionChange", [change]);
+		#end
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		curSelected += change;
@@ -199,6 +235,9 @@ class FreeplayState extends MusicBeatState
 			curSelected = songs.length - 1;
 		if (curSelected >= songs.length)
 			curSelected = 0;
+		#if sys
+		script.callFunction("selectionChange", [change]);
+		#end
 
 		changeDiff();
 
@@ -255,3 +294,26 @@ class SongMetadata
 		this.songColor = color;
 	}
 }
+
+
+/*
+temp script deletae later
+
+function preSongLoad() {}
+
+function create() {}
+
+function createPost() {}
+
+function update(elapsed) {}
+
+function updatePost(elapsed) {}
+
+function preDifficultyChange(change) {}
+
+function difficultyChange(change) {}
+
+function preSelectionChange(change) {}
+
+function selectionChange(change) {}
+*/
