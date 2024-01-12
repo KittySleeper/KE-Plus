@@ -37,6 +37,7 @@ class Main extends Sprite
 		// quick checks 
 
 		Lib.current.addChild(new Main());
+trace("im not boom smart im money smart makes me more intelligent");
 	}
 
 	public function new()
