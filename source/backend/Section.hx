@@ -1,6 +1,6 @@
 package backend;
 
-typedef SwagSection =
+typedef Intersection =
 {
 	var sectionNotes:Array<Dynamic>;
 	var lengthInSteps:Int;
