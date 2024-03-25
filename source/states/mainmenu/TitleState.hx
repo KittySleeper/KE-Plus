@@ -52,9 +52,10 @@ class TitleState extends MusicBeatState
 	override public function create():Void
 	{
 		#if sys
+		var mods = sys.FileSystem.readDirectory("mods");
 		polymod.Polymod.init({
 			modRoot: "mods",
-			dirs: [Assets.getText(Paths.txt("modSelected")), "global"],
+			dirs: [mods, "global"],
 			errorCallback: (e) -> {
 				trace(e.message);
 			},
