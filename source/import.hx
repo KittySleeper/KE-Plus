@@ -1,5 +1,7 @@
 import Paths;
 
+import states.LoadReplayState;
+
 import states.game.PlayState;
 
 import states.mainmenu.FreeplayState;
@@ -34,8 +36,14 @@ import backend.Ratings;
 import backend.EtternaFunctions;
 import backend.ChartParser;
 import backend.WiggleEffect;
+import backend.KadeEngineData;
+import backend.APIStuff;
+import backend.ConvertScore;
+import backend.CoolUtil;
 
 import options.Options;
 import options.PlayerSettings;
+import options.ButtonRemapSubstate;
+import options.GameplayCustomizeState;
 
 using StringTools;
