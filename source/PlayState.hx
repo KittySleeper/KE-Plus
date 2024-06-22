@@ -73,7 +73,7 @@ class PlayState extends MusicBeatState
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
-	public static var storyDifficulty:Int = 1;
+	public static var storyDifficulty:String = "normal";
 	public static var weekSong:Int = 0;
 	public static var shits:Int = 0;
 	public static var bads:Int = 0;
@@ -255,17 +255,7 @@ class PlayState extends MusicBeatState
 		trace('Mod chart: ' + executeModchart + " - " + Paths.lua(songLowercase + "/modchart"));
 
 		// Making difficulty text for Discord Rich Presence.
-		switch (storyDifficulty)
-		{
-			case 0:
-				storyDifficultyText = "Easy";
-			case 1:
-				storyDifficultyText = "Normal";
-			case 2:
-				storyDifficultyText = "Hard";
-			case 3:
-				storyDifficultyText = "Erect";
-		}
+		storyDifficultyText = storyDifficulty;
 
 		#if windows
 		iconRPC = SONG.player2;
@@ -1299,10 +1289,7 @@ class PlayState extends MusicBeatState
 
 		if (!paused)
 		{
-			if (storyDifficultyText.toLowerCase() == "erect")
-				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song, "erect"), 1, false);
-			else
-				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
+			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song, SONG.remix), 1, false);
 		}
 
 		FlxG.sound.music.onComplete = endSong;
@@ -1367,15 +1354,9 @@ class PlayState extends MusicBeatState
 		curSong = songData.song;
 
 		if (SONG.needsVoices) {
-			if (storyDifficultyText.toLowerCase() == "erect") {
-				vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, "", "erect"));
-				vocalsBF = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, boyfriend.curCharacter, "erect"));
-				vocalsDad = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, dad.curCharacter, "erect"));
-			} else {
-				vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
-				vocalsBF = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, boyfriend.curCharacter));
-				vocalsDad = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, dad.curCharacter));
-			}
+			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, "", SONG.remix));
+			vocalsBF = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, boyfriend.curCharacter, SONG.remix));
+			vocalsDad = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, dad.curCharacter, SONG.remix));
 		}
 		else
 			vocals = new FlxSound();
@@ -2536,14 +2517,8 @@ class PlayState extends MusicBeatState
 				{
 					var difficulty:String = "";
 
-					if (storyDifficulty == 0)
-						difficulty = '-easy';
-
-					if (storyDifficulty == 2)
-						difficulty = '-hard';
-
-					if (storyDifficulty == 2)
-						difficulty = '-erect';
+					if (storyDifficulty != "normal")
+						difficulty = '-$storyDifficulty';
 
 					trace('LOADING NEXT SONG');
 					// pre lowercasing the next story song name

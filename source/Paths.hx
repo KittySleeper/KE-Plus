@@ -103,11 +103,11 @@ class Paths
 				case 'dad-battle': songLowercase = 'dadbattle';
 				case 'philly-nice': songLowercase = 'philly';
 			}
-		if (remix != "") {
+		if (remix != null && remix != "") {
 			if (character != "")
 				return 'songs:assets/songs/${songLowercase}/Voices-$character-$remix.$SOUND_EXT';
 			else
-				return 'songs:assets/songs/${songLowercase}/Voices.$SOUND_EXT';
+				return 'songs:assets/songs/${songLowercase}/Voices-$remix.$SOUND_EXT';
 		} else {
 			if (character != "")
 				return 'songs:assets/songs/${songLowercase}/Voices-$character.$SOUND_EXT';
@@ -123,7 +123,7 @@ class Paths
 				case 'dad-battle': songLowercase = 'dadbattle';
 				case 'philly-nice': songLowercase = 'philly';
 			}
-		if (remix != "")
+		if (remix != null && remix != "")
 			return 'songs:assets/songs/${songLowercase}/Inst-$remix.$SOUND_EXT';
 		else
 			return 'songs:assets/songs/${songLowercase}/Inst.$SOUND_EXT';

@@ -56,6 +56,8 @@ class StoryMenuState extends MusicBeatState
 		"Hating Simulator ft. Moawling"
 	];
 
+	var diffArray:Array<String> = ["easy", "normal", "hard"];
+
 	var txtWeekTitle:FlxText;
 
 	var curWeek:Int = 0;
@@ -295,7 +297,7 @@ class StoryMenuState extends MusicBeatState
 					diffic = '-hard';
 			}
 
-			PlayState.storyDifficulty = curDifficulty;
+			PlayState.storyDifficulty = diffArray[curDifficulty];
 
 			PlayState.SONG = Song.loadFromJson(StringTools.replace(PlayState.storyPlaylist[0]," ", "-").toLowerCase() + diffic, StringTools.replace(PlayState.storyPlaylist[0]," ", "-").toLowerCase());
 			PlayState.storyWeek = curWeek;
@@ -335,10 +337,10 @@ class StoryMenuState extends MusicBeatState
 
 		// USING THESE WEIRD VALUES SO THAT IT DOESNT FLOAT UP
 		sprDifficulty.y = leftArrow.y - 15;
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(curWeek, diffArray[curDifficulty]);
 
 		#if !switch
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(curWeek, diffArray[curDifficulty]);
 		#end
 
 		FlxTween.tween(sprDifficulty, {y: leftArrow.y + 15, alpha: 1}, 0.07);
@@ -393,7 +395,7 @@ class StoryMenuState extends MusicBeatState
 		txtTracklist.text += "\n";
 
 		#if !switch
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(curWeek, diffArray[curDifficulty]);
 		#end
 	}
 }

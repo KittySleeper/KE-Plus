@@ -49,14 +49,37 @@ class TitleState extends MusicBeatState
 	var wackyImage:FlxSprite;
 
 	override public function create():Void
-	{
-		#if polymod
-		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
-		#end
-		
+	{		
 		#if sys
 		if (!sys.FileSystem.exists(Sys.getCwd() + "/assets/replays"))
 			sys.FileSystem.createDirectory(Sys.getCwd() + "/assets/replays");
+
+		var mods = sys.FileSystem.readDirectory("mods");
+		polymod.Polymod.init({
+			modRoot: "mods",
+			dirs: mods,
+			errorCallback: (e) -> {
+				trace(e.message);
+			},
+			frameworkParams: {
+				assetLibraryPaths: [
+					"songs" => "assets/songs",
+					"images" => "assets/images",
+					"shared" => 'assets/shared',
+					"data" => "assets/data",
+					"fonts" => "assets/fonts",
+					"sounds" => "assets/sounds",
+					"music" => "assets/music",
+					"tutorial" => "assets/tutorial",
+					"week1" => "assets/week1",
+					"week2" => "assets/week2",
+					"week3" => "assets/week3",
+					"week4" => "assets/week4",
+					"week5" => 'assets/week5',
+					"week6" => 'assets/week6',
+				]
+			}
+		});
 		#end
 
 		@:privateAccess

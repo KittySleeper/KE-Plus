@@ -1,5 +1,5 @@
 Tutorial:gf:1:easy|normal|hard
-Bopeebo:dad:1:easy|normal|hard
+Bopeebo:dad:1:easy|normal|hard|rumble
 Fresh:dad:1:easy|normal|hard
 Dad Battle:dad:1:easy|normal|hard
 Spookeez:spooky:2:easy|normal|hard

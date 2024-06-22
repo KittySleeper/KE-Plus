@@ -16,7 +16,7 @@ typedef ReplayJSON =
     public var replayGameVer:String;
     public var timestamp:Date;
     public var songName:String;
-    public var songDiff:Int;
+    public var songDiff:String;
     public var songNotes:Array<Float>;
 	public var noteSpeed:Float;
 	public var isDownscroll:Bool;
@@ -33,7 +33,7 @@ class Replay
         this.path = path;
         replay = {
             songName: "Tutorial", 
-            songDiff: 1,
+            songDiff: "normal",
 			noteSpeed: 1.5,
 			isDownscroll: false,
 			songNotes: [],
