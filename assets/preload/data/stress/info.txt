@@ -1,2 +1,0 @@
-Stress
-Composer: Kawai Sprite

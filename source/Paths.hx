@@ -1,6 +1,6 @@
 package;
 
-import lime.utils.Assets;
+import openfl.Assets;
 import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
@@ -56,7 +56,7 @@ class Paths
 		return getPath(file, type, library);
 	}
 
-	inline static public function lua(key:String, ?library:String)
+	inline static public function lua(key:String,?library:String)
 	{
 		return getPath('data/$key.lua', TEXT, library);
 	}
@@ -96,34 +96,37 @@ class Paths
 		return getPath('music/$key.$SOUND_EXT', MUSIC, library);
 	}
 
-	inline static public function voices(song:String, diff:String = "")
+	inline static public function voices(song:String, character:String = "", remix:String = "")
 	{
-		var voices = "";
-
-		if (diff == "normal" || diff == null)
-			diff = "";
-
-		if (Assets.exists('assets/songs/${song.toLowerCase()}/Voices-${diff.toLowerCase()}.$SOUND_EXT'))
-			voices = 'assets/songs/${song.toLowerCase()}/Voices-${diff.toLowerCase()}.$SOUND_EXT';
-		else
-			voices = 'assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
-
-		return 'songs:$voices';
+		var songLowercase = StringTools.replace(song, " ", "-").toLowerCase();
+			switch (songLowercase) {
+				case 'dad-battle': songLowercase = 'dadbattle';
+				case 'philly-nice': songLowercase = 'philly';
+			}
+		if (remix != "") {
+			if (character != "")
+				return 'songs:assets/songs/${songLowercase}/Voices-$character-$remix.$SOUND_EXT';
+			else
+				return 'songs:assets/songs/${songLowercase}/Voices.$SOUND_EXT';
+		} else {
+			if (character != "")
+				return 'songs:assets/songs/${songLowercase}/Voices-$character.$SOUND_EXT';
+			else
+				return 'songs:assets/songs/${songLowercase}/Voices.$SOUND_EXT';
+		}
 	}
 
-	inline static public function inst(song:String, diff:String = "")
+	inline static public function inst(song:String, remix:String = "")
 	{
-		var inst = "";
-
-		if (diff == "normal" || diff == null)
-			diff = "";
-
-		if (Assets.exists('assets/songs/${song.toLowerCase()}/Inst-${diff.toLowerCase()}.$SOUND_EXT'))
-			inst = 'assets/songs/${song.toLowerCase()}/Inst-${diff.toLowerCase()}.$SOUND_EXT';
+		var songLowercase = StringTools.replace(song, " ", "-").toLowerCase();
+			switch (songLowercase) {
+				case 'dad-battle': songLowercase = 'dadbattle';
+				case 'philly-nice': songLowercase = 'philly';
+			}
+		if (remix != "")
+			return 'songs:assets/songs/${songLowercase}/Inst-$remix.$SOUND_EXT';
 		else
-			inst = 'assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
-
-		return 'songs:$inst';
+			return 'songs:assets/songs/${songLowercase}/Inst.$SOUND_EXT';
 	}
 
 	inline static public function image(key:String, ?library:String)
@@ -134,26 +137,6 @@ class Paths
 	inline static public function font(key:String)
 	{
 		return 'assets/fonts/$key';
-	}
-
-	inline static public function video(key:String)
-	{
-		return 'assets/videos/$key.mp4';
-	}
-
-	inline static public function state(key:String, ext:String = "hx")
-	{
-		return 'assets/states/$key.$ext';
-	}
-
-	inline static public function cutsene(key:String, ext:String = "hx")
-	{
-		return 'assets/cutsenes/$key.$ext';
-	}
-
-	inline static public function character(key:String, ext:String = "json")
-	{
-		return 'assets/characters/$key.$ext';
 	}
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)

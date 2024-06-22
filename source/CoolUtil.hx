@@ -1,13 +1,18 @@
 package;
 
-import flixel.FlxG;
-import flixel.math.FlxMath;
 import lime.utils.Assets;
 
 using StringTools;
 
 class CoolUtil
 {
+	public static var difficultyArray:Array<String> = ['EASY', "NORMAL", "HARD"];
+
+	public static function difficultyString():String
+	{
+		return difficultyArray[PlayState.storyDifficulty];
+	}
+
 	public static function coolTextFile(path:String):Array<String>
 	{
 		var daList:Array<String> = Assets.getText(path).trim().split('\n');
@@ -40,9 +45,5 @@ class CoolUtil
 			dumbArray.push(i);
 		}
 		return dumbArray;
-	}
-
-	public static function lerpGood(a:Float, b:Float, ratio:Float) {
-		return FlxMath.lerp(a, b, FlxMath.bound(ratio - (FlxG.elapsed * 60), 0, 1));
 	}
 }
