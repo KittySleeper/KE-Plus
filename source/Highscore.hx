@@ -68,7 +68,7 @@ class Highscore
 	{
 		var daSong:String = song;
 
-		if (diff != "nomal")
+		if (diff != "normal")
 			daSong += '-$diff';
 
 		return daSong;
