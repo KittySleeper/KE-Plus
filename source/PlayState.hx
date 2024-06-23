@@ -1634,8 +1634,14 @@ class PlayState extends MusicBeatState
 			{
 				case 0:
 					cpuStrums.add(babyArrow);
+
+					if (FlxG.save.data.middlescroll)
+						babyArrow.x -= 99999;
 				case 1:
 					playerStrums.add(babyArrow);
+
+					if (FlxG.save.data.middlescroll)
+						babyArrow.x -= 300;
 			}
 
 			babyArrow.animation.play('static');

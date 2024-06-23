@@ -513,7 +513,9 @@ class Character extends FlxSprite
 				flipX = true;
 			
 			default:
-				//if (Assets.exists(Paths.json(curCharacter, null, "characters"))) {} else {
+				if (Assets.exists(Paths.json(curCharacter, null, "characters"))) {
+					
+				} else {
 					var tex = Paths.getSparrowAtlas('characters/BOYFRIEND', 'shared');
 					frames = tex;
 	
@@ -552,10 +554,10 @@ class Character extends FlxSprite
 					playAnim('idle');
 	
 					flipX = true;
-											
+
 					color = FlxColor.BLACK;
 					alpha = 0.45;
-				//}
+				}
 		}
 
 		dance();
