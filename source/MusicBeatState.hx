@@ -1,5 +1,6 @@
 package;
 
+import openfl.Assets;
 #if windows
 import Discord.DiscordClient;
 #end
@@ -22,17 +23,36 @@ class MusicBeatState extends FlxUIState
 	private var curBeat:Int = 0;
 	private var controls(get, never):Controls;
 
+	var globalScripts:Array<HScript> = [];
+
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
 
 	override function create()
 	{
+		for (script in Assets.getText(Paths.txt("globalScripts")).split("\n")) { // somewhat decent global script system?
+			var script = new HScript('assets/data/$script');
+
+			if (!script.isBlank && script.expr != null)
+			{
+				script.interp.scriptObject = this;
+				script.setValue('add', add);
+				script.setValue('remove', remove);
+				script.interp.execute(script.expr);
+			}
+
+			script.callFunction("create");
+		}
+
 		(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
 
 		if (transIn != null)
 			trace('reg ' + transIn.region);
 
 		super.create();
+
+		for (script in globalScripts)
+			script.callFunction("createPost");
 	}
 
 
@@ -50,6 +70,9 @@ class MusicBeatState extends FlxUIState
 
 	override function update(elapsed:Float)
 	{
+		for (script in globalScripts)
+			script.callFunction("update", [elapsed]);
+
 		//everyStep();
 		var oldStep:Int = curStep;
 
@@ -74,6 +97,9 @@ class MusicBeatState extends FlxUIState
 			(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
 
 		super.update(elapsed);
+
+		for (script in globalScripts)
+			script.callFunction("updatePost", [elapsed]);
 	}
 
 	private function updateBeat():Void
@@ -102,14 +128,19 @@ class MusicBeatState extends FlxUIState
 
 	public function stepHit():Void
 	{
-
 		if (curStep % 4 == 0)
 			beatHit();
+
+		for (script in globalScripts)
+			script.callFunction("stepHit");
 	}
 
 	public function beatHit():Void
 	{
 		//do literally nothing dumbass
+
+		for (script in globalScripts)
+			script.callFunction("beatHit");
 	}
 	
 	public function fancyOpenURL(schmancy:String)

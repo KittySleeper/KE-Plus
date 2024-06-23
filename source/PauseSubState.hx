@@ -113,10 +113,12 @@ class PauseSubState extends MusicBeatSubstate
 				case "Resume":
 					close();
 				case "Restart Song":
-					PlayState.instance.transIn = null;
+					/*PlayState.instance.transIn = null;
 					PlayState.instance.transOut = null;
 					PlayState.instance.openSubState(new StickerSubState(null, true));
-					//destroy();
+					destroy();*/
+
+					FlxG.resetState();
 				case "Exit to menu":
 					if(PlayState.loadRep)
 					{
