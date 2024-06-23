@@ -62,6 +62,8 @@ import Sys;
 import sys.FileSystem;
 #end
 
+import TheSplash;
+
 using StringTools;
 
 class PlayState extends MusicBeatState
@@ -2660,6 +2662,14 @@ class PlayState extends MusicBeatState
 					if (FlxG.save.data.accuracyMod == 0)
 						totalNotesHit += 0.75;
 				case 'sick':
+					var splash:TheSplash = new TheSplash();
+					splash.cameras = [camHUD];
+					splash.x = playerStrums.members[daNote.noteData].x;
+					splash.y = playerStrums.members[daNote.noteData].y;
+					add(splash);
+					splash.animation.play(Std.string(daNote.noteData));
+					trace(daNote.noteData);
+					//strumLineSplashes.members[].animation
 					if (health < 2)
 						health += 0.1;
 					if (FlxG.save.data.accuracyMod == 0)
