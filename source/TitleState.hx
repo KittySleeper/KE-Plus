@@ -51,8 +51,17 @@ class TitleState extends MusicBeatState
 	override public function create():Void
 	{		
 		#if sys
-		if (!sys.FileSystem.exists(Sys.getCwd() + "/assets/replays"))
-			sys.FileSystem.createDirectory(Sys.getCwd() + "/assets/replays");
+		HScript.parser = new hscript.Parser();
+		HScript.parser.allowJSON = true;
+		HScript.parser.allowMetadata = true;
+		HScript.parser.allowTypes = true;
+		HScript.parser.preprocesorValues = [
+			"desktop" => #if (desktop) true #else false #end,
+			"windows" => #if (windows) true #else false #end,
+			"mac" => #if (mac) true #else false #end,
+			"linux" => #if (linux) true #else false #end,
+			"debugBuild" => #if (debug) true #else false #end
+		];
 
 		var mods = sys.FileSystem.readDirectory("mods");
 		polymod.Polymod.init({
@@ -80,12 +89,10 @@ class TitleState extends MusicBeatState
 				]
 			}
 		});
-		#end
 
-		@:privateAccess
-		{
-			trace("Loaded " + openfl.Assets.getLibrary("default").assetsLoaded + " assets (DEFAULT)");
-		}
+		if (!sys.FileSystem.exists(Sys.getCwd() + "/assets/replays"))
+			sys.FileSystem.createDirectory(Sys.getCwd() + "/assets/replays");
+		#end
 		
 		PlayerSettings.init();
 

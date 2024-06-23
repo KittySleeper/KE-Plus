@@ -213,6 +213,8 @@ class PlayState extends MusicBeatState
 	private var executeModchart = false;
 
 	// API stuff
+
+	var script:HScript;
 	
 	public function addObject(object:FlxBasic) { add(object); }
 	public function removeObject(object:FlxBasic) { remove(object); }
@@ -239,7 +241,7 @@ class PlayState extends MusicBeatState
 		repReleases = 0;
 
 		// pre lowercasing the song name (create)
-		var songLowercase = StringTools.replace(PlayState.SONG.song, " ", "-").toLowerCase();
+		var songLowercase = PlayState.SONG.song.toLowerCase();
 			switch (songLowercase) {
 				case 'dad-battle': songLowercase = 'dadbattle';
 				case 'philly-nice': songLowercase = 'philly';
@@ -717,6 +719,21 @@ class PlayState extends MusicBeatState
 					add(stageCurtains);
 			}
 		}
+
+		script = new HScript('assets/data/$songLowercase/script');
+
+		if (!script.isBlank && script.expr != null)
+		{
+			script.interp.scriptObject = this;
+			script.setValue('add', add);
+			script.setValue('remove', remove);
+			script.setValue("introAssets", []);
+			script.setValue("introSuffix", "");
+			script.interp.execute(script.expr);
+		}
+
+		script.callFunction("create");
+
 		var gfVersion:String = 'gf';
 
 		switch (SONG.gfVersion)
@@ -1054,6 +1071,8 @@ class PlayState extends MusicBeatState
 			rep = new Replay("na");
 
 		super.create();
+
+		script.callFunction("createPost");
 	}
 
 	function schoolIntro(?dialogueBox:DialogueBox):Void
@@ -1162,7 +1181,6 @@ class PlayState extends MusicBeatState
 		generateStaticArrows(0);
 		generateStaticArrows(1);
 
-
 		#if windows
 		if (executeModchart)
 		{
@@ -1170,6 +1188,8 @@ class PlayState extends MusicBeatState
 			luaModchart.executeState('start',[PlayState.SONG.song]);
 		}
 		#end
+
+		script.callFunction("startCountdown");
 
 		talking = false;
 		startedCountdown = true;
@@ -1209,8 +1229,13 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			switch (swagCounter)
+			if (script.expr != null && script.getValue("introAssets") != [])
+				introAssets.set('default', script.getValue("introAssets"));
 
+			if (script.expr != null && script.getValue("introSuffix") != "")
+				altSuffix = script.getValue("introSuffix");
+
+			switch (swagCounter)
 			{
 				case 0:
 					FlxG.sound.play(Paths.sound('intro3' + altSuffix), 0.6);
@@ -1385,7 +1410,7 @@ class PlayState extends MusicBeatState
 			}
 		// Per song offset check
 		#if windows
-			var songPath = 'assets/data/' + songLowercase + '/';
+			/*var songPath = 'assets/data/' + songLowercase + '/';
 			
 			for(file in sys.FileSystem.readDirectory(songPath))
 			{
@@ -1402,7 +1427,7 @@ class PlayState extends MusicBeatState
 						sys.io.File.saveContent(songPath + songOffset + '.offset', '');
 					}
 				}
-			}
+			}*/
 		#end
 		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
 		for (section in noteData)
@@ -1795,10 +1820,7 @@ class PlayState extends MusicBeatState
 
 		if (FlxG.keys.justPressed.NINE)
 		{
-			if (iconP1.animation.curAnim.name == 'bf-old')
-				iconP1.animation.play(SONG.player1);
-			else
-				iconP1.animation.play('bf-old');
+			iconP1.swapOldIcon();
 		}
 
 		switch (curStage)
@@ -1825,6 +1847,8 @@ class PlayState extends MusicBeatState
 		songName.text = curSong + " (" + FlxStringUtil.formatTime(Conductor.songPosition / 1000) + "/" + FlxStringUtil.formatTime(FlxG.sound.music.length / 1000) + ")";
 
 		songPos = FlxG.sound.music.time;
+
+		script.callFunction("update", [elapsed]);
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -2341,6 +2365,8 @@ class PlayState extends MusicBeatState
 							luaModchart.executeState('playerTwoSing', [Math.abs(daNote.noteData), Conductor.songPosition]);
 						#end
 
+						script.callFunction("playerTwoSing", [daNote]);
+
 						dad.holdTimer = 0;
 	
 						if (SONG.needsVoices) {
@@ -2371,8 +2397,6 @@ class PlayState extends MusicBeatState
 							daNote.angle = strumLineNotes.members[Math.floor(Math.abs(daNote.noteData))].angle;
 						daNote.alpha = strumLineNotes.members[Math.floor(Math.abs(daNote.noteData))].alpha;
 					}
-					
-					
 
 					if (daNote.isSustainNote)
 						daNote.x += daNote.width / 2 + 17;
@@ -2421,6 +2445,8 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.ONE)
 			endSong();
 		#end
+
+		script.callFunction("updatePost", [elapsed]);
 	}
 
 	function endSong():Void
@@ -2562,8 +2588,9 @@ class PlayState extends MusicBeatState
 				FlxG.switchState(new FreeplayState());
 			}
 		}
-	}
 
+		script.callFunction("endSong");
+	}
 
 	var endingSong:Bool = false;
 
@@ -3101,6 +3128,7 @@ class PlayState extends MusicBeatState
 				luaModchart.executeState('playerOneMiss', [direction, Conductor.songPosition]);
 			#end
 
+			script.callFunction("playerOneMiss", [direction]);
 
 			updateAccuracy();
 		}
@@ -3252,6 +3280,7 @@ class PlayState extends MusicBeatState
 						luaModchart.executeState('playerOneSing', [note.noteData, Conductor.songPosition]);
 					#end
 
+					script.callFunction("playerOneSing", [note]);
 
 					if(!loadRep && note.mustPress)
 						saveNotes.push(HelperFunctions.truncateFloat(note.strumTime, 2));
@@ -3428,6 +3457,8 @@ class PlayState extends MusicBeatState
 			luaModchart.executeState('beatHit',[curBeat]);
 		}
 		#end
+
+		script.callFunction("beatHit", [curBeat]);
 
 		if (curSong == 'Tutorial' && dad.curCharacter == 'gf') {
 			if (curBeat % 2 == 1 && dad.animOffsets.exists('danceLeft'))

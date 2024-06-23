@@ -76,9 +76,9 @@ class Paths
 		return getPath('data/$key.xml', TEXT, library);
 	}
 
-	inline static public function json(key:String, ?library:String)
+	inline static public function json(key:String, ?library:String, path:String = "data")
 	{
-		return getPath('data/$key.json', TEXT, library);
+		return getPath('$path/$key.json', TEXT, library);
 	}
 
 	static public function sound(key:String, ?library:String)
