@@ -76,6 +76,8 @@ class FreeplayState extends MusicBeatState
 
 		for (i in 0...songs.length)
 		{
+			//FlxG.sound.playMusic(Paths.inst(songs[i].songName), 0.1); // preload
+			
 			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false, true);
 			songText.isMenuItem = true;
 			songText.targetY = i;

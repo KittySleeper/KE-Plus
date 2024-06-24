@@ -226,6 +226,8 @@ class PlayState extends MusicBeatState
 	public function addObject(object:FlxBasic) { add(object); }
 	public function removeObject(object:FlxBasic) { remove(object); }
 
+	var downscroll:Bool = false;
+	var middlescroll:Bool = false;
 
 	override public function create()
 	{
@@ -293,6 +295,8 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "\nAcc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
 		#end
 
+		downscroll = KadeEngineData.KEOptions.get("downscroll");
+		middlescroll = KadeEngineData.KEOptions.get("middlescroll");
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
@@ -930,7 +934,7 @@ class PlayState extends MusicBeatState
 			
 			FlxG.save.data.botplay = true;
 			FlxG.save.data.scrollSpeed = rep.replay.noteSpeed;
-			FlxG.save.data.downscroll = rep.replay.isDownscroll;
+			downscroll = rep.replay.isDownscroll;
 			// FlxG.watch.addQuick('Queued',inputsQueued);
 		}
 
@@ -945,7 +949,7 @@ class PlayState extends MusicBeatState
 		strumLine = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
 		strumLine.scrollFactor.set();
 		
-		if (FlxG.save.data.downscroll)
+		if (downscroll)
 			strumLine.y = FlxG.height - 165;
 
 		strumLineNotes = new FlxTypedGroup<FlxSprite>();
@@ -991,7 +995,7 @@ class PlayState extends MusicBeatState
 		if (FlxG.save.data.songPosition)
 			{
 				songPosBG = new FlxSprite(0, 10).loadGraphic(Paths.image('healthBar'));
-				if (FlxG.save.data.downscroll)
+				if (downscroll)
 					songPosBG.y = FlxG.height * 0.9 + 45; 
 				songPosBG.screenCenter(X);
 				songPosBG.scrollFactor.set();
@@ -1003,7 +1007,7 @@ class PlayState extends MusicBeatState
 				add(songPosBar);
 	
 				songName = new FlxText(0,songPosBG.y,FlxG.width,SONG.song, 16);
-				if (FlxG.save.data.downscroll)
+				if (downscroll)
 					songName.y -= 3;
 				songName.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 				songName.scrollFactor.set();
@@ -1012,7 +1016,7 @@ class PlayState extends MusicBeatState
 			}
 
 		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
-		if (FlxG.save.data.downscroll)
+		if (downscroll)
 			healthBarBG.y = 50;
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
@@ -1030,7 +1034,7 @@ class PlayState extends MusicBeatState
 		kadeEngineWatermark.scrollFactor.set();
 		add(kadeEngineWatermark);
 
-		if (FlxG.save.data.downscroll)
+		if (downscroll)
 			kadeEngineWatermark.y = FlxG.height * 0.9 + 45;
 
 		scoreTxt = new FlxText(FlxG.width / 2 - 235, healthBarBG.y + 50, 0, "", 20);
@@ -1043,7 +1047,7 @@ class PlayState extends MusicBeatState
 		if(FlxG.save.data.botplay) scoreTxt.x = FlxG.width / 2 - 20;													  
 		add(scoreTxt);
 
-		replayTxt = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (FlxG.save.data.downscroll ? 100 : -100), 0, "REPLAY", 20);
+		replayTxt = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (downscroll ? 100 : -100), 0, "REPLAY", 20);
 		replayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		replayTxt.scrollFactor.set();
 		if (loadRep)
@@ -1051,7 +1055,7 @@ class PlayState extends MusicBeatState
 			add(replayTxt);
 		}
 		// Literally copy-paste of the above, fu
-		botPlayState = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (FlxG.save.data.downscroll ? 100 : -100), 0, "BOTPLAY", 20);
+		botPlayState = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (downscroll ? 100 : -100), 0, "BOTPLAY", 20);
 		botPlayState.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		botPlayState.scrollFactor.set();
 		
@@ -1415,7 +1419,7 @@ class PlayState extends MusicBeatState
 				obj.destroy();
 
 			songPosBG = new FlxSprite(0, 10).loadGraphic(Paths.image('healthBar'));
-			if (FlxG.save.data.downscroll)
+			if (downscroll)
 				songPosBG.y = FlxG.height * 0.9 + 45; 
 			songPosBG.screenCenter(X);
 			songPosBG.scrollFactor.set();
@@ -1427,7 +1431,7 @@ class PlayState extends MusicBeatState
 			add(songPosBar);
 
 			songName = new FlxText(0,songPosBG.y,FlxG.width,SONG.song, 16);
-			if (FlxG.save.data.downscroll)
+			if (downscroll)
 				songName.y -= 3;
 			songName.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 			songName.scrollFactor.set();
@@ -1722,12 +1726,12 @@ class PlayState extends MusicBeatState
 				case 0:
 					cpuStrums.add(babyArrow);
 
-					if (FlxG.save.data.middlescroll)
+					if (middlescroll)
 						babyArrow.x -= 99999;
 				case 1:
 					playerStrums.add(babyArrow);
 
-					if (FlxG.save.data.middlescroll)
+					if (middlescroll)
 						babyArrow.x -= 300;
 			}
 
@@ -2332,7 +2336,7 @@ class PlayState extends MusicBeatState
 					
 					if (!daNote.modifiedByLua)
 						{
-							if (FlxG.save.data.downscroll)
+							if (downscroll)
 							{
 								if (daNote.mustPress)
 									daNote.y = (playerStrums.members[Math.floor(Math.abs(daNote.noteData))].y + 0.45 * (Conductor.songPosition - daNote.strumTime) * FlxMath.roundDecimal(FlxG.save.data.scrollSpeed == 1 ? SONG.speed : FlxG.save.data.scrollSpeed, 2));
@@ -2489,7 +2493,7 @@ class PlayState extends MusicBeatState
 					if (daNote.isSustainNote)
 						daNote.x += daNote.width / 2 + 17;
 						
-					if ((daNote.mustPress && daNote.tooLate && !FlxG.save.data.downscroll || daNote.mustPress && daNote.tooLate && FlxG.save.data.downscroll) && daNote.mustPress)
+					if ((daNote.mustPress && daNote.tooLate && !downscroll || daNote.mustPress && daNote.tooLate && downscroll) && daNote.mustPress)
 					{
 							if (daNote.isSustainNote && daNote.wasGoodHit)
 							{
@@ -2545,7 +2549,7 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.save.data.botplay = false;
 			FlxG.save.data.scrollSpeed = 1;
-			FlxG.save.data.downscroll = false;
+			downscroll = false;
 		}
 
 		if (FlxG.save.data.fpsCap > 290)
@@ -3119,8 +3123,8 @@ class PlayState extends MusicBeatState
 				
 				notes.forEachAlive(function(daNote:Note)
 				{
-					if(FlxG.save.data.downscroll && daNote.y > strumLine.y ||
-					!FlxG.save.data.downscroll && daNote.y < strumLine.y)
+					if(downscroll && daNote.y > strumLine.y ||
+					!downscroll && daNote.y < strumLine.y)
 					{
 						// Force good note hit regardless if it's too late to hit it or not as a fail safe
 						if(FlxG.save.data.botplay && daNote.canBeHit && daNote.mustPress ||
@@ -3553,7 +3557,7 @@ class PlayState extends MusicBeatState
 
 		if (generatedMusic)
 		{
-			notes.sort(FlxSort.byY, (FlxG.save.data.downscroll ? FlxSort.ASCENDING : FlxSort.DESCENDING));
+			notes.sort(FlxSort.byY, (downscroll ? FlxSort.ASCENDING : FlxSort.DESCENDING));
 		}
 
 		#if windows

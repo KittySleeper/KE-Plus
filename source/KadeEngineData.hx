@@ -3,13 +3,15 @@ import flixel.FlxG;
 
 class KadeEngineData
 {
+	public static var KEOptions:Map<String, Dynamic> = new Map();
+
     public static function initSave()
     {
+		if (FlxG.save.data.KEOptions == null)
+			FlxG.save.data.KEOptions = KEOptions;
+
         if (FlxG.save.data.newInput == null)
 			FlxG.save.data.newInput = true;
-
-		if (FlxG.save.data.downscroll == null)
-			FlxG.save.data.downscroll = false;
 
 		if (FlxG.save.data.dfjk == null)
 			FlxG.save.data.dfjk = false;
@@ -86,6 +88,8 @@ class KadeEngineData
 		KeyBinds.keyCheck();
 
 		Main.watermarks = FlxG.save.data.watermark;
+
+		KEOptions = FlxG.save.data.KEOptions;
 
 		(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
 	}

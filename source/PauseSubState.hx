@@ -124,7 +124,7 @@ class PauseSubState extends MusicBeatSubstate
 					{
 						FlxG.save.data.botplay = false;
 						FlxG.save.data.scrollSpeed = 1;
-						FlxG.save.data.downscroll = false;
+						KadeEngineData.KEOptions.set("downscroll", false);
 					}
 					PlayState.loadRep = false;
 					#if windows

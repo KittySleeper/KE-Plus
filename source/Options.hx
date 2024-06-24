@@ -139,24 +139,35 @@ class ColorHPOption extends Option
 	}
 }
 
-class DownscrollOption extends Option
+class DefaultOption extends Option
 {
-	public function new(desc:String)
+	var name:String;
+	var offName:String;
+
+	public function new(name:String, offName:String, desc:String, defaultValue:Dynamic = false)
 	{
 		super();
+		this.name = name;
+		this.offName = offName;
 		description = desc;
+
+		if (KadeEngineData.KEOptions.get(name.toLowerCase()) == null)
+			KadeEngineData.KEOptions.set(name.toLowerCase(), defaultValue);
+
+		display = updateDisplay();
 	}
 
 	public override function press():Bool
 	{
-		FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
+		KadeEngineData.KEOptions.set(name.toLowerCase(), !KadeEngineData.KEOptions.get(name.toLowerCase()));
+		FlxG.save.data.KEOptions = KadeEngineData.KEOptions;
 		display = updateDisplay();
 		return true;
 	}
 
 	private override function updateDisplay():String
 	{
-		return FlxG.save.data.downscroll ? "Downscroll" : "Upscroll";
+		return KadeEngineData.KEOptions.get(name.toLowerCase()) ? name : offName;
 	}
 }
 

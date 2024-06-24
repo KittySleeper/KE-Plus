@@ -96,7 +96,7 @@ class GameplayCustomizeState extends MusicBeatState
 
         add(strumLine);
 		
-		if (FlxG.save.data.downscroll)
+		if (KadeEngineData.KEOptions.get("downscroll"))
 			strumLine.y = FlxG.height - 165;
 
 		strumLineNotes = new FlxTypedGroup<FlxSprite>();

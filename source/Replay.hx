@@ -59,7 +59,7 @@ class Replay
             "songName": PlayState.SONG.song.toLowerCase(),
             "songDiff": PlayState.storyDifficulty,
 			"noteSpeed": (FlxG.save.data.scrollSpeed > 1 ? FlxG.save.data.scrollSpeed : PlayState.SONG.speed),
-			"isDownscroll": FlxG.save.data.downscroll,
+			"isDownscroll": KadeEngineData.KEOptions.get("downscroll"),
 			"songNotes": notearray,
             "timestamp": Date.now(),
             "replayGameVer": version
