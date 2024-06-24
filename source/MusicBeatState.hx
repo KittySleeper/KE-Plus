@@ -32,7 +32,6 @@ class MusicBeatState extends FlxUIState
 	{
 		for (script in Assets.getText(Paths.txt("globalScripts")).split("\n")) { // somewhat decent global script system?
 			var script = new HScript('assets/data/$script');
-
 			if (!script.isBlank && script.expr != null)
 			{
 				script.interp.scriptObject = this;
@@ -40,7 +39,7 @@ class MusicBeatState extends FlxUIState
 				script.setValue('remove', remove);
 				script.interp.execute(script.expr);
 			}
-
+			globalScripts.push(script);
 			script.callFunction("create");
 		}
 

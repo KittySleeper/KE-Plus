@@ -63,8 +63,6 @@ import Sys;
 import sys.FileSystem;
 #end
 
-import TheSplash;
-
 using StringTools;
 
 class PlayState extends MusicBeatState
@@ -1271,6 +1269,9 @@ class PlayState extends MusicBeatState
 
 		script.callFunction("startCountdown");
 
+		for (script in globalScripts)
+			script.callFunction("startCountdown");
+
 		talking = false;
 		startedCountdown = true;
 		Conductor.songPosition = 0;
@@ -1448,6 +1449,13 @@ class PlayState extends MusicBeatState
 		// Updating Discord Rich Presence (with Time Left)
 		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "\nAcc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
 		#end
+
+		script.callFunction("startSong");
+
+		for (script in globalScripts)
+			script.callFunction("startSong");
+
+		
 	}
 
 	var debugNum:Int = 0;
@@ -1926,8 +1934,6 @@ class PlayState extends MusicBeatState
 				moveTank();
 		}
 
-		super.update(elapsed);
-
 		scoreTxt.text = Ratings.CalculateRanking(songScore,songScoreDef,nps,maxNPS,accuracy);
 		if (!FlxG.save.data.accuracyDisplay)
 			scoreTxt.text = "Score: " + songScore;
@@ -1936,6 +1942,8 @@ class PlayState extends MusicBeatState
 		songPos = FlxG.sound.music.time;
 
 		script.callFunction("update", [elapsed]);
+
+		super.update(elapsed);
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -2278,6 +2286,11 @@ class PlayState extends MusicBeatState
 			script.setValue("gameOverScreen", gameoverScreen);
 			script.callFunction("gameOver");
 
+			for (script in globalScripts) {
+				script.setValue("gameOverScreen", gameoverScreen);
+				script.callFunction("gameOver");	
+			}
+
 			openSubState(gameoverScreen);
 
 			#if windows
@@ -2438,6 +2451,9 @@ class PlayState extends MusicBeatState
 						#end
 
 						script.callFunction("playerTwoSing", [daNote]);
+
+						for (script in globalScripts)
+							script.callFunction("playerTwoSing", [daNote]);
 
 						dad.holdTimer = 0;
 	
@@ -2650,6 +2666,9 @@ class PlayState extends MusicBeatState
 		}
 
 		script.callFunction("endSong");
+
+		for (script in globalScripts)
+			script.callFunction("endSong");
 	}
 
 	var endingSong:Bool = false;
@@ -2714,14 +2733,10 @@ class PlayState extends MusicBeatState
 					if (FlxG.save.data.accuracyMod == 0)
 						totalNotesHit += 0.75;
 				case 'sick':
-					var splash:TheSplash = new TheSplash();
+					var splash = new NoteSplash(playerStrums.members[daNote.noteData].x, playerStrums.members[daNote.noteData].y, daNote.noteData);
 					splash.cameras = [camHUD];
-					splash.x = playerStrums.members[daNote.noteData].x;
-					splash.y = playerStrums.members[daNote.noteData].y;
 					add(splash);
-					splash.animation.play(Std.string(daNote.noteData));
-					trace(daNote.noteData);
-					//strumLineSplashes.members[].animation
+
 					if (health < 2)
 						health += 0.1;
 					if (FlxG.save.data.accuracyMod == 0)
@@ -2732,9 +2747,7 @@ class PlayState extends MusicBeatState
 			// trace('Wife accuracy loss: ' + wife + ' | Rating: ' + daRating + ' | Score: ' + score + ' | Weight: ' + (1 - wife));
 
 			if (daRating != 'shit' || daRating != 'bad')
-				{
-	
-	
+			{
 			songScore += Math.round(score);
 			songScoreDef += Math.round(ConvertScore.convertScore(noteDiff));
 	
@@ -2807,8 +2820,6 @@ class PlayState extends MusicBeatState
 
 				for(i in hits)
 					total += i;
-				
-
 				
 				offsetTest = HelperFunctions.truncateFloat(total / hits.length,2);
 			}
@@ -3198,6 +3209,9 @@ class PlayState extends MusicBeatState
 
 			script.callFunction("playerOneMiss", [direction]);
 
+			for (script in globalScripts)
+				script.callFunction("playerOneMiss", [direction]);
+
 			updateAccuracy();
 		}
 	}
@@ -3351,6 +3365,9 @@ class PlayState extends MusicBeatState
 					#end
 
 					script.callFunction("playerOneSing", [note]);
+
+					for (script in globalScripts)
+						script.callFunction("playerOneSing", [note]);
 
 					if(!loadRep && note.mustPress)
 						saveNotes.push(HelperFunctions.truncateFloat(note.strumTime, 2));

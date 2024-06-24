@@ -238,6 +238,8 @@ class FreeplayState extends MusicBeatState
 		if (curSelected >= songs.length)
 			curSelected = 0;
 
+		changeDiff();
+
 		// selector.y = (70 * curSelected) + 30;
 		
 		// adjusting the highscore song name to be compatible (changeSelection)

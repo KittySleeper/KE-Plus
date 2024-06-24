@@ -513,6 +513,12 @@ class Character extends FlxSprite
 				animation.addByPrefix('good', 'PRETTY GOOD tankman instance', 24);
 				animation.addByPrefix('ugh', 'TANKMAN UGH instance', 24);
 
+				addOffset("idle", 0, 0);
+				addOffset("singLEFT", 91, -25);
+				addOffset("singDOWN", 68, -106);
+				addOffset("singRIGHT", -23, -11);
+				addOffset("singUP", 27, 58);
+
 				flipX = true;
 			
 			default:
