@@ -19,6 +19,9 @@ class Character extends FlxSprite
 
 	public var holdTimer:Float = 0;
 
+	public var canDance:Bool = true;
+	public var canSing:Bool = true;
+
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
 	{
 		super(x, y);
@@ -507,8 +510,8 @@ class Character extends FlxSprite
 				animation.addByPrefix('singLEFT', 'Tankman Right Note instance', 24);
 				animation.addByPrefix('singDOWN', 'Tankman DOWN note instance', 24);
 				animation.addByPrefix('singRIGHT', 'Tankman Note Left instance', 24);
-				animation.addByPrefix('singDOWN-alt', 'PRETTY GOOD tankman instance', 24);
-				animation.addByPrefix('singUP-alt', 'TANKMAN UGH instance', 24);
+				animation.addByPrefix('good', 'PRETTY GOOD tankman instance', 24);
+				animation.addByPrefix('ugh', 'TANKMAN UGH instance', 24);
 
 				flipX = true;
 			
@@ -622,7 +625,7 @@ class Character extends FlxSprite
 	 */
 	public function dance()
 	{
-		if (!debugMode)
+		if (!debugMode && canDance)
 		{
 			switch (curCharacter)
 			{

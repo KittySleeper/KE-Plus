@@ -41,6 +41,11 @@ function createPost() {
 }
 
 function update(elapsed) {
+    switch (state.curStep) {
+        case 60:
+            state.dad.playAnim("ugh", true);
+    }
+
     if (state.inCutscene) {
         if (canBeep) {
             if (state.controls.UP_P) {

@@ -1,22 +1,22 @@
 Tutorial:gf:1:easy|normal|hard
-Bopeebo:dad:1:easy|normal|hard
-Fresh:dad:1:easy|normal|hard
-Dad Battle:dad:1:easy|normal|hard
-Spookeez:spooky:2:easy|normal|hard
-South:spooky:2:easy|normal|hard
+Bopeebo:dad:1:easy|normal|hard|erect|nightmare
+Fresh:dad:1:easy|normal|hard|erect|nightmare
+Dadbattle:dad:1:easy|normal|hard|erect|nightmare
+Spookeez:spooky:2:easy|normal|hard|erect|nightmare
+South:spooky:2:easy|normal|hard|erect|nightmare
 Monster:monster:2:easy|normal|hard
-Pico:pico:3:easy|normal|hard
-Philly Nice:pico:3:easy|normal|hard
-Blammed:pico:3:easy|normal|hard
-Satin Panties:mom:4:easy|normal|hard
-High:mom:4:easy|normal|hard
+Pico:pico:3:easy|normal|hard|erect|nightmare
+Philly:pico:3:easy|normal|hard|erect|nightmare
+Blammed:pico:3:easy|normal|hard|erect|nightmare
+Satin Panties:mom:4:easy|normal|hard|erect|nightmare
+High:mom:4:easy|normal|hard|erect|nightmare
 Milf:mom:4:easy|normal|hard
 Cocoa:parents-christmas:5:easy|normal|hard
-Eggnog:parents-christmas:5:easy|normal|hard
+Eggnog:parents-christmas:5:easy|normal|hard|erect|nightmare
 Winter Horrorland:monster-christmas:5:easy|normal|hard
-Senpai:senpai:6:easy|normal|hard
-Roses:senpai:6:easy|normal|hard|erect
-Thorns:spirit:6:easy|normal|hard
+Senpai:senpai:6:easy|normal|hard|erect|nightmare
+Roses:senpai:6:easy|normal|hard|erect|nightmare
+Thorns:spirit:6:easy|normal|hard|erect|nightmare
 Ugh:tankman:7:easy|normal|hard
 Guns:tankman:7:easy|normal|hard
 Stress:tankman:7:easy|normal|hard

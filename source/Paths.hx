@@ -99,10 +99,6 @@ class Paths
 	inline static public function voices(song:String, character:String = "", remix:String = "")
 	{
 		var songLowercase = StringTools.replace(song, " ", "-").toLowerCase();
-			switch (songLowercase) {
-				case 'dad-battle': songLowercase = 'dadbattle';
-				case 'philly-nice': songLowercase = 'philly';
-			}
 		if (remix != null && remix != "") {
 			if (character != "")
 				return 'songs:assets/songs/${songLowercase}/Voices-$character-$remix.$SOUND_EXT';
@@ -119,10 +115,6 @@ class Paths
 	inline static public function inst(song:String, remix:String = "")
 	{
 		var songLowercase = StringTools.replace(song, " ", "-").toLowerCase();
-			switch (songLowercase) {
-				case 'dad-battle': songLowercase = 'dadbattle';
-				case 'philly-nice': songLowercase = 'philly';
-			}
 		if (remix != null && remix != "")
 			return 'songs:assets/songs/${songLowercase}/Inst-$remix.$SOUND_EXT';
 		else
