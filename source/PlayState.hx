@@ -1805,18 +1805,22 @@ class PlayState extends MusicBeatState
 
 	function resyncVocals():Void
 	{
-		vocals.pause();
-		vocalsBF.pause();
-		vocalsDad.pause();
+		try {
+			vocals.pause();
+			vocalsBF.pause();
+			vocalsDad.pause();
+		} catch (e) {}
 
 		FlxG.sound.music.play();
 		Conductor.songPosition = FlxG.sound.music.time;
-		vocals.time = Conductor.songPosition;
-		vocalsBF.time = Conductor.songPosition;
-		vocalsDad.time = Conductor.songPosition;
-		vocals.play();
-		vocalsBF.play();
-		vocalsDad.play();
+		try {
+			vocals.time = Conductor.songPosition;
+			vocalsBF.time = Conductor.songPosition;
+			vocalsDad.time = Conductor.songPosition;
+			vocals.play();
+			vocalsBF.play();
+			vocalsDad.play();
+		} catch (e) {}
 
 		#if windows
 		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "\nAcc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
