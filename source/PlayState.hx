@@ -774,7 +774,7 @@ class PlayState extends MusicBeatState
 			}
 			case 'phillyStreets':
 				{
-						defaultCamZoom = 0.9;
+						defaultCamZoom = 0.4;
 						curStage = 'phillyStreets';
 
 						var ground:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('phillyForeground'));
