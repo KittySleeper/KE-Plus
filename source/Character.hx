@@ -22,6 +22,8 @@ class Character extends FlxSprite
 	public var canDance:Bool = true;
 	public var canSing:Bool = true;
 
+	var script:HScript;
+
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
 	{
 		super(x, y);
@@ -32,6 +34,17 @@ class Character extends FlxSprite
 
 		var tex:FlxAtlasFrames;
 		antialiasing = true;
+
+		script = new HScript('assets/characters/$curCharacter');
+
+		if (!script.isBlank && script.expr != null)
+		{
+			script.interp.scriptObject = this;
+			script.setValue('add', FlxG.state.add);
+			script.setValue('remove', FlxG.state.remove);
+			script.setValue("character", this);
+			script.interp.execute(script.expr);
+		}
 
 		switch (curCharacter)
 		{
@@ -238,21 +251,11 @@ class Character extends FlxSprite
 				animation.addByPrefix('idle', "Pico Idle Dance", 24);
 				animation.addByPrefix('singUP', 'pico Up note0', 24, false);
 				animation.addByPrefix('singDOWN', 'Pico Down Note0', 24, false);
-				if (isPlayer)
-				{
-					animation.addByPrefix('singLEFT', 'Pico NOTE LEFT0', 24, false);
-					animation.addByPrefix('singRIGHT', 'Pico Note Right0', 24, false);
-					animation.addByPrefix('singRIGHTmiss', 'Pico Note Right Miss', 24, false);
-					animation.addByPrefix('singLEFTmiss', 'Pico NOTE LEFT miss', 24, false);
-				}
-				else
-				{
-					// Need to be flipped! REDO THIS LATER!
-					animation.addByPrefix('singLEFT', 'Pico Note Right0', 24, false);
-					animation.addByPrefix('singRIGHT', 'Pico NOTE LEFT0', 24, false);
-					animation.addByPrefix('singRIGHTmiss', 'Pico NOTE LEFT miss', 24, false);
-					animation.addByPrefix('singLEFTmiss', 'Pico Note Right Miss', 24, false);
-				}
+				// Need to be flipped! REDO THIS LATER!
+				animation.addByPrefix('singLEFT', 'Pico Note Right0', 24, false);
+				animation.addByPrefix('singRIGHT', 'Pico NOTE LEFT0', 24, false);
+				animation.addByPrefix('singRIGHTmiss', 'Pico NOTE LEFT miss', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'Pico Note Right Miss', 24, false);
 
 				animation.addByPrefix('singUPmiss', 'pico Up note miss', 24);
 				animation.addByPrefix('singDOWNmiss', 'Pico Down Note MISS', 24);
@@ -265,6 +268,33 @@ class Character extends FlxSprite
 				addOffset("singUPmiss", -19, 67);
 				addOffset("singRIGHTmiss", -60, 41);
 				addOffset("singLEFTmiss", 62, 64);
+				addOffset("singDOWNmiss", 210, -28);
+
+				playAnim('idle');
+
+				flipX = true;
+
+			case 'pico-playable':
+				tex = Paths.getSparrowAtlas('characters/Pico_FNF_assetss');
+				frames = tex;
+				animation.addByPrefix('idle', "Pico Idle Dance", 24);
+				animation.addByPrefix('singUP', 'pico Up note0', 24, false);
+				animation.addByPrefix('singDOWN', 'Pico Down Note0', 24, false);
+				animation.addByPrefix('singLEFT', 'Pico NOTE LEFT0', 24, false);
+				animation.addByPrefix('singRIGHT', 'Pico Note Right0', 24, false);
+				animation.addByPrefix('singRIGHTmiss', 'Pico Note Right Miss', 24, false);
+				animation.addByPrefix('singLEFTmiss', 'Pico NOTE LEFT miss', 24, false);
+				animation.addByPrefix('singUPmiss', 'pico Up note miss', 24);
+				animation.addByPrefix('singDOWNmiss', 'Pico Down Note MISS', 24);
+
+				addOffset('idle');
+				addOffset("singUP", -29, 27);
+				addOffset("singLEFT", -68, -7);
+				addOffset("singRIGHT", 65, 9);
+				addOffset("singDOWN", 200, -70);
+				addOffset("singUPmiss", -19, 67);
+				addOffset("singLEFTmiss", -60, 41);
+				addOffset("singRIGHTmiss", 62, 64);
 				addOffset("singDOWNmiss", 210, -28);
 
 				playAnim('idle');
@@ -520,9 +550,20 @@ class Character extends FlxSprite
 				addOffset("singUP", 27, 58);
 
 				flipX = true;
+
+			case 'darnell':
+				tex = Paths.getSparrowAtlas('characters/darnell', 'shared');
+				frames = tex;
+				animation.addByPrefix('idle', 'Idle', 24);
+				animation.addByPrefix('singUP', 'Pose Up', 24);
+				animation.addByPrefix('singRIGHT', 'Pose Right', 24);
+				animation.addByPrefix('singDOWN', 'Pose Down', 24);
+				animation.addByPrefix('singLEFT', 'Pose Left', 24);
+
+				playAnim('idle');	
 			
 			default:
-				if (Assets.exists(Paths.json(curCharacter, null, "characters"))) {
+				if (Assets.exists(Paths.json(curCharacter, null, "characters")) || script.expr != null && !script.isBlank) {
 					
 				} else {
 					var tex = Paths.getSparrowAtlas('characters/BOYFRIEND', 'shared');
@@ -592,6 +633,8 @@ class Character extends FlxSprite
 				}
 			}
 		}
+
+		script.callFunction("create");
 	}
 
 	override function update(elapsed:Float)
@@ -622,6 +665,8 @@ class Character extends FlxSprite
 		}
 
 		super.update(elapsed);
+
+		script.callFunction("update", [elapsed]);
 	}
 
 	private var danced:Bool = false;
@@ -688,6 +733,8 @@ class Character extends FlxSprite
 				default:
 					playAnim('idle');
 			}
+
+			script.callFunction("dance");
 		}
 	}
 
@@ -719,6 +766,8 @@ class Character extends FlxSprite
 				danced = !danced;
 			}
 		}
+
+		script.callFunction("playAnim", [AnimName, Force, Reversed, Frame]);
 	}
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)

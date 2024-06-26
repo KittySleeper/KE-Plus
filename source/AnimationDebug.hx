@@ -1,5 +1,8 @@
 package;
 
+import flixel.util.FlxTimer;
+import openfl.desktop.ClipboardFormats;
+import openfl.desktop.Clipboard;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -8,6 +11,7 @@ import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import flixel.tweens.FlxTween;
 
 /**
 	*DEBUG MODE
@@ -39,29 +43,19 @@ class AnimationDebug extends FlxState
 		gridBG.scrollFactor.set(0.5, 0.5);
 		add(gridBG);
 
-		if (daAnim == 'bf')
-			isDad = false;
+		//if (daAnim == 'bf')
+			//isDad = false;
 
-		if (isDad)
-		{
-			dad = new Character(0, 0, daAnim);
-			dad.screenCenter();
-			dad.debugMode = true;
-			add(dad);
+		var charghost = new Character(0, 0, daAnim);
+		charghost.screenCenter();
+		charghost.debugMode = true;
+		charghost.alpha = 0.35;
+		add(charghost);
 
-			char = dad;
-			dad.flipX = false;
-		}
-		else
-		{
-			bf = new Boyfriend(0, 0);
-			bf.screenCenter();
-			bf.debugMode = true;
-			add(bf);
-
-			char = bf;
-			bf.flipX = false;
-		}
+		char = new Character(0, 0, daAnim);
+		char.screenCenter();
+		char.debugMode = true;
+		add(char);
 
 		dumbTexts = new FlxTypedGroup<FlxText>();
 		add(dumbTexts);
@@ -189,6 +183,27 @@ class AnimationDebug extends FlxState
 			genBoyOffsets(false);
 			char.playAnim(animList[curAnim]);
 		}
+
+		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.C)
+			{
+				var r = "";
+	
+				for (x in animList)
+				{
+					r += "addOffset(\"" + x + "\", " + char.animOffsets.get(x)[0] + ", " + char.animOffsets.get(x)[1] + ");\n";
+				}
+	
+				Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT, r);
+	
+				var text = new FlxText(0, 0, 0, 'Offsets saved\nPress CTRL + V.', 13);
+				text.alpha = 0.6;
+				text.color = FlxColor.BLACK;
+				add(text);
+	
+				new FlxTimer().start(0.4, function(trimer) {
+					FlxTween.tween(text, {alpha: 0}, 0.5);	
+				});
+			}	
 
 		super.update(elapsed);
 	}

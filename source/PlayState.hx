@@ -992,7 +992,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		if (FlxG.save.data.songPosition)
+		if (KadeEngineData.KEOptions.get("songpos"))
 			{
 				songPosBG = new FlxSprite(0, 10).loadGraphic(Paths.image('healthBar'));
 				if (downscroll)
@@ -1080,7 +1080,7 @@ class PlayState extends MusicBeatState
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
-		if (FlxG.save.data.songPosition)
+		if (KadeEngineData.KEOptions.get("songpos"))
 		{
 			songPosBG.cameras = [camHUD];
 			songPosBar.cameras = [camHUD];
@@ -1413,7 +1413,7 @@ class PlayState extends MusicBeatState
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
 
-		if (FlxG.save.data.songPosition)
+		if (KadeEngineData.KEOptions.get("songpos"))
 		{
 			for (obj in [songPosBG, songPosBar, songName])
 				obj.destroy();
@@ -1938,10 +1938,19 @@ class PlayState extends MusicBeatState
 				moveTank();
 		}
 
-		scoreTxt.text = Ratings.CalculateRanking(songScore,songScoreDef,nps,maxNPS,accuracy);
-		if (!FlxG.save.data.accuracyDisplay)
-			scoreTxt.text = "Score: " + songScore;
-		songName.text = curSong + " (" + FlxStringUtil.formatTime(Conductor.songPosition / 1000) + "/" + FlxStringUtil.formatTime(FlxG.sound.music.length / 1000) + ")";
+		try {
+			scoreTxt.text = Ratings.CalculateRanking(songScore,songScoreDef,nps,maxNPS,accuracy);
+			if (!FlxG.save.data.accuracyDisplay)
+				scoreTxt.text = "Score: " + songScore;
+		} catch (e) {
+
+		}
+
+		try {
+			songName.text = curSong + " (" + FlxStringUtil.formatTime(Conductor.songPosition / 1000) + "/" + FlxStringUtil.formatTime(FlxG.sound.music.length / 1000) + ")";
+		} catch (e) {
+
+		}
 
 		songPos = FlxG.sound.music.time;
 
@@ -3080,7 +3089,7 @@ class PlayState extends MusicBeatState
 						goodNoteHit(possibleNotes[0]);
 					else if (possibleNotes.length > 0 && !dontCheck)
 					{
-						if (!FlxG.save.data.ghost)
+						if (!KadeEngineData.KEOptions.get("ghosttap"))
 						{
 							for (shit in 0...pressArray.length)
 								{ // if a direction is hit that shouldn't be
@@ -3099,14 +3108,14 @@ class PlayState extends MusicBeatState
 							}
 						}
 					}
-					else if (!FlxG.save.data.ghost)
+					else if (!KadeEngineData.KEOptions.get("ghosttap"))
 						{
 							for (shit in 0...pressArray.length)
 								if (pressArray[shit])
 									noteMiss(shit, null);
 						}
 
-					if(dontCheck && possibleNotes.length > 0 && FlxG.save.data.ghost && !FlxG.save.data.botplay)
+					if(dontCheck && possibleNotes.length > 0 && KadeEngineData.KEOptions.get("ghosttap") && !FlxG.save.data.botplay)
 					{
 						if (mashViolations > 8)
 						{
@@ -3590,10 +3599,6 @@ class PlayState extends MusicBeatState
 			}
 			// else
 			// Conductor.changeBPM(SONG.bpm);
-
-			// Dad doesnt interupt his own notes
-			if (SONG.notes[Math.floor(curStep / 16)].mustHitSection && dad.curCharacter != 'gf')
-				dad.dance();
 		}
 		// FlxG.log.add('change bpm' + SONG.notes[Std.int(curStep / 16)].changeBPM);
 		wiggleShit.update(Conductor.crochet);
@@ -3626,8 +3631,10 @@ class PlayState extends MusicBeatState
 		{
 			boyfriend.playAnim('idle');
 		}
-		
 
+		if (!dad.animation.curAnim.name.startsWith("sing"))
+			dad.dance();
+		
 		if (curBeat % 8 == 7 && curSong == 'Bopeebo')
 		{
 			boyfriend.playAnim('hey', true);

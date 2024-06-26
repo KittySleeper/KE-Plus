@@ -82,7 +82,8 @@ class HScript
 				"Paths" => Paths,
 				"Conductor" => Conductor,
 				"CoolUtil" => CoolUtil,
-				"Character" => Character
+				"Character" => Character,
+				"CustomOption" => Options.DefaultOption,
 			];
 			for (va in defaultVars.keys())
 				setValue(va, defaultVars[va]);

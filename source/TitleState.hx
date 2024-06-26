@@ -20,7 +20,6 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
 
@@ -49,7 +48,7 @@ class TitleState extends MusicBeatState
 	var wackyImage:FlxSprite;
 
 	override public function create():Void
-	{		
+	{
 		#if sys
 		HScript.parser = new hscript.Parser();
 		HScript.parser.allowJSON = true;
@@ -62,6 +61,30 @@ class TitleState extends MusicBeatState
 			"linux" => #if (linux) true #else false #end,
 			"debugBuild" => #if (debug) true #else false #end
 		];
+
+		if (!sys.FileSystem.exists(Sys.getCwd() + "/assets/replays"))
+			sys.FileSystem.createDirectory(Sys.getCwd() + "/assets/replays");
+		#end
+		
+		PlayerSettings.init();
+
+		#if windows
+		DiscordClient.initialize();
+
+		Application.current.onExit.add (function (exitCode) {
+			DiscordClient.shutdown();
+		 });
+		 
+		#end
+
+		curWacky = FlxG.random.getObject(getIntroTextShit());
+
+		// DEBUG BULLSHIT
+
+		FlxG.save.bind('KADE', '504brandon');
+
+		Highscore.load();
+		KadeEngineData.initSave();
 
 		var mods = sys.FileSystem.readDirectory("mods");
 		polymod.Polymod.init({
@@ -91,32 +114,7 @@ class TitleState extends MusicBeatState
 			}
 		});
 
-		if (!sys.FileSystem.exists(Sys.getCwd() + "/assets/replays"))
-			sys.FileSystem.createDirectory(Sys.getCwd() + "/assets/replays");
-		#end
-		
-		PlayerSettings.init();
-
-		#if windows
-		DiscordClient.initialize();
-
-		Application.current.onExit.add (function (exitCode) {
-			DiscordClient.shutdown();
-		 });
-		 
-		#end
-
-		curWacky = FlxG.random.getObject(getIntroTextShit());
-
-		// DEBUG BULLSHIT
-
 		super.create();
-
-		FlxG.save.bind('funkin', 'ninjamuffin99');
-
-		KadeEngineData.initSave();
-
-		Highscore.load();
 
 		if (FlxG.save.data.weekUnlocked != null)
 		{

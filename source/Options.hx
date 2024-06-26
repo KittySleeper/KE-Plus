@@ -18,7 +18,8 @@ class OptionCategory
 
 	public final function addOption(opt:Option)
 	{
-		_options.push(opt);
+		if (!_options.contains(opt))
+			_options.push(opt);
 	}
 
 	
@@ -143,73 +144,63 @@ class DefaultOption extends Option
 {
 	var name:String;
 	var offName:String;
+	var saveName:String;
 
-	public function new(name:String, offName:String, desc:String, defaultValue:Dynamic = false)
+	public function new(name:String, offName:String, saveName:String, desc:String, defaultValue:Dynamic = false)
 	{
 		super();
 		this.name = name;
 		this.offName = offName;
+		this.saveName = saveName;
+
 		description = desc;
 
-		if (KadeEngineData.KEOptions.get(name.toLowerCase()) == null)
-			KadeEngineData.KEOptions.set(name.toLowerCase(), defaultValue);
+		if (KadeEngineData.KEOptions.get(saveName) == null)
+			KadeEngineData.KEOptions.set(saveName, defaultValue);
 
 		display = updateDisplay();
 	}
 
 	public override function press():Bool
 	{
-		KadeEngineData.KEOptions.set(name.toLowerCase(), !KadeEngineData.KEOptions.get(name.toLowerCase()));
+		KadeEngineData.KEOptions.set(saveName, !KadeEngineData.KEOptions.get(saveName));
 		FlxG.save.data.KEOptions = KadeEngineData.KEOptions;
 		display = updateDisplay();
+		pressOverride();
 		return true;
 	}
 
 	private override function updateDisplay():String
 	{
-		return KadeEngineData.KEOptions.get(name.toLowerCase()) ? name : offName;
+		return KadeEngineData.KEOptions.get(saveName) ? name : offName;
+	}
+
+	public function pressOverride() {
+
 	}
 }
 
-class MiddlescrollOption extends Option
+class ModOptionLol extends Option
 {
-	public function new(desc:String)
+	var name:String;
+
+	public function new(name:String, desc:String)
 	{
 		super();
+		this.name = name;
 		description = desc;
+		display = updateDisplay();
 	}
 
 	public override function press():Bool
 	{
-		FlxG.save.data.middlescroll = !FlxG.save.data.middlescroll;
 		display = updateDisplay();
 		return true;
 	}
 
 	private override function updateDisplay():String
 	{
-		return FlxG.save.data.middlescroll ? "Middlescroll" : "Middlescroll Off";
-	}
-}
-
-class GhostTapOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-
-	public override function press():Bool
-	{
-		FlxG.save.data.ghost = !FlxG.save.data.ghost;
-		display = updateDisplay();
-		return true;
-	}
-
-	private override function updateDisplay():String
-	{
-		return FlxG.save.data.ghost ? "Ghost Tapping" : "No Ghost Tapping";
+		return name.toLowerCase();
 	}
 }
 
@@ -230,26 +221,6 @@ class AccuracyOption extends Option
 	private override function updateDisplay():String
 	{
 		return "Accuracy " + (!FlxG.save.data.accuracyDisplay ? "off" : "on");
-	}
-}
-
-class SongPositionOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	public override function press():Bool
-	{
-		FlxG.save.data.songPosition = !FlxG.save.data.songPosition;
-		display = updateDisplay();
-		return true;
-	}
-
-	private override function updateDisplay():String
-	{
-		return "Song Position " + (!FlxG.save.data.songPosition ? "off" : "on");
 	}
 }
 
@@ -594,28 +565,6 @@ class CustomizeGameplay extends Option
 	private override function updateDisplay():String
 	{
 		return "Customize Gameplay";
-	}
-}
-
-class WatermarkOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-
-	public override function press():Bool
-	{
-		Main.watermarks = !Main.watermarks;
-		FlxG.save.data.watermark = Main.watermarks;
-		display = updateDisplay();
-		return true;
-	}
-
-	private override function updateDisplay():String
-	{
-		return "Watermarks " + (Main.watermarks ? "on" : "off");
 	}
 }
 

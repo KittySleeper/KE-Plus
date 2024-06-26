@@ -22,9 +22,6 @@ class KadeEngineData
 		if (FlxG.save.data.offset == null)
 			FlxG.save.data.offset = 0;
 
-		if (FlxG.save.data.songPosition == null)
-			FlxG.save.data.songPosition = false;
-
 		if (FlxG.save.data.fps == null)
 			FlxG.save.data.fps = false;
 
@@ -56,12 +53,6 @@ class KadeEngineData
 		if (FlxG.save.data.accuracyMod == null)
 			FlxG.save.data.accuracyMod = 1;
 
-		if (FlxG.save.data.watermark == null)
-			FlxG.save.data.watermark = true;
-
-		if (FlxG.save.data.ghost == null)
-			FlxG.save.data.ghost = true;
-
 		if (FlxG.save.data.distractions == null)
 			FlxG.save.data.distractions = true;
 
@@ -87,10 +78,15 @@ class KadeEngineData
 		PlayerSettings.player1.controls.loadKeyBinds();
 		KeyBinds.keyCheck();
 
-		Main.watermarks = FlxG.save.data.watermark;
-
 		KEOptions = FlxG.save.data.KEOptions;
 
+		if (KEOptions.get("watermark") == null)
+			Main.watermarks = true;
+		else
+			Main.watermarks = KEOptions.get("watermark");
+
 		(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
+
+		FlxG.save.flush();
 	}
 }

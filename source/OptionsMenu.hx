@@ -1,5 +1,6 @@
 package;
 
+import sys.FileSystem;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import openfl.Lib;
@@ -23,13 +24,13 @@ class OptionsMenu extends MusicBeatState
 	var selector:FlxText;
 	var curSelected:Int = 0;
 
-	var options:Array<OptionCategory> = [
+	public var options:Array<OptionCategory> = [
 		new OptionCategory("Gameplay", [
 			new DFJKOption(controls),
 			new ColorHPOption("Color the hpbar to the icons color (bassically moddern hpbar)."),
-			new DefaultOption("downscroll", "upscroll", "Change the layout of the strumline."),
-			new DefaultOption("middlescroll", "middlescroll off", "Change the layout of the strumline."),
-			new GhostTapOption("Ghost Tapping is when you tap a direction and it doesn't give you a miss."),
+			new DefaultOption("downscroll", "upscroll", "downscroll", "Change the layout of the strumline."),
+			new DefaultOption("middlescroll", "middlescroll off", "middlescroll", "Change the layout of the strumline."),
+			new DefaultOption("Ghost Tapping", "No Ghost Tapping", "ghosttap", "Ghost Tapping is when you tap a direction and it doesn't give you a miss.", true),
 			new Judgement("Customize your Hit Timings (LEFT or RIGHT)"),
 			#if desktop
 			new FPSCapOption("Cap your FPS"),
@@ -46,7 +47,7 @@ class OptionsMenu extends MusicBeatState
 			new RainbowFPSOption("Make the FPS Counter Rainbow"),
 			new AccuracyOption("Display accuracy information."),
 			new NPSDisplayOption("Shows your current Notes Per Second."),
-			new SongPositionOption("Show the songs current position (as a bar)"),
+			new DefaultOption("Time Bar On", "Time Bar Off", "songpos", "Makes a bar on the top of your screen that shows your time.", true),
 			new CpuStrums("CPU's strumline lights up when a note hits it."),
 			#else
 			new DistractionsAndEffectsOption("Toggle stage distractions that can hinder your gameplay.")
@@ -59,10 +60,13 @@ class OptionsMenu extends MusicBeatState
 			new ReplayOption("View replays"),
 			#end
 			new FlashingLightsOption("Toggle flashing lights that can cause epileptic seizures and strain."),
-			new WatermarkOption("Enable and disable all watermarks from the engine."),
+			new DefaultOption("Watermarks On", "Watermarks Off", "watermark", "Enable and disable all watermarks from the engine.", true),
 			new BotPlay("Showcase your charts and mods with autoplay.")
+		]),
+
+		new OptionCategory("Mods", [
+			new DefaultOption("temp", "temp", "mod mod mod mod lah", "Mods in progress."),
 		])
-		
 	];
 
 	public var acceptInput:Bool = true;
@@ -113,12 +117,15 @@ class OptionsMenu extends MusicBeatState
 		FlxTween.tween(versionShit,{y: FlxG.height - 18},2,{ease: FlxEase.elasticInOut});
 		FlxTween.tween(blackBorder,{y: FlxG.height - 18},2, {ease: FlxEase.elasticInOut});
 
+		for (mod in FileSystem.readDirectory("./mods")) {
+			options[3].addOption(new ModOptionLol(mod, "test"));
+		}
+		
 		super.create();
 	}
 
 	var isCat:Bool = false;
 	
-
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);

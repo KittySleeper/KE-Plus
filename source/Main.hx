@@ -86,6 +86,13 @@ class Main extends Sprite
 		toggleFPS(FlxG.save.data.fps);
 
 		#end
+
+		lime.app.Application.current.onExit.add((exitCode:Int) -> {
+			// you can also put other shit for when vthe game closes here
+			FlxG.save.flush();
+
+			trace("game closed 3;");
+		});
 	}
 
 	var game:FlxGame;
