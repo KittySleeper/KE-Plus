@@ -71,6 +71,7 @@ class HScript
 				"Std" => Std,
 
 				"FlxG" => flixel.FlxG,
+				"Http" => haxe.Http,
 				"FlxSprite" => flixel.FlxSprite,
 				"FlxText" => flixel.text.FlxText,
 				// Flixel Addons because hscript says "FUCK YOU! I AINT IMPORTING ADDONS!"

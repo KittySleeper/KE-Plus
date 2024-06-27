@@ -85,6 +85,9 @@ class KadeEngineData
 		else
 			Main.watermarks = KEOptions.get("watermark");
 
+		if (KEOptions.get("notecolors") != null)
+			Note.noteColor = KEOptions.get("notecolors");
+
 		(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
 
 		FlxG.save.flush();

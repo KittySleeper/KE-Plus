@@ -568,6 +568,27 @@ class CustomizeGameplay extends Option
 	}
 }
 
+class CustomizeNotes extends Option
+{
+	public function new(desc:String)
+	{
+		super();
+		description = desc;
+	}
+
+	public override function press():Bool
+	{
+		trace("switch");
+		FlxG.switchState(new NoteColorSetState());
+		return false;
+	}
+
+	private override function updateDisplay():String
+	{
+		return "Set Note Colors";
+	}
+}
+
 class OffsetMenu extends Option
 {
 	public function new(desc:String)

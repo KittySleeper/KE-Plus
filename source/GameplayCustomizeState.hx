@@ -135,8 +135,8 @@ class GameplayCustomizeState extends MusicBeatState
         sick.y = FlxG.save.data.changedHitY;
 
 
+        FlxG.mouse.enabled = true;
         FlxG.mouse.visible = true;
-
     }
 
     override function update(elapsed:Float) {
@@ -153,11 +153,6 @@ class GameplayCustomizeState extends MusicBeatState
             sick.x = FlxG.mouse.x - sick.width / 2;
             sick.y = FlxG.mouse.y - sick.height;
         }
-
-        for (i in playerStrums)
-            i.y = strumLine.y;
-        for (i in strumLineNotes)
-            i.y = strumLine.y;
 
         if (FlxG.mouse.overlaps(sick) && FlxG.mouse.justReleased)
         {
@@ -195,9 +190,7 @@ class GameplayCustomizeState extends MusicBeatState
         camHUD.zoom += 0.010;
 
         trace('beat');
-
     }
-
 
     // ripped from play state cuz im lazy
     

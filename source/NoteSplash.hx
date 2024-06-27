@@ -6,22 +6,20 @@ import haxe.io.Path;
 
 class NoteSplash extends FlxSprite
 {
+	public var noteData:Int;
+
 	public function new(x:Float, y:Float, noteData:Int = 0):Void
 	{
 		super(x, y);
 
-		frames = Paths.getSparrowAtlas('noteSplashes');
+		this.noteData = noteData;
 
-		animation.addByPrefix('note1-0', 'note impact 1  blue', 24, false);
-		animation.addByPrefix('note2-0', 'note impact 1 green', 24, false);
-		animation.addByPrefix('note0-0', 'note impact 1 purple', 24, false);
-		animation.addByPrefix('note3-0', 'note impact 1 red', 24, false);
-		animation.addByPrefix('note1-1', 'note impact 2 blue', 24, false);
-		animation.addByPrefix('note2-1', 'note impact 2 green', 24, false);
-		animation.addByPrefix('note0-1', 'note impact 2 purple', 24, false);
-		animation.addByPrefix('note3-1', 'note impact 2 red', 24, false);
-
+		frames = Paths.getSparrowAtlas('noteSplashes_desaturated');
+		animation.addByPrefix('splash1', 'splash1', 24, false);
+		animation.addByPrefix('splash2', 'splash2', 24, false);
 		setupNoteSplash(x, y, noteData);
+
+		color = Note.noteColor[noteData];
 
 		// alpha = 0.75;
 	}
@@ -31,7 +29,7 @@ class NoteSplash extends FlxSprite
 		setPosition(x, y);
 		alpha = 0.6;
 
-		animation.play('note' + noteData + '-' + FlxG.random.int(0, 1), true);
+		animation.play('splash' + FlxG.random.int(1, 2), true);
 		animation.curAnim.frameRate += FlxG.random.int(-2, 2);
 		updateHitbox();
 

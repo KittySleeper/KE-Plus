@@ -15,6 +15,8 @@ using StringTools;
 
 class Note extends FlxSprite
 {
+	public static var noteColor:Array<FlxColor> = [0xFFC24B99, 0xFF00FFFF, 0xFF12FA05, 0xFFF9393F];
+
 	public var strumTime:Float = 0;
 
 	public var mustPress:Bool = false;
@@ -57,56 +59,59 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		var daStage:String = PlayState.curStage;
+		try {
+			switch (PlayState.SONG.noteStyle)
+			{
+				case 'pixel':
+					loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels','week6'), true, 17, 17);
 
-		switch (PlayState.SONG.noteStyle)
-		{
-			case 'pixel':
-				loadGraphic(Paths.image('weeb/pixelUI/arrows-pixels','week6'), true, 17, 17);
+					animation.add('greenScroll', [6]);
+					animation.add('redScroll', [7]);
+					animation.add('blueScroll', [5]);
+					animation.add('purpleScroll', [4]);
 
-				animation.add('greenScroll', [6]);
-				animation.add('redScroll', [7]);
-				animation.add('blueScroll', [5]);
-				animation.add('purpleScroll', [4]);
+					if (isSustainNote)
+					{
+						loadGraphic(Paths.image('weeb/pixelUI/arrowEnds','week6'), true, 7, 6);
 
-				if (isSustainNote)
-				{
-					loadGraphic(Paths.image('weeb/pixelUI/arrowEnds','week6'), true, 7, 6);
+						animation.add('purpleholdend', [4]);
+						animation.add('greenholdend', [6]);
+						animation.add('redholdend', [7]);
+						animation.add('blueholdend', [5]);
 
-					animation.add('purpleholdend', [4]);
-					animation.add('greenholdend', [6]);
-					animation.add('redholdend', [7]);
-					animation.add('blueholdend', [5]);
+						animation.add('purplehold', [0]);
+						animation.add('greenhold', [2]);
+						animation.add('redhold', [3]);
+						animation.add('bluehold', [1]);
+					}
 
-					animation.add('purplehold', [0]);
-					animation.add('greenhold', [2]);
-					animation.add('redhold', [3]);
-					animation.add('bluehold', [1]);
-				}
+					setGraphicSize(Std.int(width * PlayState.daPixelZoom));
+					updateHitbox();
+				default:
+			}
+		} catch (e) {}
 
-				setGraphicSize(Std.int(width * PlayState.daPixelZoom));
-				updateHitbox();
-			default:
-				frames = Paths.getSparrowAtlas('NOTE_assets');
+		if (frame == null) {
+			frames = Paths.getSparrowAtlas('RECOVER_NOTE_assets_desaturated');
 
-				animation.addByPrefix('greenScroll', 'green0');
-				animation.addByPrefix('redScroll', 'red0');
-				animation.addByPrefix('blueScroll', 'blue0');
-				animation.addByPrefix('purpleScroll', 'purple0');
+			animation.addByPrefix('greenScroll', 'green instance 10');
+			animation.addByPrefix('redScroll', 'red instance 10');
+			animation.addByPrefix('blueScroll', 'blue instance 10');
+			animation.addByPrefix('purpleScroll', 'purple instance 10');
 
-				animation.addByPrefix('purpleholdend', 'pruple end hold');
-				animation.addByPrefix('greenholdend', 'green hold end');
-				animation.addByPrefix('redholdend', 'red hold end');
-				animation.addByPrefix('blueholdend', 'blue hold end');
+			animation.addByPrefix('purpleholdend', 'pruple end hold instance 1');
+			animation.addByPrefix('greenholdend', 'green hold end instance 1');
+			animation.addByPrefix('redholdend', 'red hold end instance 1');
+			animation.addByPrefix('blueholdend', 'blue hold end instance 1');
 
-				animation.addByPrefix('purplehold', 'purple hold piece');
-				animation.addByPrefix('greenhold', 'green hold piece');
-				animation.addByPrefix('redhold', 'red hold piece');
-				animation.addByPrefix('bluehold', 'blue hold piece');
+			animation.addByPrefix('purplehold', 'purple hold piece instance 1');
+			animation.addByPrefix('greenhold', 'green hold piece instance 1');
+			animation.addByPrefix('redhold', 'red hold piece instance 1');
+			animation.addByPrefix('bluehold', 'blue hold piece instance 1');
 
-				setGraphicSize(Std.int(width * 0.7));
-				updateHitbox();
-				antialiasing = true;
+			setGraphicSize(Std.int(width * 0.7));
+			updateHitbox();
+			antialiasing = true;
 		}
 
 		switch (noteData)
@@ -124,6 +129,8 @@ class Note extends FlxSprite
 				x += swagWidth * 3;
 				animation.play('redScroll');
 		}
+
+		color = noteColor[noteData];
 
 		// trace(prevNote);
 
@@ -187,6 +194,11 @@ class Note extends FlxSprite
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+
+		/*var superCoolColor = new FlxColor(0xFFFF0000);
+		superCoolColor.hue = (strumTime / 5000 * 360) % 360;
+
+		color = superCoolColor;*/
 
 		if (mustPress)
 		{
