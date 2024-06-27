@@ -772,6 +772,18 @@ class PlayState extends MusicBeatState
 
 					add(stageCurtains);
 			}
+			case 'phillyStreets':
+				{
+						defaultCamZoom = 0.4;
+						curStage = 'phillyStreets';
+
+						var ground:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('phillyForeground'));
+						ground.setGraphicSize(Std.int(ground.width * 0.9));
+						ground.updateHitbox();
+						ground.antialiasing = true;
+						ground.scrollFactor.set(1.3, 1.3);
+						ground.active = false;
+				}
 			default:
 			{
 					defaultCamZoom = 0.9;
