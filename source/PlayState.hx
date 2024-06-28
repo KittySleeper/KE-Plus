@@ -296,7 +296,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		downscroll = KadeEngineData.KEOptions.get("downscroll");
-		middlescroll = KadeEngineData.KEOptions.get("middlescroll");
+		middlescroll = KadeEngineData.KEOptions.get("Centered Notefield");
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
