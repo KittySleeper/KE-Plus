@@ -29,7 +29,7 @@ class OptionsMenu extends MusicBeatState
 			new DFJKOption(controls),
 			new ColorHPOption("Color the hpbar to the icons color (bassically moddern hpbar)."),
 			new DefaultOption("downscroll", "upscroll", "downscroll", "Change the layout of the strumline."),
-			new DefaultOption("Centered Notefield", "Centered Notefield off", "Centered Notefield On", "Change the layout of the strumline."),
+			new DefaultOption("Centered Notefield", "Centered Notefield off", "Centered Notefield", "Change the layout of the strumline."),
 			new DefaultOption("Ghost Tapping", "No Ghost Tapping", "ghosttap", "Ghost Tapping is when you tap a direction and it doesn't give you a miss.", true),
 			new Judgement("Customize your Hit Timings (LEFT or RIGHT)"),
 			#if desktop
