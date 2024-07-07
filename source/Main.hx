@@ -85,6 +85,8 @@ class Main extends Sprite
 		addChild(fpsCounter);
 		toggleFPS(FlxG.save.data.fps);
 
+		var log = new LogThing();
+		addChild(log);
 		#end
 
 		lime.app.Application.current.onExit.add((exitCode:Int) -> {

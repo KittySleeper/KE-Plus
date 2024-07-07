@@ -745,6 +745,24 @@ class PlayState extends MusicBeatState
 				var fgTank3:BGSprite = new BGSprite('tank3', 1300, 1200, 3.5, 2.5, ['fg']);
 				foregroundSprites.add(fgTank3);
 			}
+			case 'phillyStreets':
+			{
+					defaultCamZoom = 0.77;
+					curStage = 'phillyStreets';
+
+					var lights:FlxSprite = new FlxSprite(1840, 608).loadGraphic(Paths.image('phillyTraffic_lightmap'));
+					lights.updateHitbox();
+					lights.antialiasing = true;
+					lights.active = false;
+					lights.scrollFactor.set(0.9, 1);
+					add(lights);
+
+					var ground:FlxSprite = new FlxSprite(88, 317).loadGraphic(Paths.image('phillyForeground'));
+					ground.updateHitbox();
+					ground.antialiasing = true;
+					ground.active = false;
+					add(ground);
+			}
 			case 'stage':
 			{
 					defaultCamZoom = 0.9;
@@ -772,18 +790,6 @@ class PlayState extends MusicBeatState
 
 					add(stageCurtains);
 			}
-			case 'phillyStreets':
-				{
-						defaultCamZoom = 0.4;
-						curStage = 'phillyStreets';
-
-						var ground:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.image('phillyForeground'));
-						ground.setGraphicSize(Std.int(ground.width * 0.9));
-						ground.updateHitbox();
-						ground.antialiasing = true;
-						ground.scrollFactor.set(1.3, 1.3);
-						ground.active = false;
-				}
 			default:
 			{
 					defaultCamZoom = 0.9;
