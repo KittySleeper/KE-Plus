@@ -2,6 +2,7 @@
 	"song": {
 		"speed": 2.6,
 		"player1": "bf-pixel",
+		"artist":"Kawai Sprite",
 		"notes": [
 			{
 				"lengthInSteps": 16,
