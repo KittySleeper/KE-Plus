@@ -15,13 +15,13 @@ class HealthIcon extends FlxSprite
 	public var char:String = '';
 	var isPlayer:Bool = false;
 
-	public function new(char:String = 'bf', isPlayer:Bool = false)
+	public function new(char:String = 'bf', isPlayer:Bool = false, cutIconPrefix = false)
 	{
 		super();
 
 		this.isPlayer = isPlayer;
 
-		changeIcon(char);
+		changeIcon(char, cutIconPrefix);
 		antialiasing = true;
 		scrollFactor.set();
 	}
@@ -38,9 +38,9 @@ class HealthIcon extends FlxSprite
 			changeIcon(PlayState.SONG.player1);
 	}
 
-	public function changeIcon(newChar:String):Void
+	public function changeIcon(newChar:String, cutIconPrefix = false):Void
 	{
-		if (newChar != 'bf-pixel' && newChar != 'bf-old')
+		if (cutIconPrefix != true)
 			newChar = newChar.split('-')[0].trim();
 
 		if (newChar != char)

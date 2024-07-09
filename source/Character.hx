@@ -22,6 +22,8 @@ class Character extends FlxSprite
 	public var canDance:Bool = true;
 	public var canSing:Bool = true;
 
+	public var cutIconPrefix:Bool = false;
+
 	var script:HScript;
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isPlayer:Bool = false)
@@ -35,7 +37,7 @@ class Character extends FlxSprite
 		var tex:FlxAtlasFrames;
 		antialiasing = true;
 
-		script = new HScript('assets/characters/$curCharacter');
+		script = new HScript('assets/data/characters/$curCharacter');
 
 		if (!script.isBlank && script.expr != null)
 		{
@@ -427,6 +429,8 @@ class Character extends FlxSprite
 				antialiasing = false;
 
 				flipX = true;
+
+				cutIconPrefix = true;
 			case 'bf-pixel-dead':
 				frames = Paths.getSparrowAtlas('characters/bfPixelsDEAD');
 				animation.addByPrefix('singUP', "BF Dies pixel", 24, false);

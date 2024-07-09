@@ -11,9 +11,9 @@ Blammed:pico:3:easy|normal|hard|erect|nightmare
 Satin Panties:mom:4:easy|normal|hard|erect|nightmare
 High:mom:4:easy|normal|hard|erect|nightmare
 Milf:mom:4:easy|normal|hard
-Cocoa:parents-christmas:5:easy|normal|hard
-Eggnog:parents-christmas:5:easy|normal|hard|erect|nightmare
-Winter Horrorland:monster-christmas:5:easy|normal|hard
+Cocoa:parents:5:easy|normal|hard
+Eggnog:parents:5:easy|normal|hard|erect|nightmare
+Winter Horrorland:monster:5:easy|normal|hard
 Senpai:senpai:6:easy|normal|hard|erect|nightmare
 Roses:senpai:6:easy|normal|hard|erect|nightmare
 Thorns:spirit:6:easy|normal|hard|erect|nightmare
