@@ -47,7 +47,7 @@ class StoryMenuState extends MusicBeatState
 		['parents-christmas', 'bf', 'gf'],
 		['senpai', 'bf', 'gf'],
 		['', 'bf', 'gf'],
-		['', 'pico', 'gf']
+		['', 'bf', 'gf'] //brandon port the weekend 1 and week 7 sprites
 	];
 
 	var weekNames:Array<String> = [
