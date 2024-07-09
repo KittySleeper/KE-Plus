@@ -5,6 +5,7 @@
         "needsVoices": true,
         "player1": "pico",
         "player2": "darnell",
+        "artist":"Kawai Sprite",
         "speed": 2.6,
         "notes": [
             {

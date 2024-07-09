@@ -6,7 +6,7 @@ Spookeez:spooky:2:easy|normal|hard|erect|nightmare
 South:spooky:2:easy|normal|hard|erect|nightmare
 Monster:monster:2:easy|normal|hard
 Pico:pico:3:easy|normal|hard|erect|nightmare
-Philly:pico:3:easy|normal|hard|erect|nightmare
+Philly Nice:pico:3:easy|normal|hard|erect|nightmare
 Blammed:pico:3:easy|normal|hard|erect|nightmare
 Satin Panties:mom:4:easy|normal|hard|erect|nightmare
 High:mom:4:easy|normal|hard|erect|nightmare

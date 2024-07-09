@@ -2,6 +2,7 @@
     "song": {
         "song": "Eggnog",
         "remix": "erect",
+        "artist":"Saruky",
         "bpm": 140,
         "needsVoices": true,
         "player1": "bf-christmas",
@@ -4606,7 +4607,7 @@
             }
         ],
         "stage": "mall",
-        "player3": "gf-christmas"
+        "gfVersion": "gf-christmas"
     },
     "generatedBy": "tposejank FNF to Psych Engine porter"
 }

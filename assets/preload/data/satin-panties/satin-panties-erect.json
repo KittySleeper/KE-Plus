@@ -1,6 +1,7 @@
 {
     "song": {
         "song": "Satin-Panties",
+        "artist":"Kawai Sprite",
         "remix": "erect",
         "bpm": 135,
         "needsVoices": true,
@@ -6251,7 +6252,7 @@
             }
         ],
         "stage": "limo",
-        "player3": "gf-car"
+        "gfVersion": "gf-car"
     },
     "generatedBy": "tposejank FNF to Psych Engine porter"
 }
