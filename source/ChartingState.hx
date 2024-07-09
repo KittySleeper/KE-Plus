@@ -118,6 +118,7 @@ class ChartingState extends MusicBeatState
 				gfVersion: 'gf',
 				noteStyle: 'normal',
 				stage: 'stage',
+				artist: 'Kawai Sprite',
 				remix: '',
 				speed: 1,
 				validScore: false
