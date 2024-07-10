@@ -605,7 +605,7 @@ class OffsetMenu extends Option
 		PlayState.SONG = Song.loadFromJson(poop, "Tutorial");
 		PlayState.isStoryMode = false;
 		PlayState.storyDifficulty = "normal";
-		PlayState.storyWeek = 0;
+		PlayState.storyWeek = "0";
 		PlayState.offsetTesting = true;
 		trace('CUR WEEK' + PlayState.storyWeek);
 		LoadingState.loadAndSwitchState(new PlayState());
