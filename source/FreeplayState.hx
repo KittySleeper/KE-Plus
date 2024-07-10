@@ -42,7 +42,7 @@ class FreeplayState extends MusicBeatState
 		for (i in 0...initSonglist.length)
 		{
 			var data:Array<String> = initSonglist[i].split(':');
-			songs.push(new SongMetadata(data[0], Std.parseInt(data[2]), data[1], data[3].split("|")));
+			songs.push(new SongMetadata(data[0], data[2], data[1], data[3].split("|")));
 		}
 
 		/* 
@@ -286,11 +286,11 @@ class FreeplayState extends MusicBeatState
 class SongMetadata
 {
 	public var songName:String = "";
-	public var week:Int = 0;
+	public var week:String = "0";
 	public var songCharacter:String = "";
 	public var difficultys:Array<String> = [];
 
-	public function new(song:String, week:Int, songCharacter:String, songDifficultys:Array<String>)
+	public function new(song:String, week:String, songCharacter:String, songDifficultys:Array<String>)
 	{
 		this.songName = song;
 		this.week = week;

@@ -110,7 +110,7 @@ class TitleState extends MusicBeatState
 					"week5" => 'assets/week5',
 					"week6" => 'assets/week6',
 					"week7" => 'assets/week7',
-					"week8" => 'assets/week8'
+					"weekend1" => 'assets/weekend1'
 				]
 			}
 		});

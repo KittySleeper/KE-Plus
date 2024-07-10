@@ -58,7 +58,7 @@ class StoryMenuState extends MusicBeatState
 		"MOMMY MUST MURDER",
 		"RED SNOW",
 		"Hating Simulator ft. Moawling",
-		"TANKMAN",
+		"TANKMAN FT. JOHNNYUTAH",
 		"DUE DEBTS"
 	];
 
@@ -67,6 +67,18 @@ class StoryMenuState extends MusicBeatState
 	var txtWeekTitle:FlxText;
 
 	var curWeek:Int = 0;
+	var weekImage:String;
+	var weekImages:Array<String> = [
+		"tutorial",
+		"week1",
+		"week2",
+		"week3",
+		"week4",
+		"week5",
+		"week6",
+		"week7",
+		"weekend1"
+	];
 
 	var txtTracklist:FlxText;
 
@@ -306,7 +318,7 @@ class StoryMenuState extends MusicBeatState
 			PlayState.storyDifficulty = diffArray[curDifficulty];
 
 			PlayState.SONG = Song.loadFromJson(StringTools.replace(PlayState.storyPlaylist[0]," ", "-").toLowerCase() + diffic, StringTools.replace(PlayState.storyPlaylist[0]," ", "-").toLowerCase());
-			PlayState.storyWeek = curWeek;
+			PlayState.storyWeek = weekImage;
 			PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
@@ -343,10 +355,10 @@ class StoryMenuState extends MusicBeatState
 
 		// USING THESE WEIRD VALUES SO THAT IT DOESNT FLOAT UP
 		sprDifficulty.y = leftArrow.y - 15;
-		intendedScore = Highscore.getWeekScore(curWeek, diffArray[curDifficulty]);
+		intendedScore = Highscore.getWeekScore(weekImage, diffArray[curDifficulty]);
 
 		#if !switch
-		intendedScore = Highscore.getWeekScore(curWeek, diffArray[curDifficulty]);
+		intendedScore = Highscore.getWeekScore(weekImage, diffArray[curDifficulty]);
 		#end
 
 		FlxTween.tween(sprDifficulty, {y: leftArrow.y + 15, alpha: 1}, 0.07);
@@ -376,6 +388,8 @@ class StoryMenuState extends MusicBeatState
 			bullShit++;
 		}
 
+		weekImage = weekImages[curWeek];
+
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 
 		updateText();
@@ -401,7 +415,7 @@ class StoryMenuState extends MusicBeatState
 		txtTracklist.text += "\n";
 
 		#if !switch
-		intendedScore = Highscore.getWeekScore(curWeek, diffArray[curDifficulty]);
+		intendedScore = Highscore.getWeekScore(weekImage, diffArray[curDifficulty]);
 		#end
 	}
 }
