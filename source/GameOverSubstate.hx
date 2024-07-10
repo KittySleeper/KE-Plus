@@ -52,7 +52,8 @@ class GameOverSubstate extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		PlayState.instance.script.callFunction("updateDead", [elapsed]);
+		for (script in PlayState.instance.scripts)
+			script.callFunction("updateDead", [elapsed]);
 
 		if (controls.ACCEPT)
 		{

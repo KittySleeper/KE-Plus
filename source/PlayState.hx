@@ -216,7 +216,10 @@ class PlayState extends MusicBeatState
 
 	// API stuff
 
-	public var script:HScript;
+	public var startCallback:Void->Void = null;
+	public var endCallback:Void->Void = null;
+
+	public var scripts:Array<HScript> = [];
 
 	var tankWatchtower:BGSprite;
 	var tankGround:BGSprite;
@@ -232,6 +235,9 @@ class PlayState extends MusicBeatState
 	override public function create()
 	{
 		instance = this;
+
+		startCallback = startCountdown;
+		endCallback = endSong;
 		
 		if (FlxG.save.data.fpsCap > 290)
 			(cast (Lib.current.getChildAt(0), Main)).setFPSCap(800);
@@ -765,6 +771,17 @@ class PlayState extends MusicBeatState
 			} //deleted the stage case its the default jackass youre fucking welcome
 			default:
 			{
+				var stage = new HScript('assets/data/stages/${SONG.stage}');
+
+				if (!stage.isBlank && stage.expr != null)
+				{
+					stage.interp.scriptObject = this;
+					stage.setValue('add', add);
+					stage.setValue('remove', remove);
+					stage.setValue("introAssets", []);
+					stage.setValue("introSuffix", "");
+					stage.interp.execute(stage.expr);
+				} else {
 					defaultCamZoom = 0.9;
 					curStage = 'stage';
 					var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.image('stageback'));
@@ -789,10 +806,14 @@ class PlayState extends MusicBeatState
 					stageCurtains.active = false;
 
 					add(stageCurtains);
+				}
+		
+				scripts.push(stage);
+				stage.callFunction("create");
 			}
 		}
 
-		script = new HScript('assets/data/$songLowercase/script');
+		var script = new HScript('assets/data/$songLowercase/script');
 
 		if (!script.isBlank && script.expr != null)
 		{
@@ -805,6 +826,8 @@ class PlayState extends MusicBeatState
 		}
 
 		script.callFunction("create");
+
+		scripts.push(script);
 
 		var gfVersion:String = 'gf';
 
@@ -930,10 +953,8 @@ class PlayState extends MusicBeatState
 		}
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
-		// doof.x += 70;
-		// doof.y = FlxG.height * 0.5;
 		doof.scrollFactor.set();
-		doof.finishThing = startCountdown;
+		doof.finishThing = startCallback;
 
 		Conductor.songPosition = -5000;
 		
@@ -948,8 +969,6 @@ class PlayState extends MusicBeatState
 
 		playerStrums = new FlxTypedGroup<FlxSprite>();
 		cpuStrums = new FlxTypedGroup<FlxSprite>();
-
-		// startCountdown();
 
 		if (SONG.song == null)
 			trace('song is null???');
@@ -1116,7 +1135,7 @@ class PlayState extends MusicBeatState
 								ease: FlxEase.quadInOut,
 								onComplete: function(twn:FlxTween)
 								{
-									startCountdown();
+									startCallback();
 								}
 							});
 						});
@@ -1130,7 +1149,7 @@ class PlayState extends MusicBeatState
 					schoolIntro(doof);
 				default:
 					if (!songHasCutscene)
-						startCountdown();
+						startCallback();
 			}
 		}
 		else
@@ -1139,7 +1158,7 @@ class PlayState extends MusicBeatState
 			{
 				default:
 					if (!songHasCutscene) //hmmm
-						startCountdown();
+						startCallback();
 			}
 		}
 
@@ -1232,7 +1251,7 @@ class PlayState extends MusicBeatState
 					}
 				}
 				else
-					startCountdown();
+					startCallback();
 
 				remove(black);
 			}
@@ -1263,7 +1282,8 @@ class PlayState extends MusicBeatState
 		}
 		#end
 
-		script.callFunction("startCountdown");
+		for (script in scripts)
+			script.callFunction("startCountdown");
 
 		for (script in globalScripts)
 			script.callFunction("startCountdown");
@@ -1306,11 +1326,13 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			if (script.expr != null && script.getValue("introAssets") != [])
-				introAssets.set('default', script.getValue("introAssets"));
+			for (script in scripts) {
+				if (script.expr != null && script.getValue("introAssets") != [])
+					introAssets.set('default', script.getValue("introAssets"));
 
-			if (script.expr != null && script.getValue("introSuffix") != "")
-				altSuffix = script.getValue("introSuffix");
+				if (script.expr != null && script.getValue("introSuffix") != "")
+					altSuffix = script.getValue("introSuffix");
+			}
 
 			switch (swagCounter)
 			{
@@ -1394,7 +1416,7 @@ class PlayState extends MusicBeatState
 			FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song, SONG.remix), 1, false);
 		}
 
-		FlxG.sound.music.onComplete = endSong;
+		FlxG.sound.music.onComplete = endCallback;
 
 		if (SONG.needsVoices) {
 			vocals.play();
@@ -1446,12 +1468,11 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence(detailsText + " " + SONG.song + " (" + storyDifficultyText + ") " + Ratings.GenerateLetterRank(accuracy), "\nAcc: " + HelperFunctions.truncateFloat(accuracy, 2) + "% | Score: " + songScore + " | Misses: " + misses  , iconRPC);
 		#end
 
-		script.callFunction("startSong");
+		for (script in scripts)
+			script.callFunction("startSong");
 
 		for (script in globalScripts)
 			script.callFunction("startSong");
-
-		
 	}
 
 	var debugNum:Int = 0;
@@ -1950,7 +1971,8 @@ class PlayState extends MusicBeatState
 
 		songPos = FlxG.sound.music.time;
 
-		script.callFunction("update", [elapsed]);
+		for (script in scripts)
+			script.callFunction("update", [elapsed]);
 
 		super.update(elapsed);
 
@@ -2194,6 +2216,10 @@ class PlayState extends MusicBeatState
 				if (luaModchart != null)
 					luaModchart.executeState('playerTwoTurn', []);
 				#end
+
+				for (script in scripts)
+					script.callFunction("playerTwoTurn");
+
 				// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
 
 				switch (dad.curCharacter)
@@ -2229,6 +2255,9 @@ class PlayState extends MusicBeatState
 				if (luaModchart != null)
 					luaModchart.executeState('playerOneTurn', []);
 				#end
+
+				for (script in scripts)
+					script.callFunction("playerOneTurn");
 
 				switch (curStage)
 				{
@@ -2292,8 +2321,11 @@ class PlayState extends MusicBeatState
 			FlxG.sound.music.stop();
 
 			var gameoverScreen = new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y);
-			script.setValue("gameOverScreen", gameoverScreen);
-			script.callFunction("gameOver");
+
+			for (script in scripts) {
+				script.setValue("gameOverScreen", gameoverScreen);
+				script.callFunction("gameOver");
+			}
 
 			for (script in globalScripts) {
 				script.setValue("gameOverScreen", gameoverScreen);
@@ -2459,7 +2491,8 @@ class PlayState extends MusicBeatState
 							luaModchart.executeState('playerTwoSing', [Math.abs(daNote.noteData), Conductor.songPosition]);
 						#end
 
-						script.callFunction("playerTwoSing", [daNote]);
+						for (script in scripts)
+							script.callFunction("playerTwoSing", [daNote]);
 
 						for (script in globalScripts)
 							script.callFunction("playerTwoSing", [daNote]);
@@ -2543,10 +2576,11 @@ class PlayState extends MusicBeatState
 			endSong();
 		#end
 
-		script.callFunction("updatePost", [elapsed]);
+		for (script in scripts)
+			script.callFunction("updatePost", [elapsed]);
 	}
 
-	function endSong():Void
+	public function endSong():Void
 	{
 		if (!loadRep)
 			rep.SaveReplay(saveNotes);
@@ -2673,7 +2707,8 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		script.callFunction("endSong");
+		for (script in scripts)
+			script.callFunction("endSong");
 
 		for (script in globalScripts)
 			script.callFunction("endSong");
@@ -3216,7 +3251,8 @@ class PlayState extends MusicBeatState
 				luaModchart.executeState('playerOneMiss', [direction, Conductor.songPosition]);
 			#end
 
-			script.callFunction("playerOneMiss", [direction]);
+			for (script in scripts)
+				script.callFunction("playerOneMiss", [direction]);
 
 			for (script in globalScripts)
 				script.callFunction("playerOneMiss", [direction]);
@@ -3373,7 +3409,8 @@ class PlayState extends MusicBeatState
 						luaModchart.executeState('playerOneSing', [note.noteData, Conductor.songPosition]);
 					#end
 
-					script.callFunction("playerOneSing", [note]);
+					for (script in scripts)
+						script.callFunction("playerOneSing", [note]);
 
 					for (script in globalScripts)
 						script.callFunction("playerOneSing", [note]);
@@ -3573,7 +3610,8 @@ class PlayState extends MusicBeatState
 		}
 		#end
 
-		script.callFunction("beatHit", [curBeat]);
+		for (script in scripts)
+			script.callFunction("beatHit", [curBeat]);
 
 		if (curSong == 'Tutorial' && dad.curCharacter == 'gf') {
 			if (curBeat % 2 == 1 && dad.animOffsets.exists('danceLeft'))
