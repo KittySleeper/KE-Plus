@@ -86,9 +86,9 @@ class LoadReplayState extends MusicBeatState
 		super.create();
 	}
 
-    public function getWeekNumbFromSong(songName:String):Int
+    public function getWeekNumbFromSong(songName:String):String
     {
-        var week:Int = 0;
+        var week:String = "0";
         for (i in 0...songs.length)
         {
             var pog:FreeplayState.SongMetadata = songs[i];

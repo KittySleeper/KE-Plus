@@ -20,7 +20,7 @@ Thorns:spirit:6:easy|normal|hard|erect|nightmare
 Ugh:tankman:7:easy|normal|hard
 Guns:tankman:7:easy|normal|hard
 Stress:tankman:7:easy|normal|hard
-Darnell:darnell:8:easy|normal|hard
-Lit Up:darnell:8:easy|normal|hard
-2Hot:darnell:8:easy|normal|hard
-Blazin:darnell:8:easy|normal|hard
+Darnell:darnell:weekend1:easy|normal|hard
+Lit Up:darnell:weekend1:easy|normal|hard
+2Hot:darnell:weekend1:easy|normal|hard
+Blazin:darnell:weekend1:easy|normal|hard

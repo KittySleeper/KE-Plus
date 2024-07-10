@@ -27,7 +27,7 @@ class Highscore
 		}else trace('BotPlay detected. Score saving is disabled.');
 	}
 
-	public static function saveWeekScore(week:Int = 1, score:Int = 0, ?diff:String = "normal"):Void
+	public static function saveWeekScore(week:String = "1", score:Int = 0, ?diff:String = "normal"):Void
 	{
 		if(!FlxG.save.data.botplay)
 		{
@@ -72,7 +72,7 @@ class Highscore
 		return songScores.get(formatSong(song, diff));
 	}
 
-	public static function getWeekScore(week:Int, diff:String = "normal"):Int
+	public static function getWeekScore(week:String, diff:String = "normal"):Int
 	{
 		if (!songScores.exists(formatSong('week' + week, diff)))
 			setScore(formatSong('week' + week, diff), 0);
