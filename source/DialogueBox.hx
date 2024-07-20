@@ -69,6 +69,8 @@ class DialogueBox extends FlxSpriteGroup
 				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-pixel');
 				box.animation.addByPrefix('normalOpen', 'Text Box Appear', 24, false);
 				box.animation.addByIndices('normal', 'Text Box Appear', [4], "", 24);
+
+				box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
 			case 'roses':
 				FlxG.sound.play(Paths.sound('ANGRY_TEXT_BOX'));
 
@@ -77,11 +79,15 @@ class DialogueBox extends FlxSpriteGroup
 				box.animation.addByPrefix('normalOpen', 'SENPAI ANGRY IMPACT SPEECH', 24, false);
 				box.animation.addByIndices('normal', 'SENPAI ANGRY IMPACT SPEECH', [4], "", 24);
 
+				box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
+
 			case 'thorns':
 				box = new FlxSprite(-20, 45);
 				box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-evil');
 				box.animation.addByPrefix('normalOpen', 'Spirit Textbox spawn', 24, false);
 				box.animation.addByIndices('normal', 'Spirit Textbox spawn', [11], "", 24);
+
+				box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
 
 				var face:FlxSprite = new FlxSprite(320, 170).loadGraphic(Paths.image('weeb/spiritFaceForward'));
 				face.setGraphicSize(Std.int(face.width * 6));
@@ -115,7 +121,6 @@ class DialogueBox extends FlxSpriteGroup
 		portraitRight.visible = false;
 	
 		box.animation.play('normalOpen');
-		//box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
 		box.updateHitbox();
 		add(box);
 

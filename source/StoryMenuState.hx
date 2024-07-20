@@ -23,62 +23,21 @@ class StoryMenuState extends MusicBeatState
 {
 	var scoreText:FlxText;
 
-	var weekData:Array<Dynamic> = [
-		['Tutorial'],
-		['Bopeebo', 'Fresh', 'Dad Battle'],
-		['Spookeez', 'South', "Monster"],
-		['Pico', 'Philly Nice', "Blammed"],
-		['Satin Panties', "High", "Milf"],
-		['Cocoa', 'Eggnog', 'Winter Horrorland'],
-		['Senpai', 'Roses', 'Thorns'],
-		['Ugh', 'Guns', 'Stress'],
-		['Darnell', 'Lit Up', '2Hot', 'Blazin'],
-	];
+	var weekData:Array<Dynamic> = [];
 	var curDifficulty:Int = 1;
 
-	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true, true, true, true];
+	public static var weekUnlocked:Array<Bool> = [];
 
-	var weekCharacters:Array<Dynamic> = [
-		['gf', 'bf', ''],
-		['dad', 'bf', 'gf'],
-		['spooky', 'bf', 'gf'],
-		['pico', 'bf', 'gf'],
-		['mom', 'bf', 'gf'],
-		['parents-christmas', 'bf', 'gf'],
-		['senpai', 'bf', 'gf'],
-		['', 'bf', 'gf'],
-		['', 'bf', 'gf'] //brandon port the weekend 1 and week 7 sprites
-	];
+	var weekCharacters:Array<Dynamic> = [];
 
-	var weekNames:Array<String> = [
-		"TEACHING TIME",
-		"Daddy Dearest",
-		"Spooky Month",
-		"PICO",
-		"MOMMY MUST MURDER",
-		"RED SNOW",
-		"Hating Simulator ft. Moawling",
-		"TANKMAN FT. JOHNNYUTAH",
-		"DUE DEBTS"
-	];
+	var weekNames:Array<String> = [];
 
 	var diffArray:Array<String> = ["easy", "normal", "hard"];
 
 	var txtWeekTitle:FlxText;
 
 	var curWeek:Int = 0;
-	var weekImage:String;
-	var weekImages:Array<String> = [
-		"tutorial",
-		"week1",
-		"week2",
-		"week3",
-		"week4",
-		"week5",
-		"week6",
-		"week7",
-		"weekend1"
-	];
+	var weekImages:Array<String> = [];
 
 	var txtTracklist:FlxText;
 
@@ -98,6 +57,18 @@ class StoryMenuState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Story Mode Menu", null);
 		#end
+
+		var initSonglist = CoolUtil.coolTextFile(Paths.txt('weekSonglist'));
+
+		for (i in 0...initSonglist.length)
+		{
+			var data:Array<String> = initSonglist[i].split(':');
+			weekData.push(data[0].split(","));
+			weekImages.push(data[1]);
+			weekNames.push(data[2]);
+			weekCharacters.push(data[3].split(","));
+			weekUnlocked.push(true);
+		}
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
@@ -141,7 +112,7 @@ class StoryMenuState extends MusicBeatState
 
 		for (i in 0...weekData.length)
 		{
-			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, i);
+			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, weekImages[i]);
 			weekThing.y += ((weekThing.height + 20) * i);
 			weekThing.targetY = i;
 			grpWeekText.add(weekThing);
@@ -318,7 +289,7 @@ class StoryMenuState extends MusicBeatState
 			PlayState.storyDifficulty = diffArray[curDifficulty];
 
 			PlayState.SONG = Song.loadFromJson(StringTools.replace(PlayState.storyPlaylist[0]," ", "-").toLowerCase() + diffic, StringTools.replace(PlayState.storyPlaylist[0]," ", "-").toLowerCase());
-			PlayState.storyWeek = weekImage;
+			PlayState.storyWeek = weekImages[curWeek];
 			PlayState.campaignScore = 0;
 			new FlxTimer().start(1, function(tmr:FlxTimer)
 			{
@@ -355,10 +326,10 @@ class StoryMenuState extends MusicBeatState
 
 		// USING THESE WEIRD VALUES SO THAT IT DOESNT FLOAT UP
 		sprDifficulty.y = leftArrow.y - 15;
-		intendedScore = Highscore.getWeekScore(weekImage, diffArray[curDifficulty]);
+		intendedScore = Highscore.getWeekScore(weekImages[curWeek], diffArray[curDifficulty]);
 
 		#if !switch
-		intendedScore = Highscore.getWeekScore(weekImage, diffArray[curDifficulty]);
+		intendedScore = Highscore.getWeekScore(weekImages[curWeek], diffArray[curDifficulty]);
 		#end
 
 		FlxTween.tween(sprDifficulty, {y: leftArrow.y + 15, alpha: 1}, 0.07);
@@ -388,8 +359,6 @@ class StoryMenuState extends MusicBeatState
 			bullShit++;
 		}
 
-		weekImage = weekImages[curWeek];
-
 		FlxG.sound.play(Paths.sound('scrollMenu'));
 
 		updateText();
@@ -415,7 +384,7 @@ class StoryMenuState extends MusicBeatState
 		txtTracklist.text += "\n";
 
 		#if !switch
-		intendedScore = Highscore.getWeekScore(weekImage, diffArray[curDifficulty]);
+		intendedScore = Highscore.getWeekScore(weekImages[curWeek], diffArray[curDifficulty]);
 		#end
 	}
 }

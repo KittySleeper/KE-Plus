@@ -1157,8 +1157,7 @@ class PlayState extends MusicBeatState
 			switch (curSong.toLowerCase())
 			{
 				default:
-					if (!songHasCutscene) //hmmm
-						startCallback();
+					startCallback();
 			}
 		}
 
