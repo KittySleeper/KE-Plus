@@ -28,9 +28,9 @@ class StickerSubState extends MusicBeatSubstate {
             if (resetState)
                 FlxG.resetState();
             else
-                FlxG.switchState(nextState);   
+                FlxG.switchState(nextState);  
             
-            PlayState.instance.transIn = FlxTransitionableState.defaultTransIn;
+            PlayState.instance.transIn = FlxTransitionableState.defaultTransIn;;
             PlayState.instance.transOut = FlxTransitionableState.defaultTransOut;
         }
     }
