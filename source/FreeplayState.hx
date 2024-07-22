@@ -35,8 +35,29 @@ class FreeplayState extends MusicBeatState
 
 	private var iconArray:Array<HealthIcon> = [];
 
+	var stickerSubState:StickerSubState;
+
+	public function new(?stickers:StickerSubState = null)
+	{
+		super();
+	  
+		if (stickers != null)
+		{
+			stickerSubState = stickers;
+		}
+	}
+
 	override function create()
 	{
+		if (stickerSubState != null)
+		{
+			this.persistentUpdate = true;
+			this.persistentDraw = true;
+		
+			openSubState(stickerSubState);
+			stickerSubState.degenStickers();
+		}
+		
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
 		for (i in 0...initSonglist.length)
