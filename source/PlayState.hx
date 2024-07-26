@@ -75,6 +75,7 @@ class PlayState extends MusicBeatState
 	public static var storyWeek:String = '0';
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:String = "normal";
+	public static var deathCounter:Int = 0;
 	public static var weekSong:Int = 0;
 	public static var shits:Int = 0;
 	public static var bads:Int = 0;
@@ -2394,6 +2395,8 @@ class PlayState extends MusicBeatState
 
 			FlxG.sound.music.stop();
 
+			deathCounter += 1;
+
 			var gameoverScreen = new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y);
 
 			for (script in scripts) {
@@ -2676,6 +2679,7 @@ class PlayState extends MusicBeatState
 		}
 		#end
 
+		deathCounter = 0;
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		for (sound in FlxG.sound.list) {
