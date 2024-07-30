@@ -4,6 +4,8 @@ import Controls.KeyboardScheme;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
+import flixel.FlxState;
+import flixel.FlxSubState;
 import flixel.effects.FlxFlicker;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -132,6 +134,16 @@ class MainMenuState extends MusicBeatState
 		super.create();
 	}
 
+	override function openSubState(SubState:FlxSubState)
+	{
+		super.openSubState(SubState);
+	}
+
+	override function closeSubState()
+	{
+		super.closeSubState();
+	}
+
 	var selectedSomethin:Bool = false;
 
 	override function update(elapsed:Float)
@@ -226,8 +238,10 @@ class MainMenuState extends MusicBeatState
 				FlxG.switchState(new StoryMenuState());
 				trace("Story Menu Selected");
 			case 'freeplay':
-				FlxG.switchState(new FreeplayState());
-
+				if (KadeEngineData.KEOptions.get("oldfreeplay"))
+					openSubState(new VSliceFreeplayState());
+				else
+					FlxG.switchState(new FreeplayState());
 				trace("Freeplay Menu Selected");
 
 			case 'options':

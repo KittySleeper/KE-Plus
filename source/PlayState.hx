@@ -26,6 +26,7 @@ import flixel.FlxGame;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import openfl.utils.Assets;
 import flixel.FlxSubState;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.effects.FlxTrail;
@@ -128,6 +129,7 @@ class PlayState extends MusicBeatState
 
 	private var gfSpeed:Int = 1;
 	public var health:Float = 1; //making public because sethealth doesnt work without it
+	private var healthLerp:Float = 1; // for the smoother healthbar
 	public var songPos:Float = 0; // same kade
 	private var combo:Int = 0;
 	public static var misses:Int = 0;
@@ -1098,7 +1100,7 @@ class PlayState extends MusicBeatState
 		add(healthBarBG);
 
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
-			'health', 0, 2);
+			'healthLerp', 0, 2);
 		healthBar.scrollFactor.set();
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		add(healthBar);
@@ -1923,6 +1925,10 @@ class PlayState extends MusicBeatState
 
 	public static var songRate = 1.5;
 
+	function inRange(a:Float, b:Float, tolerance:Float){
+		return (a <= b + tolerance && a >= b - tolerance);
+	}
+
 	override public function update(elapsed:Float)
 	{
 		#if !debug
@@ -2098,6 +2104,14 @@ class PlayState extends MusicBeatState
 
 		if (health > 2)
 			health = 2;
+
+		if(healthLerp != health){
+			healthLerp = Utils.fpsAdjsutedLerp(healthLerp, health, 0.7);
+		}
+		if(inRange(healthLerp, 2, 0.001)){
+			healthLerp = 2;
+		}
+
 		if (healthBar.percent < 20)
 			iconP1.animation.curAnim.curFrame = 1;
 		else
