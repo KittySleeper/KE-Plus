@@ -1,19 +1,20 @@
 ![Kade Engine logo](https://user-images.githubusercontent.com/26305836/110529589-4b4eb600-80ce-11eb-9c44-e899118b0bf0.png)
-[![AppVeyor](https://img.shields.io/appveyor/build/KadeDev/Kade-Engine-Windows?label=windows%20build)](https://ci.appveyor.com/project/KadeDev/kade-engine-windows/branch/master/artifacts) [![AppVeyor](https://img.shields.io/appveyor/build/KadeDev/Kade-Engine-Macos?label=macOS%20build)](https://ci.appveyor.com/project/KadeDev/kade-engine-macos/branch/master/artifacts)  [![AppVeyor](https://img.shields.io/appveyor/build/KadeDev/Kade-Engine-Linux?label=linux%20build)](https://ci.appveyor.com/project/KadeDev/kade-engine-linux/branch/master/artifacts) [![AppVeyor](https://img.shields.io/appveyor/build/daniel11420/KadeEngineWeb?label=html5&20build)](https://ci.appveyor.com/project/daniel11420/KadeEngineWeb) [![Discord](https://img.shields.io/discord/808039740464300104?label=discord)](https://discord.gg/MG6GQFh52U) [![GitHub issues](https://img.shields.io/github/issues/KadeDev/Kade-Engine)](https://github.com/ /issues) [![GitHub pull requests](https://img.shields.io/github/issues-pr/504brandon/KE-Plus)](https://github.com/KadeDev/Kade-Engine/pulls) []() []()
 
-![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/KadeDev/Kade-Engine/latest) ![GitHub repo size](https://img.shields.io/github/repo-size/KadeDev/Kade-Engine) ![Lines of code](https://img.shields.io/tokei/lines/github/KadeDev/Kade-Engine) ![Supported platforms](https://img.shields.io/badge/supported%20platforms-windows%2C%20macOS%2C%20linux%2C%20html5-blue) ![GitHub all releases](https://img.shields.io/github/downloads/KadeDev/Kade-Engine/total) ![GitHub](https://img.shields.io/github/license/KadeDev/Kade-Engine) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/KadeDev/Kade-Engine?include_prereleases&label=latest%20version) 
+[![AppVeyor](https://img.shields.io/appveyor/build/504brandon/KE-Plus-Windows?label=windows%20build)](https://ci.appveyor.com/project/504brandon/KE-Plus-windows/branch/master/artifacts) [![AppVeyor](https://img.shields.io/appveyor/build/504brandon/KE-Plus-Macos?label=macOS%20build)](https://ci.appveyor.com/project/504brandon/KE-Plus-macos/branch/master/artifacts)  [![AppVeyor](https://img.shields.io/appveyor/build/504brandon/KE-Plus-Linux?label=linux%20build)](https://ci.appveyor.com/project/504brandon/KE-Plus-linux/branch/master/artifacts) [![AppVeyor](https://img.shields.io/appveyor/build/daniel11420/KadeEngineWeb?label=html5&20build)](https://ci.appveyor.com/project/daniel11420/KadeEngineWeb) [![Discord](https://img.shields.io/discord/808039740464300104?label=discord)](https://discord.gg/MG6GQFh52U) [![GitHub issues](https://img.shields.io/github/issues/504brandon/KE-Plus)](https://github.com/504brandon/KE-Plus/issues) [![GitHub pull requests](https://img.shields.io/github/issues-pr/504brandon/KE-Plus)](https://github.com/504brandon/KE-Plus/pulls) []() []()
 
-# Friday Night Funkin': Kade Engine +
+![GitHub commits since latest release (by date)](https://img.shields.io/github/commits-since/504brandon/KE-Plus/latest) ![GitHub repo size](https://img.shields.io/github/repo-size/504brandon/KE-Plus) ![Lines of code](https://img.shields.io/tokei/lines/github/504brandon/KE-Plus) ![Supported platforms](https://img.shields.io/badge/supported%20platforms-windows%2C%20macOS%2C%20linux%2C%20html5-blue) ![GitHub all releases](https://img.shields.io/github/downloads/504brandon/KE-Plus/total) ![GitHub](https://img.shields.io/github/license/504brandon/KE-Plus) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/504brandon/KE-Plus?include_prereleases&label=latest%20version) 
+
+# Friday Night Funkin': Kade Engine
 ## Friday Night Funkin'
 **Friday Night Funkin'** is a rhythm game originally made for Ludum Dare 47 "Stuck In a Loop".
 
 Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](https://www.newgrounds.com/portal/view/770371) ⋅ [source code on GitHub](https://github.com/ninjamuffin99/Funkin)**
 > Uh oh! Your tryin to kiss ur hot girlfriend, but her MEAN and EVIL dad is trying to KILL you! He's an ex-rockstar, the only way to get to his heart? The power of music... 
 
-## Kade Engine +
-**Kade Engine +** is a mod for Friday Night Funkin', including a full engine rework, replays, and more.
+## Kade Engine
+**Kade Engine** is a mod for Friday Night Funkin', including a full engine rework, replays, and more.
 
-Links: **[GameBanana mod page](https://gamebanana.com/gamefiles/16761) ⋅ [play in browser](https://funkin.puyo.xyz) ⋅ [latest stable release](https://github.com/KadeDev/Kade-Engine/releases/latest) ⋅ [latest development build (windows)](https://ci.appveyor.com/project/KadeDev/kade-engine-windows/branch/master/artifacts) ⋅ [latest development build (macOS)](https://ci.appveyor.com/project/KadeDev/kade-engine-macos/branch/master/artifacts) ⋅ [latest development build (linux)](https://ci.appveyor.com/project/KadeDev/kade-engine-linux/branch/master/artifacts)**
+Links: **[GameBanana mod page](https://gamebanana.com/gamefiles/16761) ⋅ [play in browser](https://funkin.puyo.xyz) ⋅ [latest stable release](https://github.com/504brandon/KE-Plus/releases/latest) ⋅ [latest development build (windows)](https://ci.appveyor.com/project/504brandon/KE-Plus-windows/branch/master/artifacts) ⋅ [latest development build (macOS)](https://ci.appveyor.com/project/504brandon/KE-Plus-macos/branch/master/artifacts) ⋅ [latest development build (linux)](https://ci.appveyor.com/project/504brandon/KE-Plus-linux/branch/master/artifacts)**
 
 **REMEMBER**: This is a **mod**. This is not the vanilla game and should be treated as a **modification**. This is not and probably will never be official, so don't get confused.
 
@@ -55,12 +56,6 @@ If you're looking for documentation, changelogs, or guides, you can find those o
  - [Kawai Sprite](https://twitter.com/kawaisprite) - Music
 
 This game was made with love to Newgrounds and its community. Extra love to Tom Fulp.
-
-### Kade Engine +
-
-- [504brandon](https://twitter.com/504brandon) - Maintainer and lead programmer of Kade Engine +
-- DemonDezerin - co-programmer and did Xbox Support
-
 ### Kade Engine
-- [KadeDeveloper](https://twitter.com/KadeDeveloper) - Maintainer and lead programmer of Kade Engine
-- [The contributors](https://github.com/KadeDev/Kade-Engine/graphs/contributors)
+- [KadeDeveloper](https://twitter.com/KadeDeveloper) - Maintainer and lead programmer
+- [The contributors](https://github.com/504brandon/KE-Plus/graphs/contributors)
