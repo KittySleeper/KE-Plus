@@ -49,6 +49,7 @@ class OptionsMenu extends MusicBeatState
 			new AccuracyOption("Display accuracy information."),
 			new NPSDisplayOption("Shows your current Notes Per Second."),
 			new DefaultOption("Time Bar On", "Time Bar Off", "songpos", "Makes a bar on the top of your screen that shows your time.", true),
+			new DefaultOption("VSlice Freeplay", "Legacy Freeplay", "oldfreeplay", "Changes the Freeplay To Look like the V-Slice Freeplay or the Legacy Freeplay", true),
 			new CpuStrums("CPU's strumline lights up when a note hits it."),
 			#else
 			new DistractionsAndEffectsOption("Toggle stage distractions that can hinder your gameplay.")

@@ -26,6 +26,7 @@ import flixel.FlxGame;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import openfl.utils.Assets;
 import flixel.FlxSubState;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.effects.FlxTrail;
@@ -75,6 +76,7 @@ class PlayState extends MusicBeatState
 	public static var storyWeek:String = '0';
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:String = "normal";
+	public static var deathCounter:Int = 0;
 	public static var weekSong:Int = 0;
 	public static var shits:Int = 0;
 	public static var bads:Int = 0;
@@ -127,6 +129,7 @@ class PlayState extends MusicBeatState
 
 	private var gfSpeed:Int = 1;
 	public var health:Float = 1; //making public because sethealth doesnt work without it
+	private var healthLerp:Float = 1; // for the smoother healthbar
 	public var songPos:Float = 0; // same kade
 	private var combo:Int = 0;
 	public static var misses:Int = 0;
@@ -268,7 +271,19 @@ class PlayState extends MusicBeatState
 		trace('Mod chart: ' + executeModchart + " - " + Paths.lua(songLowercase + "/modchart"));
 
 		// Making difficulty text for Discord Rich Presence.
-		storyDifficultyText = storyDifficulty;
+		switch (storyDifficulty)
+		{
+			case "easy":
+				storyDifficultyText = "Easy";
+			case "normal":
+				storyDifficultyText = "Normal";
+			case "hard":
+				storyDifficultyText = "Hard";
+			case "erect":
+				storyDifficultyText = "Erect";
+			case "nightmare":
+				storyDifficultyText = "Nightmare";
+		}
 
 		#if windows
 		iconRPC = SONG.player2;
@@ -410,7 +425,7 @@ class PlayState extends MusicBeatState
 						add(phillyTrain);
 					}
 
-					trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes','week3'));
+					trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes','shared'));
 					FlxG.sound.list.add(trainSound);
 
 					// var cityLights:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.win0.png);
@@ -756,18 +771,65 @@ class PlayState extends MusicBeatState
 					defaultCamZoom = 0.77;
 					curStage = 'phillyStreets';
 
-					var lights:FlxSprite = new FlxSprite(1840, 608).loadGraphic(Paths.image('phillyTraffic_lightmap'));
-					lights.updateHitbox();
+					var bg:FlxSprite = new FlxSprite(-545, -273).loadGraphic(Paths.image('phillySkybox', 'weekend1'));
+					bg.antialiasing = true;
+					bg.scrollFactor.set(0.2, 0.2);
+					bg.active = false;
+					add(bg);
+
+					var sky:FlxSprite = new FlxSprite(-545, -273).loadGraphic(Paths.image('phillySkyline', 'weekend1'));
+					sky.antialiasing = true;
+					sky.scrollFactor.set(0.2, 0.2);
+					sky.active = false;
+					add(sky);
+
+					var city:FlxSprite = new FlxSprite(-545, -273).loadGraphic(Paths.image('phillyForegroundCity', 'weekend1'));
+					city.antialiasing = true;
+					city.scrollFactor.set(0.3, 0.3);
+					city.active = false;
+					add(city);
+
+					var construction:FlxSprite = new FlxSprite(1800, 364).loadGraphic(Paths.image('phillyConstruction', 'weekend1'));
+					construction.antialiasing = true;
+					construction.scrollFactor.set(0.7, 1);
+					construction.active = false;
+					add(construction);
+
+					var lights:FlxSprite = new FlxSprite(284, 305).loadGraphic(Paths.image('phillyHighwayLights', 'weekend1'));
 					lights.antialiasing = true;
+					lights.scrollFactor.set(1, 1);
 					lights.active = false;
-					lights.scrollFactor.set(0.9, 1);
 					add(lights);
 
-					var ground:FlxSprite = new FlxSprite(88, 317).loadGraphic(Paths.image('phillyForeground'));
-					ground.updateHitbox();
-					ground.antialiasing = true;
-					ground.active = false;
-					add(ground);
+					var highway:FlxSprite = new FlxSprite(139, 209).loadGraphic(Paths.image('phillyHighway', 'weekend1'));
+					highway.antialiasing = true;
+					highway.scrollFactor.set(1, 1);
+					highway.active = false;
+					add(highway);
+
+					var smog:FlxSprite = new FlxSprite(-6, 245).loadGraphic(Paths.image('phillySmog', 'weekend1'));
+					smog.antialiasing = true;
+					smog.scrollFactor.set(0.8, 1);
+					smog.active = false;
+					add(smog);
+
+					// put cars here i think
+
+					// traffic lights here
+
+					//the lightmap
+
+					var fg:FlxSprite = new FlxSprite(88, 317).loadGraphic(Paths.image('phillyForeground', 'weekend1'));
+					fg.antialiasing = true;
+					fg.scrollFactor.set(1, 1);
+					fg.active = false;
+					add(fg);
+
+					var pile:FlxSprite = new FlxSprite(920, 1045).loadGraphic(Paths.image('spraycanPile', 'weekend1'));
+					pile.antialiasing = true;
+					pile.scrollFactor.set(1, 1);
+					pile.active = false;
+					add(pile);
 			} //deleted the stage case its the default jackass youre fucking welcome
 			default:
 			{
@@ -886,8 +948,8 @@ class PlayState extends MusicBeatState
 				dad.x -= 150;
 				dad.y += 100;
 				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
-				case 'tankman':
-					dad.y += 180;
+			case 'tankman':
+				dad.y += 180;
 			}
 
 
@@ -931,6 +993,11 @@ class PlayState extends MusicBeatState
 				boyfriend.y += 220;
 				gf.x += 180;
 				gf.y += 300;
+			case 'phillyStreets':
+				dad.x += 900;
+				dad.y += 1110;
+				boyfriend.x += 2151;
+				boyfriend.y += 1228;
 		}
 
 		add(gf);
@@ -1033,7 +1100,7 @@ class PlayState extends MusicBeatState
 		add(healthBarBG);
 
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
-			'health', 0, 2);
+			'healthLerp', 0, 2);
 		healthBar.scrollFactor.set();
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		add(healthBar);
@@ -1143,7 +1210,7 @@ class PlayState extends MusicBeatState
 				case 'senpai':
 					schoolIntro(doof);
 				case 'roses':
-					FlxG.sound.play(Paths.sound('ANGRY'));
+					FlxG.sound.play(Paths.sound('ANGRY', 'shared'));
 					schoolIntro(doof);
 				case 'thorns':
 					schoolIntro(doof);
@@ -1228,7 +1295,7 @@ class PlayState extends MusicBeatState
 							else
 							{
 								senpaiEvil.animation.play('idle');
-								FlxG.sound.play(Paths.sound('Senpai_Dies'), 1, false, null, true, function()
+								FlxG.sound.play(Paths.sound('Senpai_Dies', 'week6'), 1, false, null, true, function()
 								{
 									remove(senpaiEvil);
 									remove(red);
@@ -1337,6 +1404,8 @@ class PlayState extends MusicBeatState
 			{
 				case 0:
 					FlxG.sound.play(Paths.sound('intro3' + altSuffix), 0.6);
+					if (curStage.startsWith('school'))
+						FlxG.sound.play(Paths.sound('intro3', 'week6'), 0.6);
 				case 1:
 					var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
 					ready.scrollFactor.set();
@@ -1355,6 +1424,8 @@ class PlayState extends MusicBeatState
 						}
 					});
 					FlxG.sound.play(Paths.sound('intro2' + altSuffix), 0.6);
+					if (curStage.startsWith('school'))
+						FlxG.sound.play(Paths.sound('intro2', 'week6'), 0.6);
 				case 2:
 					var set:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[1]));
 					set.scrollFactor.set();
@@ -1372,6 +1443,8 @@ class PlayState extends MusicBeatState
 						}
 					});
 					FlxG.sound.play(Paths.sound('intro1' + altSuffix), 0.6);
+					if (curStage.startsWith('school'))
+						FlxG.sound.play(Paths.sound('intro1', 'week6'), 0.6);
 				case 3:
 					var go:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[2]));
 					go.scrollFactor.set();
@@ -1391,6 +1464,8 @@ class PlayState extends MusicBeatState
 						}
 					});
 					FlxG.sound.play(Paths.sound('introGo' + altSuffix), 0.6);
+					if (curStage.startsWith('school'))
+						FlxG.sound.play(Paths.sound('introGo', 'week6'), 0.6);
 				case 4:
 			}
 
@@ -1488,6 +1563,8 @@ class PlayState extends MusicBeatState
 		if (SONG.needsVoices) {
 			vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, "", SONG.remix));
 			vocalsBF = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, boyfriend.curCharacter, SONG.remix));
+			if (boyfriend.curCharacter == 'pico-playable')
+				vocalsBF = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, 'pico', SONG.remix));
 			vocalsDad = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song, dad.curCharacter, SONG.remix));
 		}
 		else
@@ -1847,6 +1924,10 @@ class PlayState extends MusicBeatState
 
 	public static var songRate = 1.5;
 
+	function inRange(a:Float, b:Float, tolerance:Float){
+		return (a <= b + tolerance && a >= b - tolerance);
+	}
+
 	override public function update(elapsed:Float)
 	{
 		#if !debug
@@ -2022,6 +2103,14 @@ class PlayState extends MusicBeatState
 
 		if (health > 2)
 			health = 2;
+
+		if(healthLerp != health){
+			healthLerp = Utils.fpsAdjsutedLerp(healthLerp, health, 0.7);
+		}
+		if(inRange(healthLerp, 2, 0.001)){
+			healthLerp = 2;
+		}
+
 		if (healthBar.percent < 20)
 			iconP1.animation.curAnim.curFrame = 1;
 		else
@@ -2319,6 +2408,8 @@ class PlayState extends MusicBeatState
 
 			FlxG.sound.music.stop();
 
+			deathCounter += 1;
+
 			var gameoverScreen = new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y);
 
 			for (script in scripts) {
@@ -2601,6 +2692,7 @@ class PlayState extends MusicBeatState
 		}
 		#end
 
+		deathCounter = 0;
 		canPause = false;
 		FlxG.sound.music.volume = 0;
 		for (sound in FlxG.sound.list) {

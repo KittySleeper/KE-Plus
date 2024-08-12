@@ -30,10 +30,22 @@ class FreeplayState extends MusicBeatState
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
 
+	var coolColors:Array<Int> = [
+		0xff9271fd,
+		0xff9271fd,
+		0xff223344,
+		0xFF941653,
+		0xFFfc96d7,
+		0xFFa0d1ff,
+		0xffff78bf,
+		0xfff6b604
+	];
+
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
 
 	private var iconArray:Array<HealthIcon> = [];
+	var bg:FlxSprite;
 
 	override function create()
 	{
@@ -68,7 +80,7 @@ class FreeplayState extends MusicBeatState
 
 		// LOAD CHARACTERS
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
+		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		add(bg);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
@@ -153,6 +165,7 @@ class FreeplayState extends MusicBeatState
 		}
 
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
+		bg.color = FlxColor.interpolate(bg.color, coolColors[Std.parseInt(songs[curSelected].week) % coolColors.length], 0.045);
 
 		if (Math.abs(lerpScore - intendedScore) <= 10)
 			lerpScore = intendedScore;
