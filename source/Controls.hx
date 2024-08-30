@@ -31,6 +31,7 @@ enum abstract Action(String) to String from String
 	var PAUSE = "pause";
 	var RESET = "reset";
 	var CHEAT = "cheat";
+	var SCREENSHOT = "screenshot";
 }
 #else
 @:enum
@@ -53,6 +54,7 @@ abstract Action(String) to String from String
 	var PAUSE = "pause";
 	var RESET = "reset";
 	var CHEAT = "cheat";
+	var SCREENSHOT = "screenshot";
 }
 #end
 
@@ -78,6 +80,7 @@ enum Control
 	BACK;
 	PAUSE;
 	CHEAT;
+	SCREENSHOT;
 }
 
 enum KeyboardScheme
@@ -111,6 +114,7 @@ class Controls extends FlxActionSet
 	var _pause = new FlxActionDigital(Action.PAUSE);
 	var _reset = new FlxActionDigital(Action.RESET);
 	var _cheat = new FlxActionDigital(Action.CHEAT);
+	var _screenshot = new FlxActionDigital(Action.SCREENSHOT);
 
 	#if (haxe >= "4.0.0")
 	var byName:Map<String, FlxActionDigital> = [];
@@ -206,6 +210,9 @@ class Controls extends FlxActionSet
 	inline function get_CHEAT()
 		return _cheat.check();
 
+	inline function get_SCREENSHOT()
+		return _screenshot.check();
+
 	#if (haxe >= "4.0.0")
 	public function new(name, scheme = None)
 	{
@@ -228,6 +235,7 @@ class Controls extends FlxActionSet
 		add(_pause);
 		add(_reset);
 		add(_cheat);
+		add(_screenshot);
 
 		for (action in digitalActions)
 			byName[action.name] = action;
@@ -256,6 +264,7 @@ class Controls extends FlxActionSet
 		add(_pause);
 		add(_reset);
 		add(_cheat);
+		add(_screenshot);
 
 		for (action in digitalActions)
 			byName[action.name] = action;
@@ -310,6 +319,7 @@ class Controls extends FlxActionSet
 			case PAUSE: _pause;
 			case RESET: _reset;
 			case CHEAT: _cheat;
+			case SCREENSHOT: _screenshot;
 		}
 	}
 
@@ -355,6 +365,8 @@ class Controls extends FlxActionSet
 				func(_reset, JUST_PRESSED);
 			case CHEAT:
 				func(_cheat, JUST_PRESSED);
+			case SCREENSHOT:
+				func(_screenshot, JUST_PRESSED);
 		}
 	}
 
@@ -580,7 +592,8 @@ class Controls extends FlxActionSet
 		inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
 		inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 		inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);
-		inline bindKeys(Control.RESET, [FlxKey.fromString(FlxG.save.data.killBind)]);
+		inline bindKeys(Control.RESET, [FlxKey.fromString(FlxG.save.data.killBind), FlxKey.R]);
+		inline bindKeys(Control.SCREENSHOT, [FlxKey.fromString(FlxG.save.data.screenshot), FlxKey.F3]);
 	}
 
 	function removeKeyboard()

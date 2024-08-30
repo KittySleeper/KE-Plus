@@ -11,9 +11,6 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxSignal;
 import flixel.util.FlxTimer;
-import funkin.graphics.FunkinSprite;
-import funkin.input.Cursor;
-import funkin.audio.FunkinSound;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
 import openfl.display.BitmapData;
@@ -39,6 +36,7 @@ typedef ScreenshotPluginParams =
 class ScreenshotPlugin extends FlxBasic
 {
   public static final SCREENSHOT_FOLDER = 'screenshots';
+  private var lastScreenshotTimeStamp:Float = 0;
 
   var _hotkeys:Array<FlxKey>;
 
@@ -79,8 +77,10 @@ class ScreenshotPlugin extends FlxBasic
   {
     super.update(elapsed);
 
-    if (hasPressedScreenshot())
+    if (hasPressedScreenshot() && lastScreenshotTimeStamp+2<Sys.time())
     {
+      lastScreenshotTimeStamp = Sys.time();
+      trace('Capturing screen at $lastScreenshotTimeStamp !');
       capture();
     }
   }
@@ -92,23 +92,24 @@ class ScreenshotPlugin extends FlxBasic
   {
     FlxG.plugins.addPlugin(new ScreenshotPlugin(
       {
-        flashColor: Preferences.flashingLights ? FlxColor.WHITE : null, // Was originally a black flash.
+        flashColor: ClientPrefs.data.flashing ? FlxColor.WHITE : null, // Was originally a black flash.
 
         // TODO: Add a way to configure screenshots from the options menu.
         hotkeys: [FlxKey.F3],
         shouldHideMouse: false,
         fancyPreview: true,
       }));
+      
   }
 
   public function hasPressedScreenshot():Bool
   {
-    return PlayerSettings.player1.controls.WINDOW_SCREENSHOT;
+    return Controls.instance.SCREENSHOT;
   }
 
   public function updatePreferences():Void
   {
-    _flashColor = Preferences.flashingLights ? FlxColor.WHITE : null;
+    _flashColor = ClientPrefs.data.flashing ? FlxColor.WHITE : null;
   }
 
   /**
@@ -133,7 +134,7 @@ class ScreenshotPlugin extends FlxBasic
     if (_shouldHideMouse && FlxG.mouse.visible)
     {
       wasMouseHidden = true;
-      Cursor.hide();
+      FlxG.mouse.visible = false;
     }
 
     // The actual work.
@@ -144,7 +145,7 @@ class ScreenshotPlugin extends FlxBasic
 
     if (wasMouseHidden)
     {
-      Cursor.show();
+      FlxG.mouse.visible = true;
     }
 
     // Save the bitmap to a file.
@@ -172,9 +173,14 @@ class ScreenshotPlugin extends FlxBasic
     flashSpr.addChild(flashBitmap);
     FlxG.stage.addChild(flashSpr);
     FlxTween.tween(flashSpr, {alpha: 0}, 0.15, {ease: FlxEase.quadOut, onComplete: _ -> FlxG.stage.removeChild(flashSpr)});
-
+    FlxG.signals.postStateSwitch.addOnce(() -> {
+      try{
+        FlxG.stage.removeChild(flashSpr);
+      }
+      catch(x){} // this can crach if flashSpr is not a child of stage anymore.
+    });
     // Play a sound (auto-play is true).
-    FunkinSound.playOnce(Paths.sound('screenshot'), 1.0);
+    FlxG.sound.play(Paths.sound('screenshot'),1.0);
   }
 
   static final PREVIEW_INITIAL_DELAY = 0.25; // How long before the preview starts fading in.
@@ -189,7 +195,7 @@ class ScreenshotPlugin extends FlxBasic
     if (!FlxG.mouse.visible)
     {
       wasMouseHidden = true;
-      Cursor.show();
+      FlxG.mouse.visible = true;
     }
 
     // so that it doesnt change the alpha when tweening in/out
@@ -249,7 +255,7 @@ class ScreenshotPlugin extends FlxBasic
                   onComplete: function(_) {
                     if (wasMouseHidden)
                     {
-                      Cursor.hide();
+                      FlxG.mouse.visible = false;
                     }
 
                     previewSprite.removeEventListener(MouseEvent.MOUSE_DOWN, openScreenshotsFolder);
@@ -262,6 +268,18 @@ class ScreenshotPlugin extends FlxBasic
             });
           }
         });
+    });
+    FlxG.signals.postStateSwitch.addOnce(() ->{
+      if (wasMouseHidden)
+        {
+          FlxG.mouse.visible = false;
+        }
+
+        previewSprite.removeEventListener(MouseEvent.MOUSE_DOWN, openScreenshotsFolder);
+        previewSprite.removeEventListener(MouseEvent.MOUSE_OVER, onHover);
+        previewSprite.removeEventListener(MouseEvent.MOUSE_OUT, onHoverOut);
+
+        FlxG.stage.removeChild(previewSprite);
     });
   }
 

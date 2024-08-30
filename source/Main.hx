@@ -1,5 +1,6 @@
 package;
 
+//import plugins.FunkinSoundTray;
 import openfl.display.BlendMode;
 import openfl.text.TextFormat;
 import openfl.display.Application;
@@ -76,6 +77,8 @@ class Main extends Sprite
 		#if !debug
 		initialState = TitleState;
 		#end
+
+		// game._customSoundTray = plugins.FunkinSoundTray;
 
 		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
 		addChild(game);

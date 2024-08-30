@@ -22,6 +22,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 import openfl.Assets;
+//import plugins.ScreenshotPlugin;
 
 #if windows
 import Discord.DiscordClient;
@@ -277,6 +278,8 @@ class TitleState extends MusicBeatState
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
+
+		//ScreenshotPlugin.initialize();
 
 		if (FlxG.keys.justPressed.F)
 		{

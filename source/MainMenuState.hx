@@ -116,7 +116,7 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.camera.follow(camFollow, null, 0.60 * (60 / FlxG.save.data.fpsCap));
 
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, gameVer +  (Main.watermarks ? " FNF - " + kadeEngineVer + " Kade Engine +" : ""), 12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 40, 0, 'Kade Engine +: ' + kadeEngineVer + '\nFriday Night Funkin Version: ' + gameVer, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
@@ -239,7 +239,7 @@ class MainMenuState extends MusicBeatState
 				trace("Story Menu Selected");
 			case 'freeplay':
 				if (KadeEngineData.KEOptions.get("oldfreeplay"))
-					openSubState(new VSliceFreeplayState());
+					FlxG.switchState(new vslicefp.VSliceFreeplayState());
 				else
 					FlxG.switchState(new FreeplayState());
 				trace("Freeplay Menu Selected");

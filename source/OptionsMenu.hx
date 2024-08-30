@@ -16,6 +16,7 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+//import shaders.HSVShader;
 
 class OptionsMenu extends MusicBeatState
 {
@@ -27,7 +28,6 @@ class OptionsMenu extends MusicBeatState
 	public var options:Array<OptionCategory> = [
 		new OptionCategory("Gameplay", [
 			new DFJKOption(controls),
-			new ColorHPOption("Color the hpbar to the icons color (bassically moddern hpbar)."),
 			new DefaultOption("downscroll", "upscroll", "downscroll", "Change the layout of the strumline."),
 			new DefaultOption("Middlescroll", "Middlescroll off", "middlescroll", "Change the layout of the strumline."),
 			new DefaultOption("Ghost Tapping", "No Ghost Tapping", "ghosttap", "Ghost Tapping is when you tap a direction and it doesn't give you a miss.", true),
@@ -36,7 +36,7 @@ class OptionsMenu extends MusicBeatState
 			new FPSCapOption("Cap your FPS"),
 			#end
 			new ScrollSpeedOption("Change your scroll speed (1 = Chart dependent)"),
-			new AccuracyDOption("Change how accuracy is calculated. (Accurate = Simple, Complex = Milisecond Based)"),
+			new AccuracyDOption("Change how accuracy is calculated. (Accurate = Simple, Complex = Millisecond Based)"),
 			new ResetButtonOption("Toggle pressing R to gameover."),
 			// new OffsetMenu("Get a note offset based off of your inputs!"),
 			new CustomizeGameplay("Drag'n'Drop Gameplay Modules around to your preference"),
@@ -49,7 +49,9 @@ class OptionsMenu extends MusicBeatState
 			new AccuracyOption("Display accuracy information."),
 			new NPSDisplayOption("Shows your current Notes Per Second."),
 			new DefaultOption("Time Bar On", "Time Bar Off", "songpos", "Makes a bar on the top of your screen that shows your time.", true),
+			new ColorHPOption("Color the hpbar to the icons color (basically moddern hpbar)."),
 			new DefaultOption("VSlice Freeplay", "Legacy Freeplay", "oldfreeplay", "Changes the Freeplay To Look like the V-Slice Freeplay or the Legacy Freeplay", true),
+			new DefaultOption("Kade Rating Sprites", "Base Game Rating Sprites", "ratingsprites", "Changes the Rating Sprites to look like V-Slice Or Kade Engines Style (Numbers too)", true),
 			new CpuStrums("CPU's strumline lights up when a note hits it."),
 			#else
 			new DistractionsAndEffectsOption("Toggle stage distractions that can hinder your gameplay.")
@@ -82,13 +84,12 @@ class OptionsMenu extends MusicBeatState
 	override function create()
 	{
 		instance = this;
-		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image("menuDesat"));
-
+		var menuBG = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
 		menuBG.updateHitbox();
 		menuBG.screenCenter();
-		menuBG.antialiasing = true;
+		menuBG.scrollFactor.set(0, 0);
 		add(menuBG);
 
 		grpControls = new FlxTypedGroup<Alphabet>();

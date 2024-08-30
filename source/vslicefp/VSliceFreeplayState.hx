@@ -1,4 +1,4 @@
-package;
+package vslicefp;
 
 import flash.text.TextField;
 import flixel.FlxG;
@@ -9,6 +9,10 @@ import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import lime.utils.Assets;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.group.FlxGroup;
+import shaders.AngleMask;
 
 
 #if windows
@@ -17,8 +21,9 @@ import Discord.DiscordClient;
 
 using StringTools;
 
-class LegacyFreeplayState extends MusicBeatState
+class VSliceFreeplayState extends MusicBeatState
 {
+    //final currentCharacter:String;
 	var songs:Array<SongMetadata> = [];
 
 	var selector:FlxText;
@@ -30,22 +35,18 @@ class LegacyFreeplayState extends MusicBeatState
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
 
-	var coolColors:Array<Int> = [
-		0xff9271fd,
-		0xff9271fd,
-		0xff223344,
-		0xFF941653,
-		0xFFfc96d7,
-		0xFFa0d1ff,
-		0xffff78bf,
-		0xfff6b604
-	];
-
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
 
-	private var iconArray:Array<HealthIcon> = [];
 	var bg:FlxSprite;
+
+    //var dj:DJBoyfriend;
+	var ostName:FlxText;
+	var bgDad:FlxSprite;
+	var exitMovers:ExitMoverData = new Map();
+	public var orangeBackShit:FlxSprite;
+	public var alsoOrangeLOL:FlxSprite;
+	public var pinkBack:FlxSprite;
 
 	override function create()
 	{
@@ -83,6 +84,75 @@ class LegacyFreeplayState extends MusicBeatState
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		add(bg);
 
+		pinkBack = new FlxSprite(0, 0, Paths.image('freeplay/pinkBack'));
+		pinkBack.color = 0xFFFFD4E9; // sets it to pink!
+		pinkBack.x -= pinkBack.width;
+		add(pinkBack);
+		FlxTween.tween(pinkBack, {x: 0}, 0.6, {ease: FlxEase.quartOut});
+		
+
+		// Create the first orangeBackShit sprite
+		var orangeBackShit = new FlxSprite(84, 440);
+		orangeBackShit.makeGraphic(Std.int(pinkBack.width), 75, FlxColor.WHITE); // Set the size and fill with white color
+		orangeBackShit.color = 0xFFFEDA00; // Apply the color
+		add(orangeBackShit);
+
+		// Create the alsoOrangeLOL sprite
+		var alsoOrangeLOL = new FlxSprite(0, orangeBackShit.y);
+		alsoOrangeLOL.makeGraphic(100, Std.int(orangeBackShit.height), FlxColor.WHITE); // Set the size and fill with white color
+		alsoOrangeLOL.color = 0xFFFFD400; // Apply the color
+		add(alsoOrangeLOL);
+
+		exitMovers.set([pinkBack, orangeBackShit, alsoOrangeLOL], {
+			x: -pinkBack.width,
+			y: pinkBack.y,
+			speed: 0.4,
+			wait: 0
+		});
+
+		var grpTxtScrolls:FlxGroup = new FlxGroup();
+		add(grpTxtScrolls);
+		grpTxtScrolls.visible = false;
+
+        /*dj = new DJBoyfriend(640, 366);
+        exitMovers.set([dj],
+          {
+            x: -dj.width * 1.6,
+            speed: 0.5
+          });
+    
+        // TODO: Replace this.
+        if (currentCharacter == 'pico') dj.visible = false;
+    
+        add(dj);*/
+
+		bgDad = new FlxSprite(pinkBack.width * 0.74, 0).loadGraphic(Paths.image('freeplay/freeplayBGdad'));
+		bgDad.shader = new AngleMask();
+		bgDad.visible = false;
+
+		var blackOverlayBullshitLOLXD:FlxSprite = new FlxSprite(FlxG.width,0,Paths.image("back"));
+		blackOverlayBullshitLOLXD.alpha = 1;
+		add(blackOverlayBullshitLOLXD); // used to mask the text lol!
+		
+		
+		// this makes the texture sizes consistent, for the angle shader
+		bgDad.setGraphicSize(0, FlxG.height);
+		blackOverlayBullshitLOLXD.setGraphicSize(0, FlxG.height);
+
+		bgDad.updateHitbox();
+		blackOverlayBullshitLOLXD.updateHitbox();
+
+		exitMovers.set([blackOverlayBullshitLOLXD, bgDad], {
+			x: FlxG.width * 1.5,
+			speed: 0.4,
+			wait: 0
+		});
+		
+		add(bgDad);
+		FlxTween.tween(blackOverlayBullshitLOLXD, {x: (pinkBack.width * 0.74)-37}, 0.7, {ease: FlxEase.quintOut});
+
+		blackOverlayBullshitLOLXD.shader = bgDad.shader;
+
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
 
@@ -95,12 +165,7 @@ class LegacyFreeplayState extends MusicBeatState
 			songText.targetY = i;
 			grpSongs.add(songText);
 
-			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter, false, true);
-			icon.sprTracker = songText;
-
 			// using a FlxGroup is too much fuss!
-			iconArray.push(icon);
-			add(icon);
 
 			// songText.x += 40;
 			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
@@ -165,7 +230,6 @@ class LegacyFreeplayState extends MusicBeatState
 		}
 
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
-		bg.color = FlxColor.interpolate(bg.color, coolColors[Std.parseInt(songs[curSelected].week) % coolColors.length], 0.045);
 
 		if (Math.abs(lerpScore - intendedScore) <= 10)
 			lerpScore = intendedScore;
@@ -272,13 +336,6 @@ class LegacyFreeplayState extends MusicBeatState
 
 		var bullShit:Int = 0;
 
-		for (i in 0...iconArray.length)
-		{
-			iconArray[i].alpha = 0.6;
-		}
-
-		iconArray[curSelected].alpha = 1;
-
 		for (item in grpSongs.members)
 		{
 			item.targetY = bullShit - curSelected;
@@ -294,6 +351,22 @@ class LegacyFreeplayState extends MusicBeatState
 			}
 		}
 	}
+}
+
+/**
+ * The map storing information about the exit movers.
+ */
+ typedef ExitMoverData = Map<Array<FlxSprite>, MoveData>;
+
+ /**
+  * The data for an exit mover.
+  */
+typedef MoveData =
+{
+	var ?x:Float;
+	var ?y:Float;
+	var ?speed:Float;
+	var ?wait:Float;
 }
 
 class SongMetadata

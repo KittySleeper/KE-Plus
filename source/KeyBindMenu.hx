@@ -33,14 +33,17 @@ class KeyBindMenu extends FlxSubState
     var keyTextDisplay:FlxText;
     var keyWarning:FlxText;
     var warningTween:FlxTween;
-    var keyText:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT"];
-    var defaultKeys:Array<String> = ["A", "S", "W", "D", "R"];
+    var keyText:Array<String> = ["LEFT", "DOWN", "UP", "RIGHT", "RESET", "SCREENSHOT"];
+    var defaultKeys:Array<String> = ["A", "S", "W", "D", "R", "F3"];
+    var defaultGpKeys:Array<String> = ["DPAD_LEFT", "DPAD_DOWN", "DPAD_UP", "DPAD_RIGHT"];
     var curSelected:Int = 0;
 
     var keys:Array<String> = [FlxG.save.data.leftBind,
                               FlxG.save.data.downBind,
                               FlxG.save.data.upBind,
-                              FlxG.save.data.rightBind];
+                              FlxG.save.data.rightBind,
+                              FlxG.save.data.killBind,
+                              FlxG.save.data.screenshot];
 
     var tempKey:String = "";
     var blacklist:Array<String> = ["ESCAPE", "ENTER", "BACKSPACE", "SPACE"];
@@ -175,6 +178,11 @@ class KeyBindMenu extends FlxSubState
             keyTextDisplay.text += textStart + keyText[i] + ": " + ((keys[i] != keyText[i]) ? (keys[i] + " / ") : "" ) + keyText[i] + " ARROW\n";
 
         }
+        var textStartPause = (4 == curSelected) ? "> " : "  ";
+        keyTextDisplay.text += textStartPause + keyText[4] + ": " + (keys[4]) + "\n";
+
+        var textStartReset = (5 == curSelected) ? "> " : "  ";
+        keyTextDisplay.text += textStartReset + keyText[5] + ": " + (keys[5]) + "\n";
 
         keyTextDisplay.screenCenter();
 
@@ -186,6 +194,8 @@ class KeyBindMenu extends FlxSubState
         FlxG.save.data.downBind = keys[1];
         FlxG.save.data.leftBind = keys[0];
         FlxG.save.data.rightBind = keys[3];
+        FlxG.save.data.killBind = keys[4];
+        FlxG.save.data.screenshot = keys[5];
 
         FlxG.save.flush();
 
@@ -253,9 +263,9 @@ class KeyBindMenu extends FlxSubState
     {
         curSelected += _amount;
                 
-        if (curSelected > 3)
+        if (curSelected > 5)
             curSelected = 0;
         if (curSelected < 0)
-            curSelected = 3;
+            curSelected = 5;
     }
 }

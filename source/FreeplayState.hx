@@ -46,6 +46,7 @@ class FreeplayState extends MusicBeatState
 
 	private var iconArray:Array<HealthIcon> = [];
 	var bg:FlxSprite;
+	var songText:Alphabet;
 
 	override function create()
 	{
@@ -90,7 +91,7 @@ class FreeplayState extends MusicBeatState
 		{
 			//FlxG.sound.playMusic(Paths.inst(songs[i].songName), 0.1); // preload
 			
-			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false, true);
+			songText = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false, true);
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			grpSongs.add(songText);
@@ -185,6 +186,9 @@ class FreeplayState extends MusicBeatState
 			changeSelection(1);
 		}
 
+		if (FlxG.mouse.wheel > 0 || FlxG.mouse.wheel < 0)
+            changeSelection(-FlxG.mouse.wheel);
+
 		if (controls.LEFT_P)
 			changeDiff(-1);
 		if (controls.RIGHT_P)
@@ -234,7 +238,7 @@ class FreeplayState extends MusicBeatState
 		intendedScore = Highscore.getScore(songHighscore, songs[curSelected].difficultys[curDifficulty]);
 		#end
 
-		diffText.text = songs[curSelected].difficultys[curDifficulty].toUpperCase();
+		diffText.text = "< " + songs[curSelected].difficultys[curDifficulty].toUpperCase() + " >";
 	}
 
 	function changeSelection(change:Int = 0)

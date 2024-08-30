@@ -234,6 +234,9 @@ class PlayState extends MusicBeatState
 
 	var downscroll:Bool = false;
 	var middlescroll:Bool = false;
+	var ratingsprites:Bool = false;
+
+	var numScore:FlxSprite;
 
 	override public function create()
 	{
@@ -318,6 +321,7 @@ class PlayState extends MusicBeatState
 
 		downscroll = KadeEngineData.KEOptions.get("downscroll");
 		middlescroll = KadeEngineData.KEOptions.get("middlescroll");
+		ratingsprites = KadeEngineData.KEOptions.get("ratingsprites");
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
@@ -2391,7 +2395,7 @@ class PlayState extends MusicBeatState
 					// FlxG.switchState(new TitleState());
 			}
 		}
-		if (FlxG.save.data.resetButton && FlxG.keys.justPressed.R)
+		if (FlxG.save.data.resetButton && controls.RESET)
 		{
 			health = -1;
 		}	
@@ -2904,7 +2908,10 @@ class PlayState extends MusicBeatState
 				pixelShitPart2 = '-pixel';
 			}
 	
-			rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2));
+			if (ratingsprites)
+				rating.loadGraphic(Paths.image(pixelShitPart1 + daRating + pixelShitPart2));
+			else
+				rating.loadGraphic(Paths.image(pixelShitPart1 + "vanilla/" + daRating + pixelShitPart2));
 			rating.screenCenter();
 			rating.y -= 50;
 			rating.x = coolText.x - 125;
@@ -3025,7 +3032,10 @@ class PlayState extends MusicBeatState
 			var daLoop:Int = 0;
 			for (i in seperatedScore)
 			{
-				var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'num' + Std.int(i) + pixelShitPart2));
+				if (ratingsprites)
+					numScore = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'num' + Std.int(i) + pixelShitPart2));
+				else
+					numScore = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'vanilla/num' + Std.int(i) + pixelShitPart2));
 				numScore.screenCenter();
 				numScore.x = rating.x + (43 * daLoop) - 50;
 				numScore.y = rating.y + 100;
