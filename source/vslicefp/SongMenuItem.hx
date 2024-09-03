@@ -1,9 +1,7 @@
 package vslicefp;
 
-import funkin.Scoring.ScoringRank;
 import states.freeplay.FreeplayState.FreeplaySongData;
 import shaders.Grayscale;
-import states.freeplay.FreeplayState.FreeplaySongData;
 import shaders.HSVShader;
 import shaders.GaussianBlurShader;
 import flixel.group.FlxGroup;
@@ -20,7 +18,6 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.addons.effects.FlxTrail;
 import flixel.util.FlxColor;
-import funkin.MathUtil;
 
 class SongMenuItem extends FlxSpriteGroup
 {
@@ -90,13 +87,6 @@ class SongMenuItem extends FlxSpriteGroup
     // capsule.animation
     add(capsule);
 
-    difficultyText = new FlxSprite(414, 87).loadGraphic(Paths.image('freeplay/freeplayCapsule/difficultytext'));
-    difficultyText.setGraphicSize(Std.int(difficultyText.width * 0.9));
-    add(difficultyText);
-
-    weekType = new FlxSprite(291, 87);
-    weekType.frames = Paths.getSparrowAtlas('freeplay/freeplayCapsule/weektypes');
-
     newText = new FlxSprite(454, 9);
     newText.frames = Paths.getSparrowAtlas('freeplay/freeplayCapsule/new');
     newText.animation.addByPrefix('newAnim', 'NEW notif', 24, true);
@@ -109,6 +99,22 @@ class SongMenuItem extends FlxSpriteGroup
 
     // var debugNumber2:CapsuleNumber = new CapsuleNumber(0, 0, true, 2);
     // add(debugNumber2);
+
+    for (i in 0...2)
+    {
+      var bigNumber:CapsuleNumber = new CapsuleNumber(466 + (i * 30), 32, true, 0);
+      add(bigNumber);
+
+      bigNumbers.push(bigNumber);
+    }
+
+    for (i in 0...3)
+    {
+      var smallNumber:CapsuleNumber = new CapsuleNumber(185 + (i * 11), 88.5, false, 0);
+      add(smallNumber);
+
+      smallNumbers.push(smallNumber);
+    }
 
     // doesn't get added, simply is here to help with visibility of things for the pop in!
     grpHide = new FlxGroup();
@@ -199,14 +205,6 @@ class SongMenuItem extends FlxSpriteGroup
     favIcon.blend = BlendMode.ADD;
     add(favIcon);
 
-    var weekNumber:CapsuleNumber = new CapsuleNumber(355, 88.5, false, 0);
-    var weekNumber2:CapsuleNumber = new CapsuleNumber(365, 88.5, false, 0);
-    add(weekNumber);
-    add(weekNumber2);
-
-    weekNumbers.push(weekNumber);
-    weekNumbers.push(weekNumber2);
-
     setVisibleGrp(false);
   }
 
@@ -223,39 +221,6 @@ class SongMenuItem extends FlxSpriteGroup
   {
     // trace(name);
     var weekNum:Int = id;
-
-    
-
-    if (weekNum == 0)
-    {
-      weekType.visible = false;
-      weekNumbers[0].visible = false;
-      weekNumbers[1].visible = false;
-    }
-    else if(weekNum<10)
-    {
-      weekType.visible = true;
-      weekNumbers[0].visible = true;
-      weekNumbers[1].visible = false;
-      weekNumbers[0].digit = Std.int(Math.abs(weekNum));
-    }
-    else 
-    {
-      weekType.visible = true;
-      weekNumbers[0].visible = true;
-      weekNumbers[1].visible = true;
-      weekNumbers[1].digit = Std.int(Math.abs(weekNum%10));
-      weekNumbers[0].digit = Std.int(Math.abs(weekNum/10));
-    }
-    if (weekNum > 0)
-    {
-      weekType.animation.play('WEEK', true);
-    }
-    else
-    {
-      weekType.animation.play('WEEKEND', true);
-      weekNumbers[0].offset.x -= 35;
-    }
   }
 
   /**
@@ -300,39 +265,6 @@ class SongMenuItem extends FlxSpriteGroup
       shiftX = 186;
     }
 
-    for (i in 0...smallNumbers.length)
-    {
-      smallNumbers[i].x = this.x + (shiftX + (i * 11));
-      switch (i)
-      {
-        case 0:
-          if (newBPM < 100)
-          {
-            smallNumbers[i].digit = 0;
-          }
-          else
-          {
-            smallNumbers[i].digit = Math.floor(newBPM / 100) % 10;
-          }
-
-        case 1:
-          if (newBPM < 10)
-          {
-            smallNumbers[i].digit = 0;
-          }
-          else
-          {
-            smallNumbers[i].digit = Math.floor(newBPM / 10) % 10;
-
-            if (Math.floor(newBPM / 10) % 10 == 1) tempShift = -4;
-          }
-        case 2:
-          smallNumbers[i].digit = newBPM % 10;
-        default:
-          trace('why the fuck is this being called');
-      }
-      smallNumbers[i].x += tempShift;
-    }
     // diffRatingSprite.loadGraphic(Paths.image('freeplay/diffRatings/diff${ratingPadded}'));
     // diffRatingSprite.visible = false;
   }

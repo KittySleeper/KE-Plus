@@ -1,6 +1,7 @@
 package vslicefp;
 
 import flixel.FlxObject;
+import flixel.FlxG;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;

@@ -81,6 +81,8 @@ class Main extends Sprite
 		// game._customSoundTray = plugins.FunkinSoundTray;
 
 		game = new FlxGame(gameWidth, gameHeight, initialState, zoom, framerate, framerate, skipSplash, startFullscreen);
+		//@:privateAccess
+		//game._customSoundTray = plugins.FunkinSoundTray;
 		addChild(game);
 
 		#if !mobile
