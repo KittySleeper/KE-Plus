@@ -49,6 +49,7 @@
 	
 	<section if="PRELOAD_ALL">
 		<library name="songs"    preload="true" />
+    <assets path="alsoft.txt" />
 		<library name="shared"   preload="true" />
 		<library name="tutorial" preload="true" />
 		<library name="week1"    preload="true" />
